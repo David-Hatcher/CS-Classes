@@ -1,0 +1,18 @@
+// unitTest Me
+
+package me.java
+
+class unitTest
+{
+	public static void main(String args[])
+	{
+		if (me.factorial(20) == 2432902008176640000)
+		{
+			System.out.println("Test works for 20");
+		}
+		else
+		{
+			System.out.println("Test Failed on 20");
+		}
+	}
+}
