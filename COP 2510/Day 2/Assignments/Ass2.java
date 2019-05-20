@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Assignment2.src.main.java.summer.COP2510;
+package summer.COP2510;
 import java.util.Scanner;
 /**
  *
