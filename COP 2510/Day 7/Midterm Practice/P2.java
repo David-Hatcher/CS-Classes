@@ -2,14 +2,14 @@ import java.util.Scanner;
 
 public class P2{
 
-  private static String AskName(){
+  public static String AskName(){
     Scanner userInput = new Scanner(System.in);
     System.out.print("Please ender a name:");
     String name = userInput.nextLine();
     return name;
   }
 
-  private static void FindMatchingNames(String name_1, String name_2, String name_3){
+  public static void FindMatchingNames(String name_1, String name_2, String name_3){
     boolean matchingNames1_2 = DoesNameMatch(name_1, name_2);
     boolean matchingNames2_3 = DoesNameMatch(name_2, name_3);
     boolean matchingNames3_1 = DoesNameMatch(name_3, name_1);
@@ -28,7 +28,7 @@ public class P2{
     }
 
   }
-  private static boolean DoesNameMatch(String name_1, String name_2){
+  public static boolean DoesNameMatch(String name_1, String name_2){
     boolean nameMatches = true;
     int i = 1;    
     int length_1 = name_1.length(), length_2 = name_2.length();
@@ -41,7 +41,7 @@ public class P2{
     }    
     return nameMatches;    
   }
-  private static boolean DoesStringMatch(String subString_1, String subString_2){
+  public static boolean DoesStringMatch(String subString_1, String subString_2){
     return subString_1.equalsIgnoreCase(subString_2);
   }
   public static void main(String[] args) {
