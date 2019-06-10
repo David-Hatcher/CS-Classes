@@ -1,12 +1,14 @@
+package midterm.classes;
+
+
 import java.util.Scanner;
 
 public class P1{
+  static private Scanner userInput = new Scanner(System.in);
 
   public static String AskName(){
-    Scanner userInput = new Scanner(System.in);
-    System.out.print("Please ender a name:");
-    String name = userInput.nextLine();
-    return name;
+    System.out.print("Please enter a name:");
+    return userInput.nextLine();
   }
 
   public static void FindMatchingNames(String name_1, String name_2, String name_3){
@@ -31,10 +33,10 @@ public class P1{
   public static boolean DoesNameMatch(String name_1, String name_2){
     boolean nameMatches = true;
     int i = 0;    
-    while(nameMatches == true && i < name_1.length() && i < name_2.length() && 
-    !name_1.substring(i,i+1).equalsIgnoreCase(" ")&& 
-    !name_2.substring(i,i+1).equalsIgnoreCase(" ")){
-      nameMatches = DoesStringMatch(name_1.substring(0, i+1), name_2.substring(0, i+1));
+    while(nameMatches == true && i < name_1.length() && i < name_2.length() && !name_1.substring(i,i+1).equalsIgnoreCase(" ")){
+      if(!name_1.substring(i,i+1).equalsIgnoreCase(name_2.substring(i,i+1))){
+        nameMatches = false;
+      }      
       i++;
     }    
     return nameMatches;    
@@ -42,10 +44,15 @@ public class P1{
   public static boolean DoesStringMatch(String subString_1, String subString_2){
     return subString_1.equalsIgnoreCase(subString_2);
   }
-  public static void main(String[] args) {
-    String name_1 = AskName();
-    String name_2 = AskName();
-    String name_3 = AskName();
+  
+  public static void RunNameReader(){
+    String name_1, name_2, name_3;
+    name_1 = AskName();
+    name_2 = AskName();
+    name_3 = AskName();
     FindMatchingNames(name_1.trim(), name_2.trim(), name_3.trim());
+  }
+  public static void main(String[] args) {
+    RunNameReader();
   }
 }

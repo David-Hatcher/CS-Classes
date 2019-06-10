@@ -1,41 +1,50 @@
+package midterm.classes;
+
+
 import java.util.Random;
 
 public class P3{
 
-	static Random r = new Random();
-	static int vCount = 0;
+	static private Random rand = new Random();
+	static private int vCount = 0;
 	
 	public static void Print(String input){
 		System.out.print(input);
 	}
 	
   public static int ChooseRange(){
-		return r.nextInt(4);
+		return randomNum(3,1);
 	}
 
-	public static int MakeRandomNumber(int range){
-		int randomNumber = 0;
+	public static int MakeRandomNumber(int range){	
+		int randomNumber = 999;
 		switch(range){
-			case 1:{randomNumber = r.nextInt(19) - 15	;	break; }
-			case 2:{randomNumber = r.nextInt(36) + 20	; break; }
-			case 3:{randomNumber = r.nextInt(11) + 101; break; }
+			case 1:{randomNumber = randomNum(19,-15); break;}
+			case 2:{randomNumber = randomNum(36,20);  break;}
+			case 3:{randomNumber = randomNum(11,101); break;}
+			default:{Print("Error no range for that value"); break;}
 		}
 		return randomNumber;
 	}
 
-	public static boolean IsNumberDivisibleByThree(int randomNumber){
-		boolean numberIsDivisibleByThree = false;
-		if(randomNumber%3 == 0){
-			numberIsDivisibleByThree = true;
+	public static int randomNum(int aVal, int bVal){
+		int randomNumber = rand.nextInt(aVal) + bVal	;
+		return randomNumber;
+	}
+
+	public static boolean IsNumberDivisibleByThree(int randomNumber){		
+		if(randomNumber % 3 == 0){			
 			vCount++;
+			return true;
 		}
-		return numberIsDivisibleByThree;
+		return false;
 	}
 
 	public static void PrintNumber(int cycle, int randomNumber){
-		Print("(" + cycle +")\t" + randomNumber);
-		if(IsNumberDivisibleByThree(randomNumber)==true){	Print(" v\n");	}
-		else{	Print("\n");	}
+		String numberStringEnding = IsNumberDivisibleByThree(randomNumber) ? " v\n" : "\n";
+		String numberString = "(" + cycle + ")\t" + randomNumber + numberStringEnding;
+		Print(numberString);
+
 	}
 
 	public static String HowManyDivisibleBy3(){
