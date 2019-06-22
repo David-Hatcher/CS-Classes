@@ -1,11 +1,44 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 
 public class iGuess {
+  static ArrayList<ArrayList<String>> listOfCombinations = new ArrayList<ArrayList<String>>();
   static Random rand = new Random();
 
   public static int RandGen(int minimum, int max) {
     return rand.nextInt(max - minimum + 1) + minimum;
+  }
+
+  public static String compareScores(ArrayList<String> guess, ArrayList<String> combination){
+    int bulls = 0;
+    int cows = 0;
+    for(int i = 0; i < guess.size(); i++){
+      for(int j = 0; j < combination.size(); j++){
+        if(guess.get(i).equalsIgnoreCase(combination.get(j)) && i == j){
+          bulls++;       
+        }
+        else if(guess.get(i).equalsIgnoreCase(combination.get(j))){
+          cows++;
+        }
+      }
+    }
+    return bulls + "A" + cows + "B";
+  }
+  
+  public static void pruneList(ArrayList<String> guess, String score){
+    for (ArrayList<String> combination : listOfCombinations) {
+      if(!score.equalsIgnoreCase(compareScores(guess,combination))){
+        listOfCombinations.remove(combination);
+      }
+    }
   }
 
   public static String[] ArrayBuilder() {
@@ -37,7 +70,6 @@ public class iGuess {
         currentToAdd.add(str);
       }
       allCombos.add(currentToAdd);
-      //System.out.println(allCombos.size());
     }
     return allCombos;
   }
@@ -59,9 +91,9 @@ public class iGuess {
     }
     out.close();
   }
-  public static ArrayList<ArrayList<String>> readFile(String filePath) throws IOException {
+  public static void  readFile(String filePath) throws IOException {
     BufferedReader in = new BufferedReader(
-                        new FileReader("Possibles.txt"));
+                        new FileReader(filePath));
     ArrayList<ArrayList<String>> readCombos = new ArrayList<ArrayList<String>>(10);
     String line;
     while((line = in.readLine()) != null){      
@@ -73,21 +105,13 @@ public class iGuess {
       readCombos.add(currentCombo);
       System.out.println(readCombos.size());
     }
-    return readCombos;
+    in.close();
+    listOfCombinations = readCombos;    
   }
 
   public static void main(String[] args){
     ArrayList<ArrayList<String>> allCombos = FullPossibles();
     String filePath = "Possibles.txt";
-    ArrayList<ArrayList<String>> readCombos = new ArrayList<ArrayList<String>>();
-    try {
-      writeFile(allCombos, filePath);
-      readCombos = readFile(filePath);
-    } catch (Exception e) {
-      System.out.println("ERROR");
-    }    
-    System.out.println(readCombos);
-    System.out.println(readCombos.size());
   }
   
 }
