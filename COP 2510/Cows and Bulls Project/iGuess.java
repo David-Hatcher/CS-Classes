@@ -27,7 +27,7 @@ public class iGuess {
 
   public static ArrayList<ArrayList<String>> FullPossibles() {
     ArrayList<ArrayList<String>> allCombos = new ArrayList<ArrayList<String>>();
-    while (allCombos.size() < 10) {
+    while (allCombos.size() < 120121) {
       String[] currentPossible = ArrayBuilder();
       while (allCombos.contains(Arrays.asList(currentPossible))) {
         currentPossible = ArrayBuilder();
@@ -37,7 +37,7 @@ public class iGuess {
         currentToAdd.add(str);
       }
       allCombos.add(currentToAdd);
-      //System.out.println(allCombos.size());
+      System.out.println(allCombos.size());
     }
     return allCombos;
   }
@@ -70,8 +70,7 @@ public class iGuess {
       for (String str : lineArray) {
         currentCombo.add(str);
       }
-      readCombos.add(currentCombo);
-      System.out.println(readCombos.size());
+      readCombos.add(currentCombo);      
     }
     return readCombos;
   }
