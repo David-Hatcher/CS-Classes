@@ -1,3 +1,5 @@
+package COP2510.project.business;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -60,7 +62,7 @@ public class iGuess {
 
   public static ArrayList<ArrayList<String>> FullPossibles() {
     ArrayList<ArrayList<String>> allCombos = new ArrayList<ArrayList<String>>();
-    while (allCombos.size() < 120121) {
+    while (allCombos.size() < 120120) {
       String[] currentPossible = ArrayBuilder();
       while (allCombos.contains(Arrays.asList(currentPossible))) {
         currentPossible = ArrayBuilder();
@@ -70,13 +72,10 @@ public class iGuess {
         currentToAdd.add(str);
       }
       allCombos.add(currentToAdd);
-<<<<<<< HEAD
-=======
-      System.out.println(allCombos.size());
->>>>>>> master
     }
     return allCombos;
   }
+
   public static void writeFile(ArrayList<ArrayList<String>> allCombos ,String filePath) throws IOException {
     PrintWriter out = new PrintWriter(
                       new BufferedWriter(
@@ -95,7 +94,7 @@ public class iGuess {
     }
     out.close();
   }
-  public static void  readFile(String filePath) throws IOException {
+  public static void readFile(String filePath) throws IOException {
     BufferedReader in = new BufferedReader(
                         new FileReader(filePath));
     ArrayList<ArrayList<String>> readCombos = new ArrayList<ArrayList<String>>(10);
@@ -113,8 +112,7 @@ public class iGuess {
   }
 
   public static void main(String[] args){
-    ArrayList<ArrayList<String>> allCombos = FullPossibles();
-    String filePath = "Possibles.txt";
+    
   }
   
 }
