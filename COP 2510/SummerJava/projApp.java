@@ -11,6 +11,7 @@ public class projApp{
     private static Scanner read = new Scanner(System.in);
     private static ArrayList<String> choicesSet = new ArrayList<String>(
         Arrays.asList("v", "w", "x", "y", "z", "5", "6", "7", "8", "9", "=", "?", "%", "@", "$"));
+
     
     private static void print(String message){
         System.out.print(message);
@@ -60,7 +61,7 @@ public class projApp{
             runPlayerCode();
         }
         else if (choice.equalsIgnoreCase("3")){
-            //runComputerCodeAndGuess();
+            runComputerCodeAndGuess();
         }
         else if (choice.equalsIgnoreCase("4")){
             runComputerAgainstItself();
@@ -76,31 +77,38 @@ public class projApp{
         println("Please type for guess of 5 digits, one digit must be @, the other 4 must be any"+
                 "\ncombination of the following, without repetion:\n"+
                 choicesSet+ 
-                "\n or type ***** to give up and have the secret code displayed.\n");        
+                "\nType ***** to give up and have the secret code displayed.\n");        
         String playerGuessString = askForGuess();
         ArrayList<String> playerGuessArrayList = convertStringToArrayList(playerGuessString);
         ArrayList<String> secretCodeComputerArrayList = iGuess.generateSecretCode();
-        // String secretCodeComputerString = convertArrayListToString(secretCodeComputerArrayList);
         String score = "";
         int guessCount = 0;
-        while(!score.equalsIgnoreCase(winString)){
-            if(doesPlayerGiveUp(playerGuessString)){
-                print("Good try!\nThe Secret Code is: " + iGuess.getSecretCode());
-                break;
-            }
-            else if(!ensureGuessCorrect(playerGuessString, playerGuessArrayList)){
-                println("ERROR, please ensure correct formatting per instructions.");
-            }
-            else{
-                score = iGuess.compareScores(playerGuessArrayList, secretCodeComputerArrayList);
-                println("Guess = " + playerGuessString + "\nScore = " + score + "\nGuess Count = " + ++guessCount);
-            }
-            if(!score.equalsIgnoreCase(winString)){
+        while(!score.equalsIgnoreCase(winString) && !score.equalsIgnoreCase("giveup")){
+            score = runComputerCodeLoop(playerGuessString, playerGuessArrayList, secretCodeComputerArrayList, ++guessCount);
+            if(!score.equalsIgnoreCase(winString) && !score.equalsIgnoreCase("giveup")){
                 playerGuessString = askForGuess();
                 playerGuessArrayList = convertStringToArrayList(playerGuessString);
             }
         }
         didPlayerGuessCorrectly(score);
+    }
+
+    private static String runComputerCodeLoop(String playerGuessString, ArrayList<String> playerGuessArrayList, ArrayList<String> secretCodeComputerArrayList,int guessCount){
+        String score = "";
+        String response = "";
+        if(doesPlayerGiveUp(playerGuessString)){
+            response = "Good try!\nThe Secret Code is: " + iGuess.getSecretCode();
+            score = "giveup";            
+        }
+        else if(!ensureGuessCorrect(playerGuessString, playerGuessArrayList)){
+            response = "ERROR, please ensure correct formatting per instructions.";
+        }
+        else{
+            score = iGuess.compareScores(playerGuessArrayList, secretCodeComputerArrayList);
+            response = "Guess = " + playerGuessString + "\nScore = " + score + "\nGuess Count = " + guessCount;
+        }
+        println(response);        
+        return score;
     }
 
 
@@ -111,7 +119,7 @@ public class projApp{
     }
     private static String askForGuess(){
         printBar();
-        String guess = readString("Please enter your next guess.");
+        String guess = readString("Please enter your next guess: ");
         return guess; 
     }
     private static boolean ensureGuessCorrect(String guess, ArrayList<String> guessArrayList){
@@ -119,16 +127,9 @@ public class projApp{
             if(guess.equalsIgnoreCase("*****")){
                 return true;
             }
-            else if(guess.length() != 5){
-                return false;
-            }
-            else if(doesStringContainOnlyChoices(guessArrayList)){
-                return false;
-            }
-            else if(areCharactersUnique(guessArrayList)){
-                return false;
-            }
-            else if(isGuessMissingAt(guessArrayList)){
+            else if(guess.length() != 5 || doesStringContainOnlyChoices(guessArrayList) 
+                                        || areCharactersUnique(guessArrayList) 
+                                        || isGuessMissingAt(guessArrayList)){
                 return false;
             }
         }
@@ -136,11 +137,11 @@ public class projApp{
     }
     private static boolean doesStringContainOnlyChoices(ArrayList<String> guess){
         for (String character : guess) {
-            if(!choicesSet.contains(guess)){
-                return false;
+            if(!choicesSet.contains(character)){
+                return true;
             }
         }
-        return true;
+        return false;
     }
     private static boolean areCharactersUnique(ArrayList<String> guess){
         boolean condition = false;
@@ -174,31 +175,55 @@ public class projApp{
         String score = "";
         int guessCount = 0;
         while(!score.equalsIgnoreCase(winString)){
-            ArrayList<String> currentGuess = iGuess.generateRandomGuess();
-            print("Guess #" + ++guessCount + "\t" + convertArrayListToString(currentGuess) +"\tEnter Score:");
-            score = readString("");
-            if(!score.equalsIgnoreCase(winString)){
-                iGuess.pruneList(currentGuess, score);
-            }            
+            score = runPlayerCodeLoop(++guessCount);
         }
+        println("I figured it out in only " + guessCount + " guesses!");
     }
-    // private static void runComputerCodeAndGuess(){
-    //     iGuess.createLists();
-    //     println("The computer will make a code and find a computer opponents code.");
-    //     ArrayList<String> computerSecretCode = iGuess.generateSecretCode();
-    //     String myScore = "";
-    //     String yourScore = "";
-    //     int myGuessCount = 0;
-    //     int yourGuessCount = 0;
-    //     while(!myScore.equalsIgnoreCase(winString) && !yourScore.equalsIgnoreCase(winString)){
-    //         if(!myScore.equalsIgnoreCase(winString)){
+    private static String runPlayerCodeLoop(int guessCount){
+        String score = "";
+        ArrayList<String> currentGuess = iGuess.generateRandomGuess();
+        print("Guess #" + guessCount + "\t" + convertArrayListToString(currentGuess) +"\tEnter Score:");
+        score = readString("");
+        if(!score.equalsIgnoreCase(winString)){
+            iGuess.pruneList(currentGuess, score);
+        }
+        return score;
+    }
+    private static void runComputerCodeAndGuess(){
+        iGuess.createLists();
+        ArrayList<String> computerSecretCode = iGuess.generateSecretCode();
+        ArrayList<String> yourCurrentGuessArrayList = new ArrayList<String>();
+        String myScore, yourScore, yourGuessString;
+        int myGuessCount, yourGuessCount;
+        myScore = yourScore = "";
+        myGuessCount = yourGuessCount = 0;
+        println("The computer will make a code and find a computer opponents code.");
+        String guessesFirst = readString("Who will go first me or opponent(1 for me, 2 for opp)");
+        while(!myScore.equalsIgnoreCase(winString) || !yourScore.equalsIgnoreCase(winString)){
+            if(guessesFirst.equalsIgnoreCase("2")){
+                if(!yourScore.equalsIgnoreCase(winString)){
+                    yourGuessString = askForGuess();
+                    yourCurrentGuessArrayList = convertStringToArrayList(yourGuessString);
+                    yourScore = runComputerCodeLoop(yourGuessString, yourCurrentGuessArrayList, computerSecretCode, ++yourGuessCount);
+                }
+                if(!myScore.equalsIgnoreCase(winString)){
+                    myScore = runPlayerCodeLoop(++myGuessCount);
+                }
+            } else {
+                if(!myScore.equalsIgnoreCase(winString)){
+                    myScore = runPlayerCodeLoop(++myGuessCount);
+                }
+                if(!yourScore.equalsIgnoreCase(winString)){
+                    yourGuessString = askForGuess();
+                    yourCurrentGuessArrayList = convertStringToArrayList(yourGuessString);
+                    yourScore = runComputerCodeLoop(yourGuessString, yourCurrentGuessArrayList, computerSecretCode, ++yourGuessCount);
+                }
+            }
+        }
+        println("I solved it in " + myGuessCount + " guesses.\n" +
+                "You solved it in " + yourGuessCount + " guesses.");
+    }
 
-    //         }
-    //         if(!yourScore.equalsIgnoreCase(winString)){
-
-    //         }
-    //     }
-    //}
     private static void runComputerAgainstItself(){
         iGuess.createLists();
         ArrayList<String> computerSecretCode = iGuess.generateSecretCode();
@@ -216,11 +241,6 @@ public class projApp{
     }
 
     public static void main(String[] args) {
-        for(int i = 0;i < 5; i++){
-            RunProgram();
-        }
-        // ArrayList<String> guess = convertStringToArrayList(askForGuess());
-        // ArrayList<String> secretCodeNew = new ArrayList<String>(Arrays.asList("v"))
-        // println(iGuess.compareScores(, combination))
+        RunProgram();
     }
 }

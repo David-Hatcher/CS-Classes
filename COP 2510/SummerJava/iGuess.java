@@ -11,6 +11,7 @@ public class iGuess {
   private static String[] possibles = {"v", "w", "x", "y", "z", "5", "6", "7", "8", "9", "=", "?", "%", "$"};
   private static Random rand = new Random();
 
+
   public static String getSecretCode(){
     String code = "";
     for (String character : secretCode) {
@@ -19,7 +20,7 @@ public class iGuess {
     return code;
   }
 
-  public static void createLists() {
+  public static void createLists(){
     combos.clear();
     for (int i = 0; i < possibles.length; i++) {
         ArrayList<String> setStrings = new ArrayList<String>(Arrays.asList(possibles));
@@ -34,7 +35,6 @@ public class iGuess {
     for (int i = 0; i < currentSet.size(); i++) {
         ArrayList<String> currentCombo = new ArrayList<String>(combo);
         if (combo.size() == length - 1) {
-            // System.out.println(combo);
             addAtsTolist(combo);
             break;
         } else if (!currentCombo.contains(currentSet.get(i))) {
@@ -47,8 +47,7 @@ public class iGuess {
   private static void addAtsTolist(ArrayList<String> combo) {
     for (int i = 0; i < combo.size() + 1; i++) {
         ArrayList<String> comboCurrent = new ArrayList<String>(combo);
-        comboCurrent.add(i, "@");           
-        // System.out.println(comboCurrent);
+        comboCurrent.add(i, "@");
         combos.add(comboCurrent);            
     }
   }
@@ -95,6 +94,6 @@ public class iGuess {
         tempList.add(combination);
       }
     }
-  combos = tempList;
+    combos = tempList;
   }
 }
