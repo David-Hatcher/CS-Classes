@@ -1,5 +1,5 @@
 public class Day12{
-    //java ternary statement
+    //java ternary statement    
     public static void main(String[] args) {
         int num = 12;
         int max = 15;

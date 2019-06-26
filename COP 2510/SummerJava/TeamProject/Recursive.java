@@ -8,7 +8,7 @@ public class Recursive{
             ArrayList<String> comboCurrent = new ArrayList<String>(combo);
             comboCurrent.add(i,"@");
             if(!combos.contains(comboCurrent)){
-                //System.out.println(comboCurrent);
+                System.out.println(comboCurrent);
                 combos.add(comboCurrent);                
             }
         }
@@ -40,7 +40,7 @@ public class Recursive{
         long start = System.nanoTime();
         String[] letters = {"v", "w", "x", "y", "z", "5", "6", "7", "8", "9", "=", "?", "%", "$"};
         createLists(letters,5);
-        System.out.println(combos.size());
+        //System.out.println(combos.size());
         long end = System.nanoTime();
         double runTime = (double) (end-start)/(1000000000.0);
         System.out.println("Total run time " + runTime + " seconds.");
