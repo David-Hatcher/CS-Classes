@@ -11,6 +11,7 @@ public class projApp{
     private static Scanner read = new Scanner(System.in);
     private static ArrayList<String> choicesSet = new ArrayList<String>(
         Arrays.asList("v", "w", "x", "y", "z", "5", "6", "7", "8", "9", "=", "?", "%", "@", "$"));
+    private static int guessCountGlobal =0;
 
     
     private static void print(String message){
@@ -84,6 +85,10 @@ public class projApp{
         String score = "";
         int guessCount = 0;
         while(!score.equalsIgnoreCase(winString) && !score.equalsIgnoreCase("giveup")){
+            while(!ensureGuessCorrect(playerGuessString, playerGuessArrayList)){
+                playerGuessString = askForGuess();
+                playerGuessArrayList = convertStringToArrayList(playerGuessString);
+            }
             score = runComputerCodeLoop(playerGuessString, playerGuessArrayList, secretCodeComputerArrayList, ++guessCount);
             if(!score.equalsIgnoreCase(winString) && !score.equalsIgnoreCase("giveup")){
                 playerGuessString = askForGuess();
