@@ -11,6 +11,13 @@ public class projApp{
     private static Scanner read = new Scanner(System.in);
     private static ArrayList<String> choicesSet = new ArrayList<String>(
         Arrays.asList("v", "w", "x", "y", "z", "5", "6", "7", "8", "9", "=", "?", "%", "@", "$"));
+    private static int guessCountGlobal =0;
+    private static int min = 100;
+    private static int max = 0;
+    private static int count = 0;
+    private static int total = 0;
+    private static double avg;
+
     
     private static void print(String message){
         System.out.print(message);
@@ -62,6 +69,9 @@ public class projApp{
         else if (choice.equalsIgnoreCase("3")){
             runComputerCodeAndGuess();
         }
+        else if (choice.equalsIgnoreCase("4")){
+            runComputerAgainstItself();
+        }
         else{
             println("Incorrect Input!!!!");
             RunProgram();
@@ -79,13 +89,13 @@ public class projApp{
         ArrayList<String> secretCodeComputerArrayList = iGuess.generateSecretCode();
         String score = "";
         int guessCount = 0;
-        while(!score.equalsIgnoreCase(winString)  /* && !score.equalsIgnoreCase("giveup")*/){
+        while(!score.equalsIgnoreCase(winString) && !score.equalsIgnoreCase("giveup")){
             while(!ensureGuessCorrect(playerGuessString, playerGuessArrayList)){
                 playerGuessString = askForGuess();
                 playerGuessArrayList = convertStringToArrayList(playerGuessString);
             }
             score = runComputerCodeLoop(playerGuessString, playerGuessArrayList, secretCodeComputerArrayList, ++guessCount);
-            if(!score.equalsIgnoreCase(winString) /* && !score.equalsIgnoreCase("giveup")*/){
+            if(!score.equalsIgnoreCase(winString) && !score.equalsIgnoreCase("giveup")){
                 playerGuessString = askForGuess();
                 playerGuessArrayList = convertStringToArrayList(playerGuessString);
             }
@@ -100,7 +110,9 @@ public class projApp{
             response = "Good try!\nThe Secret Code is: " + iGuess.getSecretCode();
             score = "giveup";            
         }
-
+        else if(!ensureGuessCorrect(playerGuessString, playerGuessArrayList)){
+            response = "ERROR, please ensure correct formatting per instructions.";
+        }
         else{
             score = iGuess.compareScores(playerGuessArrayList, secretCodeComputerArrayList);
             response = "Guess = " + playerGuessString + "\nScore = " + score + "\nGuess Count = " + guessCount;
@@ -128,9 +140,6 @@ public class projApp{
             else if(guess.length() != 5 || doesStringContainOnlyChoices(guessArrayList) 
                                         || areCharactersUnique(guessArrayList) 
                                         || isGuessMissingAt(guessArrayList)){
-                                           
-            System.out.println("ERROR, please ensure correct formatting per instructions.");
-                                            
                 return false;
             }
         }
@@ -224,7 +233,42 @@ public class projApp{
         println("I solved it in " + myGuessCount + " guesses.\n" +
                 "You solved it in " + yourGuessCount + " guesses.");
     }
+
+    private static void runComputerAgainstItself(){
+        iGuess.createLists();
+        ArrayList<String> computerSecretCode = iGuess.generateSecretCode();
+        //println("The Computer will make a code and find a computer opponents code.");
+        String score = "";
+        int guessCount = 0;
+        while(!score.equalsIgnoreCase(winString)){
+            ArrayList<String> currentGuess = iGuess.generateRandomGuess();
+            score = iGuess.compareScores(currentGuess, computerSecretCode);
+            //println("Guess #" + ++guessCount + "\t" + convertArrayListToString(currentGuess) +"\tEnter Score:" + score);
+            ++guessCount;
+            if(!score.equalsIgnoreCase(winString)){
+                iGuess.pruneList(currentGuess, score);
+            }
+        }
+        count++;
+        total += guessCount;
+        if(guessCount > max){
+            max = guessCount;
+        }
+        else if(guessCount < min){
+            min = guessCount;
+        }
+    }
+
     public static void main(String[] args) {
-        RunProgram();
+
+        System.out.println("Thinking....");
+        for(int i = 0; i < 1000; i++){
+            runComputerAgainstItself();
+        }
+        avg = (double)total/(double)count;
+        System.out.println("Min Guess = " + min);
+        System.out.println("Max Guess = " + max);
+        System.out.println("Average guess = " + avg);
+        System.out.println("Out of " + count + " games");
     }
 }
