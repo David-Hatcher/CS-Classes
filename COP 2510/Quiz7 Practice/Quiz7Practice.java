@@ -20,8 +20,9 @@ public class Quiz7Practice {
     for (int number : data) {
       temp.add(0,number);
     }
-    data.clear();
-    data.addAll(temp);
+    data = temp;
+    // data.clear();
+    // data.addAll(temp);
   }
   private static void cleanArrayList(ArrayList<Integer> data){
     ArrayList<Integer> temp = new ArrayList<Integer>();
