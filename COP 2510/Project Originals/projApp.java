@@ -237,13 +237,13 @@ public class projApp{
     private static void runComputerAgainstItself(){
         iGuess.createLists();
         ArrayList<String> computerSecretCode = iGuess.generateSecretCode();
-        //println("The Computer will make a code and find a computer opponents code.");
+        println("The Computer will make a code and find a computer opponents code.");
         String score = "";
-        int guessCount = 0;
+        int guessCount = 1;
         while(!score.equalsIgnoreCase(winString)){
             ArrayList<String> currentGuess = iGuess.generateRandomGuess();
             score = iGuess.compareScores(currentGuess, computerSecretCode);
-            //println("Guess #" + ++guessCount + "\t" + convertArrayListToString(currentGuess) +"\tEnter Score:" + score);
+            println("Guess #" + guessCount + "\t" + convertArrayListToString(currentGuess) +"\tEnter Score:" + score);
             ++guessCount;
             if(!score.equalsIgnoreCase(winString)){
                 iGuess.pruneList(currentGuess, score);
@@ -260,15 +260,6 @@ public class projApp{
     }
 
     public static void main(String[] args) {
-
-        System.out.println("Thinking....");
-        for(int i = 0; i < 1000; i++){
-            runComputerAgainstItself();
-        }
-        avg = (double)total/(double)count;
-        System.out.println("Min Guess = " + min);
-        System.out.println("Max Guess = " + max);
-        System.out.println("Average guess = " + avg);
-        System.out.println("Out of " + count + " games");
+        RunProgram();
     }
 }
