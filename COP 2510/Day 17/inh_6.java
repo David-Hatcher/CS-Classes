@@ -44,7 +44,7 @@ class graduate_student extends student {
 		System.out.println(a + a + a + "hello hello");
 	}
 }
-class inh_6 {
+public class inh_6 {
 	public static void main(String args[]) {
 		student A = new undergraduate_student();
 		
@@ -93,11 +93,14 @@ class inh_6 {
 		System.out.println();
 		
 		student C = new student();
+		C = B;	//Added in to make program work
+
 		//undergraduate_student D = C; 				// COMPILE ERROR: incompatible types
 		//undergraduate_student D = new student();	// COMPILE ERROR: incompatible types
-		//undergraduate_student D = (undergraduate_student)C;  //COMPILE OK, but failed execution: ClassCastException 
+		undergraduate_student D = (undergraduate_student)C;  //COMPILE OK, but failed execution: ClassCastException 
 		
 		C.print("C");
+		D.print("D");
 
 		System.out.println();		
 	}
