@@ -6,16 +6,18 @@ import java.util.Arrays;
 
 class ReadFile {
     PrintHelper ph = new PrintHelper();
-    public ArrayList<ArrayList<String>> readOrdersFile(String fileName){
+    private int ordersLineCount = 0;
+    private int customersLineCount = 0;
+    public int getOrdersLineCount(){return ordersLineCount;}
+    public int getCustomersLineCount(){return customersLineCount;}
+    public ArrayList<ArrayList<String>> readOrdersFile(String fileName) throws IOException{
         File filePath = new File ("../Ass7_Data/" + fileName);
         ArrayList<ArrayList<String>> lineItems = new ArrayList<ArrayList<String>>();
-        try {
-            int lineCount = 0;
-            BufferedReader input = new BufferedReader(
-                                    new FileReader(filePath));
+        try(BufferedReader input = new BufferedReader(
+                                   new FileReader(filePath))) {
             String currentLine = input.readLine();
             while(currentLine != null){
-                lineCount++;
+                ordersLineCount++;
                 ArrayList<String> currentItem = new ArrayList<String>();
                 String[] currentLines = currentLine.split("\t");
                 for (String line : currentLines) {
@@ -23,71 +25,37 @@ class ReadFile {
                 }
                 lineItems.add(currentItem);
                 currentLine = input.readLine();
-            }
-            input.close();
-            ph.PrintLn("File " + filePath.toString() + " is read successfully with " + lineCount + " lines\n");
+            }            
         } catch (IOException e) {
-            // ph.PrintLn("......No file of " + filePath.toString() + " can be found.\n" +
-            // "Please check if such a file exists and re-run this program\n\n" +
-            // ".....Reading " + fileName + " failed\n\n");
+            throw new IOException(filePath.toString());
         }
         return lineItems;
     }
-    public ArrayList<String> readCustomersFile(String fileName){
+    public ArrayList<String> readCustomersFile(String fileName) throws IOException{
         ArrayList<String> customers = new ArrayList<String>();
         File filePath = new File ("../Ass7_Data/" + fileName);
-        try {
-            int customersCount = 0;
-            BufferedReader input = new BufferedReader(
-                                    new FileReader(filePath));
+        try(BufferedReader input = new BufferedReader(
+                                   new FileReader(filePath))){
             String customerCurrent = input.readLine();
             while(customerCurrent != null){
-                customersCount++;
+                customersLineCount++;
                 customers.add(customerCurrent);
                 customerCurrent = input.readLine();
             }
-            input.close();
-            ph.PrintLn("File " + filePath.toString() + " is read successfully with " + customersCount + " lines\n");
         } catch (IOException e) {
-            // ph.PrintLn("......No file of " + filePath.toString() + " can be found.\n" +
-            // "Please check if such a file exists and re-run this program\n\n"+
-            // ".....Reading " + fileName + " failed\n\n");
+            throw new IOException(filePath.toString());
         }
         return customers;
-    }
-    public int getLineCount(File filePath){
-        int lines = 0;
-        try {
-            BufferedReader input = new BufferedReader(
-                                    new FileReader(filePath));
-            while(input.readLine() != null){
-                lines++;
-            }
-            input.close();
-        } catch (IOException e) {
-            ph.PrintLn("File Doesn't exist!!!!!");
-        }
-        return lines;
     }
 }
 class WriteFile{
     PrintHelper ph = new PrintHelper();
     ReadFile rf = new ReadFile();
-    public void writeSIMCFile(ArrayList<ArrayList<String>> data){
-        File filePath = new File ("../Ass7_Data/SIMC.txt");
-        int previousLines = 0;
-        try {
-            if(!filePath.exists()){
-                filePath.createNewFile();
-            }
-            else{
-                previousLines = rf.getLineCount(filePath);
-                FileWriter clearing = new FileWriter(filePath);
-                clearing.close();
-            }
-            PrintWriter output = new PrintWriter(
-                new BufferedWriter(
-                new FileWriter(filePath,true)));
+    public void writeSIMCFile(ArrayList<ArrayList<String>> data, int count){
+        File filePath = new File ("../Ass7_Data/SIMC.txt");        
+        try(PrintWriter output = new PrintWriter(
+                                 new BufferedWriter(
+                                 new FileWriter(filePath)))){
             for (ArrayList<String> line : data) {
                 String simcLine = "";
                 for (String info : line) {
@@ -95,10 +63,9 @@ class WriteFile{
                 }
                 output.println(simcLine);
             }
-            output.close();
-            ph.PrintLn("File " + filePath.toString() + " is created (" + data.size() + " lines) but only " + (data.size()-previousLines) + " are updated");
+            ph.PrintLn("File " + filePath.toString() + " is created (" + data.size() + " lines) but only " + (count) + " are updated");
         } catch (IOException e) {
-            System.out.println("Something went wrong with writing " + e.getMessage());
+            System.out.println("Something went wrong with writing " + filePath.toString());
         }
     }
 }
@@ -109,6 +76,7 @@ class Orders{
     private double lowestValue = 1.0/0.0;
     private int orderCount;
     private int customersOrderedCount = 0;
+    private int discountUpdated = 0;
     private String highestValueCustomer;
     private String highestValueOrder;
     private String lowestValueCustomer;
@@ -118,11 +86,23 @@ class Orders{
         return "\t(Q2) Total Orders in orders file = " + orderCount + "\n";
     }    
     public String getHighestValue(){
-        return "\t(Q4) Largest order = " + highestValue + ", which is order " + highestValueOrder + " of customer " + highestValueCustomer + "\n";
+        return "\t(Q4) Largest order = $" + highestValue + ", which is order " + highestValueOrder + " of customer " + highestValueCustomer + "\n";
     }
     public String getLowestValue(){
-        return "\t(Q5) Smallest order = " + lowestValue + ", which is order " + lowestValueOrder + " of customer " + lowestValueCustomer + "\n";
+        return "\t(Q5) Smallest order = $" + lowestValue + ", which is order " + lowestValueOrder + " of customer " + lowestValueCustomer + "\n";
     }
+    public String getCustomersOrderedCount(){
+        return "\t(Q1) Total customers in orders file = " + customersOrderedCount + "\n";
+    }
+    public String getCustomersWhoDidNotOrder(){
+        String noOrdersCust =  "\t(Q3) " + customersThatDidNotOrder.size() + " customers with no orders = ";
+        for (String customer : customersThatDidNotOrder) {
+            noOrdersCust += customer + "   ";
+        }
+        noOrdersCust+= "\n";
+        return noOrdersCust;
+    }
+    public int getDiscountUpdated(){return discountUpdated;}
     public void compileOrders(ArrayList<ArrayList<String>> data){
         ArrayList<String> orders = new ArrayList<String>();
         ArrayList<String> values = new ArrayList<String>();
@@ -191,17 +171,6 @@ class Orders{
             }
         }
     }
-    public String getCustomersOrderedCount(){
-        return "\t(Q1) Total customers in orders file = " + customersOrderedCount + "\n";
-    }
-    public String getCustomersWhoDidNotOrder(){
-        String noOrdersCust =  "\t(Q3) " + customersThatDidNotOrder.size() + " customers with no orders = ";
-        for (String customer : customersThatDidNotOrder) {
-            noOrdersCust += customer + "   ";
-        }
-        noOrdersCust+= "\n";
-        return noOrdersCust;
-    }
     public ArrayList<ArrayList<String>> createSIMCOrders(ArrayList<ArrayList<String>> data){
         ArrayList<String> countries = new ArrayList<String>(Arrays.asList("Spain","Mexico","Italy","Canada"));
         ArrayList<ArrayList<String>> simc = new ArrayList<ArrayList<String>>();
@@ -217,22 +186,22 @@ class Orders{
                 simcLine.add(line.get(19));//Quantity
                 double discount = Double.parseDouble(line.get(20));
                 if(discount == 0.0){
-                    discount = 0.3;
+                    discount = 0.03;
+                    discountUpdated++;
                 }
-                else if(discount > .2){
-                    discount -= 0.1;
+                else if(discount >= .2){
+                    discount -= 0.01;
+                    discountUpdated++;
                 }
                 simcLine.add(Double.toString(discount));
                 simc.add(simcLine);
             }
         }
         return simc;
-    }  
+    }
 }
 class PrintHelper{
-    public void PrintLn(Object message){
-        System.out.println(message);
-    }
+    public void PrintLn(Object message){System.out.println(message);}
 }
 public class Assignment7{
     static PrintHelper ph = new PrintHelper();
@@ -248,28 +217,27 @@ public class Assignment7{
         ph.PrintLn(ord.getCustomersWhoDidNotOrder());
         ph.PrintLn(ord.getHighestValue());
         ph.PrintLn(ord.getLowestValue());
-        wf.writeSIMCFile(simcList); 
+        wf.writeSIMCFile(simcList,ord.getDiscountUpdated()); 
     }
     public static void main(String[] args) {
         ph.PrintLn("\n--------begin of Assignment 7--------\n");        
-        if(args.length < 2){
+        try {
+            String ordersFileName = args[0];
+            String customersFileName = args[1];
+            ArrayList<ArrayList<String>> ordersList = rf.readOrdersFile(ordersFileName);
+            ArrayList<String> customersList = rf.readCustomersFile(customersFileName);
+            ArrayList<ArrayList<String>> simcList = ord.createSIMCOrders(ordersList);
+            ph.PrintLn("File ../Ass7_Data/" + ordersFileName + " is read successfully with " + rf.getOrdersLineCount() + " lines\n");
+            ph.PrintLn("File ../Ass7_Data/" + customersFileName + " is read successfully with " + rf.getCustomersLineCount() + " lines\n");
+            runProgram(ordersList,customersList,simcList);
+        } catch (IOException e) {
+            ph.PrintLn("......No file of " + e.getMessage() + " can be found.\n" +
+            "Please check if such a file exists and re-run this program\n\n"+
+            ".....Reading " + e.getMessage() + " failed\n");                
+        } catch (IndexOutOfBoundsException e){
             ph.PrintLn(".....Did you forget to enter 2 file names at command line?");
             ph.PrintLn("Please re-run this program\n");
-        }
-        else{
-            try {
-                ArrayList<ArrayList<String>> ordersList = rf.readOrdersFile(args[0]);
-                if(ordersList.size() == 0){throw new IOException(args[0]);}
-                ArrayList<String> customersList = rf.readCustomersFile(args[1]);
-                if(customersList.size() == 0){throw new IOException(args[1]);}
-                ArrayList<ArrayList<String>> simcList = ord.createSIMCOrders(ordersList);
-                runProgram(ordersList,customersList,simcList);
-            } catch (IOException e) {
-                ph.PrintLn("......No file of ../Ass7_data/" + e.getMessage() + " can be found.\n" +
-                "Please check if such a file exists and re-run this program\n\n"+
-                ".....Reading " + e.getMessage() + " failed\n");                
-            }  
-        }
+        }        
         ph.PrintLn("--------end of Assignment 7--------");
     }
 }

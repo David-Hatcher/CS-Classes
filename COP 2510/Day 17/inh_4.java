@@ -10,13 +10,15 @@
 
 class student {
 	protected double GPA = -1;
-	public void setSAT(int data){}
+	public void setSAT(int data){
+		System.out.println("I am changing the SAT data.");
+	}
 	public void setGPA(double gpa){
 		GPA = gpa;
 	}	
-	public void print(String s){
-		System.out.println(s + "....student details.... GPA = " + GPA);
-	}
+	// public void print(String s){
+	// 	System.out.println(s + "....student details.... GPA = " + GPA);
+	// }
 	public void hello(String s){
 		System.out.println(s + " says hello");
 	}
@@ -25,6 +27,7 @@ class student {
 class undergraduate_student extends student {
 	private int SAT;
 	public void setSAT(int sat){
+		//super.setSAT(sat);
 		SAT = sat;
 	}
 	public void print(String s){
@@ -99,7 +102,7 @@ class inh_4 {
 											//        because JRE knows somebody is still 
 											//		  NOT an undergraduate_student object
 		
-		System.out.println("\n....after    somebody.setGPA(0);\n");
+		System.out.println("\n....after    somebody.setSAT(1100);\n");
 		
 		//peter.setSAT(1100);									
 		somebody.print("somebody is peter 4");	
