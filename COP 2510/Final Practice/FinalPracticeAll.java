@@ -1,5 +1,33 @@
 import java.util.ArrayList;
 
+abstract class FindMinMaxArray{
+  public String findMinMax(int[] data){
+    int max = data[0];
+    int min = data[0];
+    for (int number : data) {
+      max = number > max ? number : max;
+      min = number < min ? number : min;
+    }
+    return ("Max = " + max + "\nMin = " + min);
+  }
+}
+final class FindMinMaxArrayList extends FindMinMaxArray{
+  final public String findMinMax(ArrayList<Integer> data){
+    int[] dataArray = new int[data.size()];
+    for(int i = 0; i < dataArray.length; i++){
+      dataArray[i] = data.get(i);
+    }
+    return super.findMinMax(dataArray);
+  }
+  final public String findMinMax(int[] data){
+    return super.findMinMax(data);
+  }
+}
+// class whatever extends FindMinMaxArrayList{
+//   public String findMinMax(ArrayList<Integer> data){
+//     super.findMinMax(data);
+//   }
+// }
 class FinalPracticeAll{
   public static void println(Object message){
     System.out.println(message);
@@ -40,26 +68,13 @@ class FinalPracticeAll{
     RunProgram(args);
   }
 }
-abstract class FindMinMaxArray{
-  public String findMinMax(int[] data){
-    int max = data[0];
-    int min = data[0];
-    for (int number : data) {
-      max = number > max ? number : max;
-      min = number < min ? number : min;
-    }
-    return ("Max = " + max + "\nMin = " + min);
-  }
+
+class polyPractice {
+public static void toString() {
+
+
 }
-class FindMinMaxArrayList extends FindMinMaxArray{
-  public String findMinMax(ArrayList<Integer> data){
-    int[] dataArray = new int[data.size()];
-    for(int i = 0; i < dataArray.length; i++){
-      dataArray[i] = data.get(i);
-    }
-    return super.findMinMax(dataArray);
-  }
-  public String findMinMax(int[] data){
-    return super.findMinMax(data);
-  }
+
+
+
 }
