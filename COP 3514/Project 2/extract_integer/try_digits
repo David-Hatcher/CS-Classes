@@ -1,0 +1,40 @@
+#iAuthor: Jing Wang, for Program Design
+# try_digits is a Unix shell script that will be used to test project 2, problem #2.
+# To use the script, copy it into the same directory as your scource file
+# Set execute permission for the file by issuing the command:
+# chmod +x try_digits
+# Compile your program, producing a.out as the executable
+# To run the script, type 
+# ./try_digits
+# The user input from the script will not be shown on the screen.
+# Compare the results from your program with the expected results on the test cases.
+echo '===================================================='
+#
+./a.out <<-EndOfInput
+3littlePigs
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Input: 3littlePigs'
+echo 'Output: 3'
+#
+echo '===================================================='
+#
+./a.out <<-EndOfInput
+forgive me 
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Input: forgive,me' 
+echo 'Output: ' 
+#
+echo '===================================================='
+#
+./a.out <<-EndOfInput
+zone8 abc!12de3
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Input: zone8 abc!12de3'
+echo 'Output: 8123' 
+echo '===================================================='

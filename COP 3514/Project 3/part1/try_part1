@@ -1,0 +1,48 @@
+# Written by Jing Wang for Program Design
+# try_part1 is a Unix shell script that will be used to test project 3.
+# To use the script, copy it into the same directory as your scource file
+# Set execute permission for the file by issuing the command:
+# chmod +x try_part1
+# Compile your program, producing a.out as the executable
+# To run the script, type 
+# ./try_part1
+# The user input from the script will not be shown on the screen.
+# Compare the results from your program with the expected results on the test cases.
+echo '===================================================='
+./a.out <<-EndOfInput
+8
+6 2 0 3 9 0 -4 0
+0
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter the length of the input array: 8'
+echo 'Enter the array elements: 6 2 0 3 9 0 -4 0'
+echo 'Enter the value for searching: 0'
+echo 'Output: 2'
+echo '===================================================='
+./a.out <<-EndOfInput
+5
+3 9 1 -4 8
+0
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter the length of the input array: 5'
+echo 'Enter the array elements: 3 9 1 -4 8'
+echo 'Enter the value for  searching: 0'
+echo 'Output array: -1'
+echo '===================================================='
+./a.out <<-EndOfInput
+3
+-9 0 1
+-9
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter the length of the input array: 3'
+echo 'Enter the array elements: -9 0 1'
+echo 'Enter the value for searching: -9'
+echo 'Output array: 0'
+echo '===================================================='
+
