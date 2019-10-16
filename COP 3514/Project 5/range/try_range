@@ -1,0 +1,70 @@
+# Author: Jing Wang, for Program Design
+# try_range is a Unix shell script that will be used to test project 5.
+# To use the script, copy it into the same directory as your scource file
+# Set execute permission for the file by issuing the command:
+# chmod +x try_range
+# Compile your program, producing a.out as the executable
+# To run the script, type 
+# ./try_range
+# The user input from the script will not be shown on the screen.
+# Compare the results from your program with the expected results on the test cases.
+echo '===================================================='
+#
+./a.out <<-EndOfInput
+abdomi[n-p]lasties
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter a word: abdomi[n-p]lasties'
+echo 'Output: abdominoplasties'
+#
+echo '===================================================='
+#
+./a.out <<-EndOfInput
+[s-u]dent
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter a word: [s-u]dent'
+echo 'Output: student'
+#
+echo '===================================================='
+#
+./a.out <<-EndOfInput
+assassinate
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter a word: assassinate'
+echo 'Output: no range found'
+echo '===================================================='
+#
+./a.out <<-EndOfInput
+[d-f]end
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter a word: [d-f]end'
+echo 'Output: defend'
+echo '===================================================='
+#
+./a.out <<-EndOfInput
+letter grade [a-f]
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter a word: letter grade [a-f]'
+echo 'Output: letter grade abcdef'
+#
+echo '===================================================='
+##
+./a.out <<-EndOfInput
+nitro cold brew
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter a word: nitro cold brew'
+echo 'Output: no range found'
+#
+echo '===================================================='
+#

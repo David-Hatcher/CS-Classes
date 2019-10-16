@@ -13,7 +13,7 @@ int main()
     int j,n=4;
     int a[4] = {5,8,2,9};
     print_arrays(a,n);
-        for(j = 0; j < n; j++){
+    for(j = 0; j < n; j++){
       
         printf("Address of a[%d] = %p\n",j,&a[j]);
     }

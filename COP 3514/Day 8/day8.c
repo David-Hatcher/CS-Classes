@@ -22,8 +22,8 @@ int main()
     ptr = &i;
 
     printf("i value = %d, i address = %p\n",i,ptr);
-    //2. Indirect operator
-    *ptr = 78;// same as i = 78   *ptr is an alias of i
+    //2. Indirect operator  (To change the value you musthave the *)
+    *ptr = 78;// same as i = 78   *ptr is an alias of i 
     printf("i value = %d, i address = %p",i,ptr);
     
 

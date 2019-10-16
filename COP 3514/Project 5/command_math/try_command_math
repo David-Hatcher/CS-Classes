@@ -1,0 +1,36 @@
+# Author: Jing Wang, for Program Design
+# try_command_math is a Unix shell script that will be used to test project 5.
+# To use the script, copy it into the same directory as your scource file
+# Set execute permission for the file by issuing the command:
+# chmod +x try_command_math
+# Compile your program, producing a.out as the executable
+# To run the script, type 
+# ./try_command_math
+# The user input from the script will not be shown on the screen.
+# Compare the results from your program with the expected results on the test cases.
+echo '===================================================='
+./a.out + 4 9
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Result: 13'
+echo '===================================================='
+./a.out - 14 -2
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Result: 16'
+echo '===================================================='
+./a.out x 2 8
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Result: 16'
+echo '===================================================='
+./a.out / 4 9
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Result: 0'
+echo '====================================================='
+./a.out . 4 3
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Invalid option. +, -, x, or / followed by two operands'
+echo '====================================================='

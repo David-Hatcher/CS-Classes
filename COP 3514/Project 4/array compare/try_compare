@@ -1,0 +1,47 @@
+# Written by Jing Wang for IT Program Design
+# try_compare is a Unix shell script that will be used to test project 4, problem #1.
+# To use the script, copy it into the same directory as your scource file
+# Set execute permission for the file by issuing the command:
+# chmod +x try_compare
+# Compile your program, producing a.out as the executable
+# To run the script, type 
+# ./try_compare
+# The user input from the script will not be shown on the screen.
+# Compare the results from your program with the expected results on the test cases.
+echo '===================================================='
+./a.out <<-EndOfInput
+5
+3 9 1 -4 8
+3 7 1 -4 8
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter the length of the first array: 5'
+echo 'Enter the first array elements: 3 9 1 -4 8'
+echo 'Enter the second array elements:3 7 1 -4 8'
+echo 'Output: The two arrays are different by 1 element'
+echo '===================================================='
+./a.out <<-EndOfInput
+5
+3 9 1 -4 8
+3 9 1 -4 8
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter the length of the first array: 5'
+echo 'Enter the first array elements: 3 9 1 -4 8'
+echo 'Enter the second  array elements: 3 9 1 -4 8'
+echo 'Output: The two arrays are identical'
+echo '===================================================='
+./a.out <<-EndOfInput
+5
+3 9 1 -4 8
+-4 8 1 3 9
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter the length of the first array: 5'
+echo 'Enter the first array elements: 3 9 1 -4 8'
+echo 'Enter the second array elements: -4 8 1 3 9'
+echo 'Output: The two arrays are different by 4 elements'
+echo '===================================================='
