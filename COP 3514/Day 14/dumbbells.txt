@@ -1,0 +1,4 @@
+3 red 10
+20 purple 2
+8 blue 8
+9 pink 32

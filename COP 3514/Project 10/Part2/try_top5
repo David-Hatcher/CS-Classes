@@ -1,0 +1,22 @@
+# Author: Jing Wang, for IT Program Design
+# try_farm is a Unix shell script that will be used to test project 5.
+# To use the script, copy it into the same directory as your scource file
+# Set execute permission for the file by issuing the command:
+# chmod +x try_top5
+# Compile your program, producing a.out as the executable
+# To run the script, type 
+# ./try_top5
+# The user input from the script will not be shown on the screen.
+# Compare the results from your program with the expected results on the test cases.
+echo '===================================================='
+#
+./a.out
+cat top5.txt
+echo '===================================================='
+echo 'Expected output:'
+echo 'lettuce			2.20	882.40'	
+echo 'tomato			2.90	873.90'	
+echo 'potato			0.60	823.65'	
+echo 'honeydew          	1.59	588.20'	
+echo 'orange			1.20	506.21'	
+echo '===================================================='

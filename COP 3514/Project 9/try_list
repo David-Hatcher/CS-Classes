@@ -1,0 +1,130 @@
+# Author: Jing Wang, for Program Design
+# try_list is a Unix shell script that will be used to test project 8.
+# To use the script, copy it into the same directory as your scource file
+# Set execute permission for the file by issuing the command:
+# chmod +x try_list
+# Compile your program, producing a.out as the executable
+# To run the script, type
+# ./try_list
+# The user input from the script will not be shown on the screen.
+# Compare the results from your program with the expected results on the test cases.
+echo '===================================================='
+./a.out <<-EndOfInput
+a
+Infant
+Jean
+Reagan
+675-474-2323
+a
+Preschool
+Ashley
+Spires
+875-443-5335
+a
+Toddler
+Whee
+Winn
+766-343-6994
+a
+Toddler
+Lisa
+Mantchev
+433-443-8755
+p
+a
+Preschool
+Ashley
+Spires
+p
+u
+Preschool
+Ashley
+Spires
+Pre-k
+u
+Pre-k
+Julia
+Donaldson
+p
+q
+EndOfInput
+echo '----------------------------------------------------'
+echo 'Expected:'
+echo 'Enter opertion code: a'
+echo 'Enter classroom: Infant'
+echo 'Enter child first name: Jean'
+echo 'Enter child last name: Reagan'
+echo 'Enter contact phone number: 675-474-2323 '
+echo '===================================================='
+echo 'Expected:'
+echo 'Enter opertion code: a'
+echo 'Enter classroom: Preschool'
+echo 'Enter child first name: Ashley'
+echo 'Enter child last name: Spires'
+echo 'Enter contact phone number: 875-443-5335'
+echo '===================================================='
+echo 'Expected:'
+echo 'Enter opertion code: a'
+echo 'Enter classroom: Toddler'
+echo 'Enter child first name: Whee'
+echo 'Enter cild last name: Winn'
+echo 'Enter contact phone number: 766-343-7994'
+echo '===================================================='
+echo 'Expected:'
+echo 'Enter opertion code: a'
+echo 'Enter classroom: Toddler'
+echo 'Enter child first name: Lisa'
+echo 'Enter child last name: Mantchev' 
+echo 'Enter contact phone number: 433-443-8755'
+echo '===================================================='
+echo 'Enter operation code: p'
+echo 'Classroom                       First Name      Last Name       Contact Phone Number'
+echo 'Infant                          Jean           Reagan             675-474-2323'
+echo 'Preschool                       Ashley         Spires             875-443-5335'
+echo 'Toddler                         Whee           Winn               766-343-7994'
+echo 'Toddler                         Lisa           Mantchev           433-443-8755'
+echo '==================================================='
+echo 'Expected:'
+echo 'Enter opertion code: a'
+echo 'Enter classroom: Preschool'
+echo 'Enter child first name: Ashley'
+echo 'Enter child last name: Spires'
+echo 'Ashley Spirtes is already on the waiting list for Preschool classroom'
+echo '===================================================='
+echo 'Enter operation code: p'
+echo 'Classroom                       First Name      Last Name       Contact Phone Number'
+echo 'Infant                          Jean           Reagan             675-474-2323'
+echo 'Preschool                       Ashley         Spires             875-443-5335'
+echo 'Toddler                         Whee           Winn               766-343-7994'
+echo 'Toddler                         Lisa           Mantchev           433-443-8755'
+echo '==================================================='
+echo 'Expected:'
+echo 'Enter opertion code: u'
+echo 'Enter classroom: Preschool'
+echo 'Enter child first name: Ashley'
+echo 'Enter child last name: Spires'
+echo 'Ashley Spires found on the waiting list for Preschool classroom.'
+echo ' Enter new classroom: Pre-k'
+echo '===================================================='
+echo 'Enter operation code: p'
+echo 'Classroom                       First Name      Last Name       Contact Phone Number'
+echo 'Infant                          Jean           Reagan             675-474-2323'
+echo 'Pre-k				Ashley         Spires             875-443-5335'
+echo 'Toddler                         Whee           Winn               766-343-7994'
+echo 'Toddler                         Lisa           Mantchev           433-443-8755'
+echo '==================================================='
+echo 'Expected:'
+echo 'Enter opertion code: u'
+echo 'Enter classroom: Pre-k'
+echo 'Enter child first name:Julia'
+echo 'Enter child last name: Donaldson'
+echo 'Julia Donaldson was not found on the waiting list for Pre-k classroom.'
+echo '===================================================='
+echo 'Enter operation code: p'
+echo 'Classroom                       First Name      Last Name       Contact Phone Number'
+echo 'Infant                          Jean           Reagan             675-474-2323'
+echo 'Pre-k				Ashley         Spires             875-443-5335'
+echo 'Toddler                         Whee           Winn               766-343-7994'
+echo 'Toddler                         Lisa           Mantchev           433-443-8755'
+echo '==================================================='
+echo 'Enter operation code: q'
