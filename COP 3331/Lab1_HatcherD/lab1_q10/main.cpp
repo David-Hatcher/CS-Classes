@@ -38,7 +38,7 @@ int main(){
     printAbsValue(nums,nums_count);
     cout << "Done" << endl;
 
-    return EXIT_SUCCESS;
+    return 0;
 }
 
 /*
