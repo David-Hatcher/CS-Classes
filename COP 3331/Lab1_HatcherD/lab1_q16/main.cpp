@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <cstdlib>
 
 using namespace std;
 
@@ -44,7 +45,7 @@ int main(){
 
     //output system response
     cout << system_response;
-    cin.ignore(); //dump newline character from input buffer
+    cin.ignore(1000,'\n'); //dump newline character from input buffer
     
     //Get and assign user feedback to terminal output string
     getline(cin,user_feedback);
@@ -53,7 +54,7 @@ int main(){
     //give user feedback with static response
     cout << terminal_output << endl;
 
-    return EXIT_SUCCESS;
+    return 0;
 
 }
 

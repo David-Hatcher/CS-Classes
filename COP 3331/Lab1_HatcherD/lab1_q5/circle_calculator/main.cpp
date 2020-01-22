@@ -2,6 +2,13 @@
 #include <cmath>
 
 using namespace std;
+/**
+ * Author: M. Delamater
+ * Edited by: David Hatcher
+ * Purpose: This program allows the user to give a diameter
+ *          of a circle and it will tell the user the radius
+ *          circumference and area of that circle 
+*/
 
 int main()
 {
