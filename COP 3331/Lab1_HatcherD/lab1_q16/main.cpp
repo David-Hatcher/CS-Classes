@@ -7,11 +7,12 @@ using namespace std;
 
 int randomGen(int min, int range);
 /*
- *This program will ask a users name then random generate 2 scores 
- *between 0 and 100 and then find the average of both scores, 
- *display them on the console. Then ask the user for feedback 
- *relay that feed back to them with heartfelt sympathies followed 
- *by a proclaimation of its best efforts. After all, it is only a computer.
+ *Author: David hatcher
+ *Purpose:  This program will ask a users name then random generate 2 scores 
+ *          between 0 and 100 and then find the average of both scores, 
+ *          display them on the console. Then ask the user for feedback 
+ *          relay that feed back to them with heartfelt sympathies followed 
+ *          by a proclaimation of its best efforts. After all, it is only a computer.
  */
 int main(){
     //Program variables definition
@@ -49,7 +50,7 @@ int main(){
     
     //Get and assign user feedback to terminal output string
     getline(cin,user_feedback);
-    terminal_output += first_name + ", I understand. You feel \"" + user_feedback + "\"; I assure you I tried my best!";
+    terminal_output += first_name + ", I understand. You feel that\"" + user_feedback + "\"; I assure you I tried my best!";
 
     //give user feedback with static response
     cout << terminal_output << endl;

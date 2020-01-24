@@ -9,11 +9,12 @@ double findSum(double nums[],int count);
 double findProduct(double nums[],int count);
 void printAbsValue(double nums[], int count);
 /*
- *This program will ask the user to enter five numbers
- *after given these numbers it will find the average,
- *sum, product, and each numbers absolute value of the
- *set of numbers given. It will then display all of these
- *values in the console.
+ *Author: David Hatcher
+ *Purpose:  This program will ask the user to enter five numbers
+ *          after given these numbers it will find the average,
+ *          sum, product, and each numbers absolute value of the
+ *          set of numbers given. It will then display all of these
+ *          values in the console.
  */
 int main(){
     //ask user for 5 values and create an array to hold them
