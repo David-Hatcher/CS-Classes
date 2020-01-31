@@ -1,10 +1,8 @@
 #include <iostream>
-
+#include "test.h"
 using namespace std;
 
 int main(){
-    int _word = 1;
-    bool False = false;
-    cout << _word;
+    cout << add(1,2);
     return 0;
 }
