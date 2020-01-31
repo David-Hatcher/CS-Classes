@@ -3,38 +3,30 @@
 #include <vector>
 #include <string>
 #include <ctime>
+const string possible_loot_file = "wizard_all_items.txt";
+const string inventory_loot_file = "wizard_inventory.txt";
 
-struct itemGen{
-    string item;
-    string response;
-}
 
 using namespace std;
 
 void showCommands();//disp commands
 void titleScreen();//title screen disp
 string getCommand();//asks user for command
-void walk();//function for processing walk command
+string walk();//function for processing walk command
 string walkDescGenerator(int num);//selects walking response
 void drop(vector<string> &inventory);//function for processing drop command
 void show(vector<string> inventory);//function for processing show command
 void exit();//function for processing exit command
-vector<string> readFile(string file_name);//reads file contents, each line in vector element.
+vector<string> readFile(string possible_loot_file);//reads file contents, each line in vector element.
 void pickUpItem(vector<string>& inventory, string item);
-vector<itemGen> generatorItem(string file_name));//reads file and generates loot
+string generatorItem(string possible_loot_file);//reads file and generates loot
 
 
 
 int main(){
-    srand(time(nullptr));
-    string possible_loot_file = "wizard_all_items.txt";
-    string inventory_loot_file = "wizard_inventory.txt";
+    srand(time(NULL));
     titleScreen();
-    vector<string> possible_loot = readFile(possible_loot_file);
-    vector<string> inventory_loot = readFile(inventory_loot_file);
-
-
-    show(inventory_loot);
+    showCommands();
 
     return 0;
 }
@@ -43,8 +35,12 @@ void titleScreen(){
     cout << "Wizard Inventory" << endl << endl;
 }
 
-void walk(){
+string walk(){
     int desc_num = rand() % 4;
+    string response = walkDescGenerator(desc_num);
+    string loot = generatorItem(possible_loot_file);
+    cout << response << loot << endl;
+    return loot;
 }
 
 string walkDescGenerator(int num){
@@ -66,6 +62,7 @@ string walkDescGenerator(int num){
     default:
         break;
     }
+    return response;
 }
 
 string getCommand(){
@@ -115,7 +112,9 @@ void pickUpItem(vector<string> &inventory, string item){
     }
 }
 
-vector<itemGen> generatorItem(string file_name){
-    vector<string> possible_loot = readFile(file_name);
-    int rand_item = rand() %
+string generatorItem(){
+    vector<string> possible_loot = readFile(possible_loot_file);
+    int rand_item = rand() % 9;
+    string item = possible_loot.at(rand_item);
+    return item;
 }

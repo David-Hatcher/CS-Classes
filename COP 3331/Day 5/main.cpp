@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "temp.h"
 
 using namespace std;
