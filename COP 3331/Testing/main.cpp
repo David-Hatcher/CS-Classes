@@ -1,8 +1,17 @@
 #include <iostream>
-#include "test.h"
+
 using namespace std;
 
 int main(){
-    cout << add(1,2);
-    return 0;
+    int num;
+    string opps;
+    cout << "Type a number: ";
+    cin >> num;
+    cout << endl;
+    if(cin.fail()){
+        cin.clear();
+        cin >> opps;
+    }
+    cout << "num = " << num << endl; 
+    cout << "opps = " <<  opps << endl;
 }

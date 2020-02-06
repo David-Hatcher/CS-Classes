@@ -1,0 +1,1 @@
+run with g++ main.cpp salestax.cpp console.cpp

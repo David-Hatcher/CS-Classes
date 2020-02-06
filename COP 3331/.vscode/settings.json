@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "exception": "cpp",
+        "new": "cpp",
+        "*.tcc": "cpp",
+        "limits": "cpp",
+        "ostream": "cpp",
+        "iomanip": "cpp",
+        "iostream": "cpp"
+    }
+}
