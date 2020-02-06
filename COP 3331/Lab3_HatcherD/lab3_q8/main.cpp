@@ -55,10 +55,42 @@ void titleScreen(){
  * walk function handles the walk command.
 */
 string walk(){
+<<<<<<< Updated upstream
     string response = "While walking down a path, you see ";
     string loot = generateItem();//generate item to be found
     cout << endl << response << loot << "." << endl;//displays full response include item
     return loot;//returns the item that was found
+=======
+    int desc_num = rand() % 4;
+    string response = walkDescGenerator(desc_num);
+    string loot = generateItem();
+    string output = response + loot;
+    cout << output;
+    cout << "." << endl;
+    return loot;
+}
+
+string walkDescGenerator(int num){
+    string response = "ERROR NUMBER OUT OF RANGE";
+    switch (num)
+    {
+    case 0:
+        response = "While strolling down the forest path, next to a tree, you spot a ";
+        break;
+    case 1:
+        response = "As you stumble down the cobble stone road, you glimpse ";
+        break;
+    case 2:
+        response = "As you explore the eerie passageway, you spot ";
+        break;
+    case 3:
+        response = "While walking down a path, you see ";
+        break;    
+    default:
+        break;
+    }
+    return response;
+>>>>>>> Stashed changes
 }
 /**
  * getCommand asks for user for their command and handle the stream
