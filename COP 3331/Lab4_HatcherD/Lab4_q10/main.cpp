@@ -59,7 +59,7 @@ vector<MenuItem> getMenuItems(const string file_name){
         string intHolder;
         getline(ss,item.name,'\t');
         getline(ss,intHolder,'\t');
-        getline(ss,item.day,'\t');
+        ss >> item.day;
         item.price = stoi(intHolder);
         items.push_back(item);
     }
@@ -89,7 +89,7 @@ string getDay(){
 void printMenuItems(const string day, const vector<MenuItem> items){
     for(MenuItem i: items){
         if(day == i.day){
-            cout << left << i.name << right << setw(30 - (int)i.name.length())  << i.price << endl;
+            cout << setw(20) << left << i.name << setw(8) << right << i.price << endl;
         }
     }
     cout << left << endl;
@@ -105,6 +105,5 @@ bool isDayValid(const string day,const vector<string> days){
 }
 
 void invalidCommand(){
-    cout << "Invalid day" << endl;
-    dispCommands();
+    cout << "Invalid day" << endl << endl;
 }
