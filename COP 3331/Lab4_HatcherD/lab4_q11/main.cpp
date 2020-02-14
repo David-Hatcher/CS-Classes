@@ -8,7 +8,7 @@ using namespace std;
 const char x_char = 'X';
 const char o_char = 'O';
 const string x_wins = "XXX";
-const string o_wins = "000";
+const string o_wins = "OOO";
 const int len = 3;
 
 struct Space{
@@ -19,7 +19,7 @@ struct Space{
 };
 
 struct Game{
-    array<array<char,len>,len> board{{' '}};
+    array<array<char,len>,len> board{{{' ', ' ',' '},{' ',' ',' '},{' ',' ',' '}}};
     bool gameState;
     array<string,8> getSets();
     Space askChoice();

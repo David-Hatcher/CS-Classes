@@ -11,9 +11,9 @@ const std::string menu_file_name = "menu.txt";
 using namespace std;
 
 struct MenuItem{
-    string name = "";
-    int price = 0;
-    string day = "";
+    string name;
+    int price;
+    string day;
 };
 
 vector<MenuItem> getMenuItems(const string file_name);
@@ -30,6 +30,9 @@ int main(){
     dispTitle();
     dispCommands();
     bool run_flag = true;
+    for(MenuItem item : items){
+        cout << "Name = " << item.name << "Price = " << item.price << "Day = " << item.day <<endl;
+    }
     do{
         string day = getDay();
         if(day == "exit"){
@@ -89,7 +92,7 @@ string getDay(){
 void printMenuItems(const string day, const vector<MenuItem> items){
     for(MenuItem i: items){
         if(day == i.day){
-            cout << setw(20) << left << i.name << setw(8) << right << i.price << endl;
+            cout << left << i.name << setw(20 - i.name.length()) << right << i.price << endl;
         }
     }
     cout << left << endl;
