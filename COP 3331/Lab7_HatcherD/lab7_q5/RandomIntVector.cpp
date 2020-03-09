@@ -19,9 +19,10 @@ RandomIntVector::RandomIntVector(int count){
 
 std::string RandomIntVector::get_str() const{
     std::string numbers = "";
-    auto b = begin();
-    auto e = end();
-    for_each(b,e,[&](int num){numbers += std::to_string(num);});
+    auto first = begin();
+    auto last = end();
+    for_each(first,--last,[&](int num){numbers += std::to_string(num) + ", ";});
+    numbers += std::to_string(*(last));
     return numbers;
 }
 

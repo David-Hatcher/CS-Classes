@@ -13,7 +13,7 @@ private:
 
     
 public:
-    RandomIntVector(int);
+    RandomIntVector(int count);
     std::string get_str() const;
     double get_avg() const;
     int get_sum() const;
