@@ -2,12 +2,14 @@
 #include "Employee.h"
 
 
-//getters
+//Getters
 std::string Employee::getEmployeeSSN() const{
     return this->employee_ssn;
 }
+//END Getters
 
-//setters
+//Setters
 void Employee::setEmployeeSSN(std::string employee_ssn){
     this->employee_ssn = employee_ssn;
 }
+//END Setters

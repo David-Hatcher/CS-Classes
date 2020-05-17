@@ -23,6 +23,11 @@ bool isCharEorC(char p);
 void printEmployee(const Employee& p);
 void printCustomer(const Customer& p);
 
+/**
+ * Author: David Hatcher
+ * Purpose: This program allows a user to create an employee or customer object
+ * and then prints the values of that object to the console
+*/
 int main(){
     printTitle(TITLE);
 
@@ -49,10 +54,17 @@ int main(){
     cout << "Bye!";
 }
 
+/**
+ * printTitle prints the title of the program
+*/
 void printTitle(string output){
     cout << output << endl << endl;
 }
 
+/**
+ * askContinue takes a string, outputs it to the console and asks the user for a y or n the returns it
+ * it also has cin error handling and handling for incorrect inputs
+*/
 bool askContinue(string output){
     cout << endl << output;
     char input;
@@ -69,6 +81,10 @@ bool askContinue(string output){
     }
 }
 
+/**
+ * askPersonType takes a string, outputs it to the console and asks the user for a c or e. 
+ * it handles cin errors and invalid character inputs
+*/
 char askPersonType(string output){
     cout << output;
     char person_type;
@@ -82,6 +98,10 @@ char askPersonType(string output){
     return tolower(person_type);
 }
 
+/**
+ * isCharEorC takes a character and returns true if it is c or e
+ * otherwise returns false
+*/
 bool isCharEorC(char p){
     if(tolower(p) == 'e' || tolower(p) == 'c'){
         return true;
@@ -89,7 +109,9 @@ bool isCharEorC(char p){
     return false;
 }
 
-
+/**
+ * createCustomer takes a first name, last name, and email and returns a customer object
+*/
 Customer createCustomer(string first_name, string last_name, string email){
     Customer p;
     p.setLastName(last_name);
@@ -102,6 +124,10 @@ Customer createCustomer(string first_name, string last_name, string email){
     p.setCustomerNumber(number);
     return p;
 }
+
+/**
+ * createEmployee takes a first name, a last name and an email and creates an employee object
+*/
 Employee createEmployee(string first_name, string last_name, string email){
     Employee p;
     p.setLastName(last_name);
@@ -115,6 +141,9 @@ Employee createEmployee(string first_name, string last_name, string email){
     return p;
 }
 
+/**
+ * printEmployee takes an Employee object and prints out the values
+*/
 void printEmployee(const Employee& p){
     cout << endl << "EMPLOYEE" << endl;
     cout << "Name: " << p.getFullName() << endl;
@@ -122,6 +151,9 @@ void printEmployee(const Employee& p){
     cout << "SSN: " << p.getEmployeeSSN() << endl;
 }
 
+/**
+ * printCustomer takes an Customer object and prints out the values
+*/
 void printCustomer(const Customer& p){
     cout << endl << "CUSTOMER" << endl;
     cout << "Name: " << p.getFullName() << endl;
