@@ -1,4 +1,5 @@
 #happyFace prints a happy face to the console
+##happy face characters built using Multiline String
 def happyFace():
     print('''                                                   *#&@@@@@@@@@@@@&%(,                                                  
                                          ./@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#,                                         
@@ -51,6 +52,6 @@ def happyFace():
 
 
 
-
+#calling happyface function
 happyFace()
 input()
