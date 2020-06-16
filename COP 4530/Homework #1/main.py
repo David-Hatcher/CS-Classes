@@ -1,12 +1,17 @@
 import sys
 import time as t
+#Starting timer when program is initially run
 start = t.time()
 #####################################
 #         Global Variables          #
 #####################################
+#Dictionary used for determining count of each keyword
 keyWordsCount = {}
+#Count of total words
 wordsCount = 0
+#Count of total Lines
 linesCount = 0
+#global gValues
 gValues = {}
 #####################################
 #       Function Definitions        #
@@ -97,7 +102,7 @@ def addValue(hashTable,word_item,tSize,gValues):
 
 ###
 #build the hash table in a loop if the addvalue method returns false
-#it will remove the previously added value and increment it's gValue then try to readd it
+#it will remove the previously added value and increment it's gValue then try to read it
 ##
 def buildHashTable(words,lettersCount):
     global gValues
