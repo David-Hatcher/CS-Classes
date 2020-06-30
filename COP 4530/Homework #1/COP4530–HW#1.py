@@ -18,7 +18,7 @@ gValues = {}
 #####################################
 
 ###
-#buildKeyWordSet returns the unique list of keywords
+#buildKeyWordSet returns the unique list of lowercase keywords
 #
 def buildKeyWordSet(words):
     keywordArray = words.lower().split()
@@ -26,7 +26,8 @@ def buildKeyWordSet(words):
     return keyWordSet
 
 ###
-#getLetters gets the letters that begin and end each keyword
+#getLetters gets the letters that begin and end each keyword\
+#returns a dictionary with the letters as keys and the value as the occurances
 ###
 def getLetters(keyWordSet):
     letters = {}
@@ -43,6 +44,7 @@ def getLetters(keyWordSet):
 
 ###
 #getWordValues gets the wor value for each of the keywords based on cichelli's algo
+#returns a 3-tuple with the word,the value(for sorting), and the length
 ###
 def getWordValues(wordSet,lettersCount):
     wordVals = []
@@ -103,6 +105,7 @@ def addValue(hashTable,word_item,tSize,gValues):
 ###
 #build the hash table in a loop if the addvalue method returns false
 #it will remove the previously added value and increment it's gValue then try to read it
+#this returns a dictionary as the hashtable where the keys are the hashkey and the value is the word
 ##
 def buildHashTable(words,lettersCount):
     global gValues
