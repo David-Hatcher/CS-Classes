@@ -17,7 +17,7 @@ sys.argv[0] = sys.argv[0][0:len(sys.argv[0]) - sys.argv[0][::-1].find('/')]
 inputFile1 = sys.argv[0]+sys.argv[1] 
 inputFile2 = sys.argv[0]+sys.argv[2] 
 inputFile3 = sys.argv[0]+sys.argv[3] 
-print("\nThe files that will be used for input are {0}, {1}, and {2}\n\n".format(sys.argv[1],sys.argv[2],sys.argv[3]))
+print("\nThe files that will be used for input are {0}, {1}, and {2}".format(sys.argv[1],sys.argv[2],sys.argv[3]))
 
 
 #Song class is used for the individual nodes in the linked list
@@ -27,7 +27,8 @@ class Song:
         self.next = next
         self.prev = prev
         global songsCount
-
+        #increment global variable every time a song is instansiated
+        songsCount += 1
 # Album class is the actual linked list 
 class Album:
     def __init__(self,name,head = None, tail = None):
@@ -46,7 +47,7 @@ class Album:
         self.songList.append(Song(song))
     #buildList orders the nodes depending on the album list provided for each album
     def buildList(self):
-        global appendCount,songsCount
+        global appendCount
         #looping through both the ordered song list and the list of song nodes to order the nodes
         for i in range(0,len(self.songOrderList)):
             for j in range(0,len(self.songList)):
@@ -54,8 +55,6 @@ class Album:
                 if(self.songList[j].name == self.songOrderList[i]):
                     #increment append counter
                     appendCount += 1
-                    #increment global variable every time a song is instansiated
-                    songsCount += 1
                     #check if it's the first song
                     if(i == 0):
                         self.head = self.songList[j]
@@ -84,6 +83,9 @@ class Playlist:
         self.tail = tail
     #append adds the node into the last position in the nodelist
     def append(self,song):
+        #increment append counter
+        global appendCount
+        appendCount += 1
         #if the node is the first to be added
         if(self.head == None):
             self.head = song
@@ -114,7 +116,11 @@ class MusicPlayer:
     #playNextTrack will play the next track in the list as per instructions
     #if there are no more songs then it will return that information
     def playNextTrack(self):
-        return "Now Playing: " + self.currentSong.name
+        if(self.currentSong.next != None):
+            self.currentSong = self.currentSong.next
+            return "Now Playing: " + self.currentSong.name
+        else:
+            return "No next song."
     #skipBack skips backwards to the previous track, if no prev track it will return that info
     def skipBack(self):
         if(self.currentSong.prev != None):
@@ -136,7 +142,7 @@ class MusicPlayer:
     #goToEnd goes to the end of the album O(1)
     def gotoEnd(self):
         self.currentSong = self.currentAlbum.tail
-        return "Now at: " + self.currentSong.name
+        return "Now at " + self.currentSong.name
     #changeAlbum changes to a new album
     def changeAlbum(self,albumName):
         for i in range(0,len(self.albums)):
@@ -144,7 +150,7 @@ class MusicPlayer:
                 self.currentAlbum = self.albums[i]
                 self.currentSong = self.currentAlbum.head
                 break
-        return "Changed to Album " + self.currentAlbum.name + '\n'
+        return "Changed to Album " + self.currentAlbum.name
     #build playlist will build the playlist when it's called
     def buildPlayList(self,playList):
         self.playListAlbum = Playlist()
@@ -192,8 +198,6 @@ class MusicPlayer:
             return self.changeAlbum(input[7:len(input)])
         elif("Playlist" in input):
             return self.buildPlayList(self.getPlayList(songsFile))
-        else:
-            return '\n'
     
         
 #creating file names from the runtime args
@@ -257,7 +261,6 @@ buildAlbums(albumCase,songsFile)
 buildAlbumOrderList(albumCase,albumsFile)
 buildAlbumLinkedLists(albumCase)
 
-
 #creating the MusicPlayer object loaded with albums
 player = MusicPlayer(albumCase)
 
@@ -280,5 +283,3 @@ print("Number of Append Commands",appendCount)
 print("Number of Beginning Forward Commands: ",beginningCount)
 print("Number of End Forward Commands: ",endCount)
 print("Total Time of Program: {:.8f} milliseconds".format(end-start))
-
-
