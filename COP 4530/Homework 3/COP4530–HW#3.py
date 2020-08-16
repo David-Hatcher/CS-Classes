@@ -23,42 +23,74 @@ class Node:
         self.parent = None
     #######################################
     #           Code I Added              #
-    #######################################  
+    #######################################
+
     # printTree recursively prints out all of the tree noes
-    # with the correct indentation
-    def printTree(self,num = 0):
-        print("    "*num,self.ID) # 4 spaces * num argument and print node ID
+    # with the correct indentation, base case being that it
+    # reaches a node with no left or right values
+    def printTree(self,num = 0,side = ''):
+        if(num == 0):
+            print(" {}".format(self.ID))
+        else:
+            print("{0} {1} {2}".format(side,"   "*num,self.ID)) # 4 spaces * num argument and print node ID
         if(self.left != None): # Check if left has a value
-            self.left.printTree(num + 1) # Calling itself on the left node, and incrementing num
+            self.left.printTree(num + 1,'L:') # Calling itself on the left node, and incrementing num
         if(self.right != None): # Check if right has a value
-            self.right.printTree(num + 1) # Calling itself on the right node, ad incrementing num
+            self.right.printTree(num + 1,'R:') # Calling itself on the right node, ad incrementing num
+
     # mirror will recrusively swap all the left nodes with the right nodes and call
-    # itself on the next nodes in the tree
+    # itself on the next nodes in the tree, the base case being that it reaches a node with
+    # no left or right values
     def mirror(self):
-        global leftCounter,rightCounter,largestValue,smallestValue,nodeCount # setting global counters to increment
         self.left, self.right = self.right, self.left # Swapping left and right pointers
-        nodeCount += 1 # Found a node, count it 
-        print("Parent: ",self.ID) # Printing the parent, which for the left and rights is this node
-        if(self.left != None): # Check if left has a pointer
-            leftCounter += 1 # Found a left node, count it
-            print("Left: ",self.left.ID) # Printing the left node name
-        if(self.right != None): # Check if right has a pointer
-            rightCounter += 1 # Found a right node, count it
-            print("Right: ",self.right.ID) # Printing the right node name
-        print() # putting a space afterwards
-        if(self.ID > largestValue): # Checking largestValue against the current node value
-            largestValue = self.ID # setting if greater
-        if(self.ID < smallestValue): # Checking smallest value against the current node value
-            smallestValue = self.ID # Setting if greater
+        # print("Parent: ",self.ID) # Printing the parent, which for the left and rights is this node
+        # if(self.left != None): # Check if left has a pointer
+        #     print("Left: ",self.left.ID) # Printing the left node name
+        # if(self.right != None): # Check if right has a pointer
+        #     print("Right: ",self.right.ID) # Printing the right node name
+        # print() # putting a space afterwards
         if(self.right != None): # Checking if there is a right node
             self.right.mirror() # Recursively calling itself on the right node
         if(self.left != None): # Checking if there is a left node
             self.left.mirror() # Recurisvely calling itself ont the left node
 
+    # countNodes takes a boolean representing if the current node is the root of the tree, this is fully
+    # recursive, the base case being that it reaches a node with no left or right values
+    def countNodes(self,onRoot,currentSide = ''):
+        global rightCounter, leftCounter, nodeCount # Setting global variables to be updated
+        nodeCount += 1 # found a node so increment counter
+        if(currentSide == 'Right'): # Checking if we're on the right side of the tree
+            rightCounter += 1 # Right side node found, incrementing counter
+        if(currentSide == 'Left'): # Checking if we're on the left side of the tree
+            leftCounter += 1 # Left side node found incrementing counter
+        if(onRoot == True): # Checking to see if we're on the root
+            currentSide = 'Right' # If not on the root we're setting the current side to right
+        if(self.right != None): # Checking to see if there is a right side node, base case
+            self.right.countNodes(False,currentSide) # found right side node, recursive call on this function
+            # currentSide being passed as it is right side, used for counting
+        if(onRoot == True): # Checking if we're on root node
+            currentSide = 'Left' # If we're on root node set currentSide to left as we're done with the right side
+        if(self.left != None): # Checking if there is a left node, base case
+            self.left.countNodes(False,currentSide) # found left side node, recursive call on this function
+            # currentSide being passed as it is left side, used for counting
+
+    # findSmallestAndLargest is used to traverse the tree and find the smallest and largest values
+    # this is fully recursive, the base case being that it reaches a node with no left or right values
+    def findSmallestAndLargest(self):
+        global smallestValue, largestValue # Setting global variables to be updated
+        if(self.ID < smallestValue): # Checking if current nodes value is less than current smallest
+            smallestValue = self.ID # Found new smallest so set it
+        if(self.ID > largestValue): # Checking if current nodes value is greater than largest
+            largestValue = self.ID # Found new largest so set it
+        if(self.right != None): # Checking for right side node, base case
+            self.right.findSmallestAndLargest() # Recursive call to this function on the right side node
+        if(self.left != None): # Checking for left side node, base case
+            self.left.findSmallestAndLargest() # Recursive call to this function on left side node
+
 
     #######################################
     #           End Code I Added          #
-    #######################################  
+    #######################################
 
 
 #
@@ -74,15 +106,16 @@ def labelTree(treeNode):
 
     treeNode.parent = treeLoc # set parent node to the previous node processed
     treeLoc = treeNode # set the tree pointer node to the node passed to the function
-    print("I have set the parent for {0} to {1}".format(treeLoc.ID, treeNode.parent.ID))
+    # print("\nParent: {}".format(treeLoc.ID))
+    # print("I have set the parent for {0} to {1}".format(treeLoc.ID, treeNode.parent.ID))
 
     if (treeDepth < 6 and (len(nodeNames) > 0)):
 
         treeLoc.left  = Node(nodeNames.pop(0)) # create left child
-        print("Left : ",treeLoc.left.ID)
+        # print("Left : ",treeLoc.left.ID)
         if (len(nodeNames) > 0):
             treeLoc.right = Node(nodeNames.pop(0)) # create right child
-            print("Right: ",treeLoc.right.ID)
+            # print("Right: ",treeLoc.right.ID)
 
         if (treeLoc.left != None):
             labelTree(treeLoc.left)  # preocess the left hand side using recursion
@@ -113,7 +146,7 @@ sys.argv[0] = sys.argv[0][0:len(sys.argv[0]) - sys.argv[0][::-1].find('/')]
 
 inputFile1 = sys.argv[1]
 
-print("\nThe file that will be used for input is {0}".format(sys.argv[1]))
+# print("\nThe file that will be used for input is {0}".format(sys.argv[1]))
 
 infile1 = open(inputFile1,"r")
 
@@ -139,26 +172,39 @@ treeLoc = root
 # Create the rest of tree and label each of the nodes
 #
 
-print("\nBuilding the tree:\n")
+# print("\nBuilding the tree:\n")
 labelTree(root)
 
 # Setting initial values for comparison of largest and smallest values in tree
 largestValue = root.ID
 smallestValue = root.ID
 
+# Counting total nodes and left/right side nodes
+root.countNodes(True)
+
+# Finding smallest and largest values on nodes
+root.findSmallestAndLargest()
+
+#Printing original tree
+print("\n\nOriginal Tree :\n")
 root.printTree()
+
+#Mirroring Tree
+# print("\n\nStarting creation of mirror tree:\n\n")
 root.mirror()
-print("\n\n##################\nMirroring Tree\n##################\n\n")
+
+#Printing Mirrored Tree
+print("\n\nMirrored Tree:\n\n")
 root.printTree()
 
 # Ending timer as program has completed requirements
 end = timer()
 
 # Printing out statistics of program
-print("**********************\n***** Statistics *****\n**********************")
+print("\n**********************\n***** Statistics *****\n**********************")
 print("Number of Nodes: ",nodeCount)
 print("Number of Nodes On Left Side: ",leftCounter)
 print("Number of Nodes On Right Side: ",rightCounter)
 print("Smallest Node Value: ",smallestValue)
 print("Largest Node Value: ",largestValue)
-print("Total time of Program: {:.8f}".format(end-start))
+print("Total Time of Program: {:.8f} milliseconds".format(end-start))
