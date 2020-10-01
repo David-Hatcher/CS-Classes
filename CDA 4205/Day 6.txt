@@ -1,0 +1,84 @@
+C Code:
+    A[12] = h + A[8]
+        h in x21, base address of A in x22
+COmpiled RISC-V Code
+    Index 8 requires offset of 64
+        8 byes per doubleword
+    ld      x9, 64(x22)
+    add     x9, x21, x9
+    sd      x9, 96(x22)
+
+Memory Operand Example
+    Previous code assumes data stored as 64-bit values (dword)
+        Can also store as wordcount
+        This forces alignment on 32b boundaries and can "save room" if dwords are not needed
+    Pay attention to how data are stored
+        a: .word            0, 1, 2, 3, ... # words  / 32b
+        b: .dword            0, 1, 2, 3, ... # dwords  / 64b
+    This will change the register offset!
+
+Registers Vs. Memory
+    Registers are faster to access than Memory
+    Operating on memory data requires load/store
+        More instructions to be executed
+    Compiler must use registers for variables as much as possible
+        Only Spill to memory for less frequently used variables
+        Register optimization is important!
+
+Sign Extension
+    Representing a number using more bits
+        Preserver the numeric values
+    Replication the sign bit to the left
+        c.f. unsigned values extend with 0s
+    Examples: 8-bit to 16-bit
+        +2: 0000 0010 => 0000 0000 0000 0010
+        -2: 1111 1110 => 1111 1111 1111 1110
+    In RISC-V instruction set
+        lb: sign-extend loaded byte
+            fills in sign number
+        lbu: zero-extend loaded byte
+            fills in zeros
+
+Representing instructions
+    Instructions are encoded in binary
+        Called machine code
+    RISC-V Instructions
+        Encoded as 32-bit instruction words
+        Small number of formats encoding operation code(opcode), register numbers, ...
+        Regularity!
+
+RISC-V R-format instructions
+    funct7      rs2     rs1     funct3      rd      opcode
+    7 bits      5 bits  5 bits  3 bits      5 bits  7 bits
+    Instruction Fields
+        opcode: operation code
+        rd: destination register number
+        funct3: 3 bit function code (additional opcode)
+        rs1: the first source register number
+        rs2: the seconds source register number
+        funct7: 7 bit function code (additional opcode)
+    Example
+        add x9,x20,x21
+        0           21          20          0       9           51
+        0000000     10101       10100       000     01001       0110011
+        0000 0001 0101 1010 0000 0100 1011 0011 = 015A04B3
+
+RISC-V I-Format Instructions
+    Immediate        rs1     funct3      rd      opcode
+    12 bits          5 bits  3 bits      5 bits  7 bits
+    Immediate arithmetic and load instructions
+        rs1: source of base address register number
+        immediate: constant operand, or offset added to base address
+            2s-complement, sign extended
+        Design Principle 3: Good design demands good compromises
+            Different formats complicate decoding, but allow 32-bit instructions uniformly
+            Keep formats as similar as possible
+
+RISC-V S-format instructions
+    imm[11:5]      rs2     rs1     funct3      imm[4:0]      opcode
+    7 bits         5 bits  5 bits  3 bits      5 bits        7 bits
+    Different immediate format for store instructions
+        rs1: base address register number
+        rs2: source operand register number
+        immediate: offset added to base address
+            split so that rs1 and rs2 fields always in the same place

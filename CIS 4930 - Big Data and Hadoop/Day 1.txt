@@ -1,0 +1,116 @@
+You are given 100 KB of data, and you are requested to design a program to access this data.
+    Currently grab data from a file and parse the data
+Now we want to process 1 TB or 100 TB of data
+    Hard disk is not big enough for hold all the data
+    So you'd have to transfer all the data from server to local machine
+        Very time consuming
+    Separate into two parts
+        Data
+        Algorithms
+        Move the data to your algorithms to process your data
+    Hadoop handles the Data in a quite a different way
+    The data volume is much bigger than your algorithms
+    So you copy your algorithms to the data
+    You submit your program to the hadoop cluster and the cluster runs your algorithms rather
+        than transfering data to your local machine
+    Hadoop is a cluster of machines rather than a single machine
+        This makes it more effecient to process the data
+        Large volumes of data is divided into multiple blocks
+        Stored on multiple machines
+    You submit your algo to the Hadoop cluster and the cluster makes multiple copies
+        and stores it to each of the cluster machines
+Course Topics
+    Hadoop cluster architecture
+    Hadoop file system
+    Hadoop ecosystems
+    MapReduce
+    Spark
+    Pig
+    Hive
+Hadoop built with two parts
+    One for data storage
+    One for data processing
+Inside a Hadoop cluster there is not one file stored
+    There is a conversion from file name to data blocks
+    File one is built up with data blocks and must tell the user where the blocks are
+Daemon tells the system where the blocks are stored
+Things to cover
+    Hadoop File system
+    Hadoop Data process
+MapReduce
+    First Step - Map
+    Second Step - Reduce
+    One major drawback of MapReduce
+        The engine reads the data line by line and passes that contents to your program
+        So your program and only access one point of data
+        Not suitable for loops, where you need to access mulitple points of data
+        This program reads from HD and writes to HD which is slooooow
+    Good thing with MapReduce
+        Only handles one line, so does not use much Memory
+Spark
+    Solves the MapReduce problems
+    Spark holds a block of data or several blocks of data into Memory
+        Uses much more Memory than MapReduce
+Two VM we use
+    One for MapReduce
+    One for Spark
+This course we will focus on MapReduce as our machines do not have enough Memory for Spark
+Systems related to Hadoop are called Hadoop ecosystems
+MapReduce is dev in java
+Spark is dev in scala
+    Must be done in scala or python
+Pig and Hive
+    Uses a script file like SQL
+    But data is stored in Hadoop cluster so not SQL
+    Syntax is similar to SQL though
+    Pig and Hive translates SQL statments to MapReduce jobs and submits it to Hadoop cluster
+Course Outcomes
+    Understand the Architecture of Hadoop clusters at both hardware and system software levels
+    Familiar with the concepts of Hadoop, MapReduce, and Spark
+    Be able to extract, transform, and load data into Hadoop using Hadoop tools.
+    Be able to apply Hadoop and related Big data technologies such as MapReduce
+        Spark, hive Impala, and Pig in developing analytic and solvint the types of
+        problems faced by enterprises today.
+    Be able to leverage big data tools such as pig, hive, and impala to retrieve big data
+
+MODULE 1
+    Hadoop is a software framework for storing, processing and analyzing "big data"
+        Distributed
+            A Hadoop cluster is built with many computers, machines, or nodes(interchangable terms)
+            The data is distributed between blocks and each block is stored on multiple machines
+            When you want to process data from one file, you copy your file to the Hadoop cluster
+                and the cluster copies this file to all the machines that contain blocks of this file
+        Hadoop is scalable
+            Scale up - machines can be upgraded
+            Scale out - more machines can be added
+                100 computers -> add 100 computers
+                    Capacity increases roughly 2x
+        Fault-tolerant
+            If one block is lost the data must be saved
+            Each machine has three copies of each data block
+            If one is lost it makes another copy from the remaining two
+        Open source
+            Hadoop, MapReduce, Spark is all open source
+    Challeges with distributed Systems
+        Programming complexity
+            Keeping data in processses in Syntax
+        Finite bandwidth
+        Partial failures
+    Before Hadoop large amounts of takes too much time to transfer to processor
+    Requirements for a New Approach
+        Partial Failure Support
+            The system must support partial failures
+                If one block fails it doesn't fail the whole job, just tries that block again
+            Data failure support
+                If a block is lost it replaces itself
+            Component recovery
+                If a componenet of the system fails and then recovers it should
+                    be able to rejoin the system without requiring a full restart of the entire system
+            Consistency
+                Component failures during execution of a job should not affect the outcome of the job
+                If one component fails the program should be able to detect that, restart the component and
+                    restart the program on that machine
+            Scalability
+                Adding load to the system should result in a graceful decline in performance of individual jobs
+                    not failure of the system
+            

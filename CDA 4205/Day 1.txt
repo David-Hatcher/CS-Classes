@@ -1,0 +1,73 @@
+Computer Abstractions and Technology
+High level abstract - Applications
+    Programs on the system
+Low level component - Physics
+    Device Physics
+Abstraction - To basically hide the details of the different levels of the system as those systems don't really need to know that type of information.
+    Applications
+    Algorithm
+    Programming language
+    /*Comp Arch*/
+    Operating System/VM
+    /*Class Content Primarily in these 3*/
+        ISA(Instruction Set Architecture, Assembly)
+        Microarchitecture
+        Register-trasnfer level
+    Gates
+    /*End Comp Arch*/
+    Circuits
+    Devices
+    Physics
+Constant Change
+    Application Requirements:
+        Suggest how to improve Architecture
+        Provide revenue to fund development
+            Applications
+            Algorithm
+            Programming language
+            Operating System/VM
+    Architecture provides feedback to guide application and technology research directions
+            ISA(Instruction Set Architecture, Assembly)
+            Microarchitecture
+            Register-trasnfer level
+            Technology Constraints:
+        Restrict what can be done efficiently
+        New technologies make new arch possible
+            Gates
+            Circuits
+            Devices
+            Physics
+The Computer Revolution
+    Progress in computer technologyu
+        Underpinned by Moore's Law
+    Makes Novel applications feasible
+        Computers in autmobiles
+        cell phones
+        Human genome project
+        World Wide Web
+        Search Engines
+    Computers are pervasive
+Classes of Computers
+    Person Computer
+        General Purpose, Variety of software
+        Subject to cost/performance tradeoff
+    Server Computers
+        Network based
+        High capacity, performance, reliability
+        Range from small servers to building sized
+    Supercomputers
+        High-end scientific and engineering caluclations
+        Highest capability but represent a small fraction of the overall computer mark
+    Embedded Computers
+        Hidden as components of systems
+        Stringent power/performance/cost Constraints
+Eight Great Ideas
+    Design for Moore's Law
+    Use abstraction to simplify Design
+    Make the common case fast
+    Preformance via paralellism
+    Performance via pipelining
+    Performance via predicition
+    Hierarchy of memories
+    Dependability via redudancy
+    

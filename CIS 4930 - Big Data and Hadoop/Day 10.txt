@@ -1,0 +1,175 @@
+Partitioners and Reducers
+    Partitioners are after the mapper and send the data into the shuffle and sort
+    Splits your k-v pairs into which partition they should go to, P0 -> Reducer 0 , P1 -> Reducer 1
+    Default partition is based on the key, some special paritioners may be also based on value
+
+getPartition:
+    (inter_key, inter_value, num_reducers) -> partition
+
+The Default Paritioner
+    The default is the HashPartitioner
+        Uses the java hashCode method
+    return (key.hashCode() & Integer.MAX_Value) % numReduceTasks;
+
+How Many Reducers do you need?
+    Default is single Reducer
+    With a single reducer, one task recieves all keys in sorted order
+        This is sometimes advantageous if the output must be in completely sorted order
+        Can cause significant problems if there is a large amount of intermediate data
+            Node on which Reducer is running may not have enough disk space to hold all the inter data
+            The Reducer will take a long time to run
+
+Jobs which Require a single reducer
+    If a job needs to output a file where all keys are listed in sorted order, a single reducer must be used
+    Alternatively, the TotalORderPartitioner can be used
+        Uses an externally generated file with contsins information about inter key dist
+        Partitions data such that all keys which go to the first Reducer are smaller than any which go to the second, etc
+        In this way, mulitpole reducers can be used
+        Concatenating the Reducers' output files results in a totally ordered list
+
+Jobs Which Require a Fixed Number of Reducers
+    Some jobs will require a specific number of Reducers
+
+Jobs with a Variable Number of Reducers
+    Many jobs can be run with a variable number of Reducers
+    Developer must decide how many to specify
+        Each Reducer should get a reasonable amount of intermediate data, but not too much
+        Chick-and-egg problem
+    Typical way to determine how many Reducers to specify
+        Test the job with a relatively small test data sometimes, maybe 10%
+        Extrapolate to calculate the amount of intermeidate data expected from the 'real' input data
+        Use that to calculate the number of reducers which should be specified
+    Note: You should take into account the number of Reducer slots likely to be available on the cluster
+        If you job requires one more Reduce slot than there are available, a second 'wave' of Reducers will run
+            Consisting just of that single reducer
+            Poitentially doubling the amount of time spent on the Reducer phase
+        In this case, increasing the number of Reducers further may cut down the time spent in the Reduce phase
+            Two or more waves will run, but the Reducers in each wave will have to process less data
+    These values should be set to a multiple of the number of Reducer tasks you have, 100 Reducer tasks, 5 Reducers, not 6
+
+Custom Partitioners
+    Sometimes you will need to write you own Partitioners
+    Example: your key is a customer WRitableComparable which contains a pair of values (a,b)
+        You may decide that all keys with the same value for a need to go to the same reducer
+        The default partitioner is not sufficient in this case
+    Customer Parititoners are needed when performing a secondary sort(see later)
+        Example: First it's sorted by the key, then it's sorted by the value as well
+        Key must be WritableComparable, value only needs to be writable
+        If you want to sort by the values you must use WritableComparable as well to compare the values
+    Custom Parititoners are also useful to avoid potential performance issues
+        To avoid one Reducer having to deal with many very large lists of values
+        Example: in our word count job, we wouldn't want a single Reducer dealing with all the three- and four-letter words, while another only had to handle 10- and 11-letter words
+
+Creating a Customer Partitioners
+    Create a class that extends Partitioner
+    Override the getPartition method
+        Return an int between 0 and one less than the number of Reducers
+    Set in driver code
+        job.setPartitionerClass(MyPartitioner.class);
+
+Data Input and output
+    How to create customer Writable and WritableComparable implementations
+    How to save binary data using SequenceFile and Avro Data files
+    What issues to consider with using file compression
+
+Box classes in hadoop
+    Hadoop's built-in data types are 'box' classes
+        They contain a single piece of data
+            Text:string
+            IntWritable: int
+            LongWritable: long
+            FloatWritable: float
+            etc
+        Writable defines the wire transfer format
+            How the data is serialized and deserialized - Interface
+
+Creating a complex Writable
+    Example say we want a tuple (a,b) as the value emitted from a mapper
+        we could artifically construct it by, for example, saying
+            Text t = new Text(a + "," + b);
+            String[] arr = t.toString().split(",");
+    Inelegant
+    Problematic
+        if a or be contained commas, for example
+    Not always practical
+        Doesn't easily work for binary objects
+    Solution: create your own Writable object
+
+The Writable Interface
+    public interface Writable{
+        void readFields(DataInput in);
+        void write(DataOutput out);
+    }
+    The readFields and write methods define how your customer object will be serialized and deserialized by Hadoop
+    The DataInput and DataOutput classes support
+        bool
+        byte, char(unicode: 2 bytes)
+        others
+    class DateWritable implements Writable{
+        int month, day, year;
+        public void readFields(DataInput in) throws IOException{
+            this.month = in.readInt();
+            this.day = in.readInt();
+            this.year = int.readInt();
+        }
+        public void write(DataOutput out) throws IOException{
+            out.writeInt(this.month);
+            out.writeInt(this.day);
+            out.writeInt(this.year);
+        }
+    }
+
+What about Binary objects
+    Solution: use byte arrays
+    Write idiom:
+        Serilize objkect to byte array
+        Write byte count
+        write byte array
+    Read idiom:
+        Read byte count
+        Create byte array of proper size
+        Ready byte array
+        Deserialize object
+
+WritableComparable
+    WritableComparable is a sub-interface of Writable
+        Must implement compareTo, hashCode, equal
+
+What are SequenceFiles?
+    SequenceFiles are files containing binary-encoded key-value pairs
+        Work Vaturally with Hadoop data types
+        SequenceFile include meta data which identifies the data types of the key and value
+    Actually, three file types in one
+        Uncompressed
+        Record-compressed
+        Block-compressed
+    Often used in MapReduce
+        Especially when the output of one job will be used as the input for another
+            SequenceFileInputFormat
+            SequenceFileOutputFormat
+An Alternative to SequenceFiles: Avro
+    Self-describing file format
+        The schema for the data is included in the file itself
+    Compact file format
+    Portable across multiple langs
+        Supports C, C++, Java, Python, Ruby, and others
+    Compatible with Hadoop
+        Via the AvroMapper and the AvroReducer class
+
+Hadoop and Compressed files
+    Hadoop understands a variety of file compress formats
+        Including GZip
+    If a compressed file is included as one of the files to be processed, hadoop will automatically decompress it and pass the decompressed contents to the mapper
+        There is no need for the developer to worry about decompressing the file
+    However, GZip is not a 'splittable file format'
+        A GZipped file can only be decompressed by starting at the beginning of the file and continue on to the end
+        You cannot start decompressing the file part of the way through it
+
+Non-splittable file format and hadoop
+    If the MapReducer framework receives a non-splittable file(gzip) is passes the entire file into a single mapper
+    This can result in one Mapper running far longer than the others
+    Use a different zipper
+    One Splittable comp format is LZO
+
+Snappy - Splittable Compression
+    This is the one to use

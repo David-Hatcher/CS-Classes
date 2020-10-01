@@ -1,0 +1,81 @@
+How to detemine if an algorithm is correct
+    Proofs of correctness
+    Loop Invariants
+How to determine if an algorithm is efficient
+    RAM model
+    Big-Oh definition and properties
+How to develop your own algorithms
+    Greedy algorithms
+    Divide and conquer
+    Dynamic Programming
+    Graph traversals
+    Backtracking
+Whether you should develop your own algorithm
+    Canonical algorithms
+    Complexity theory
+Induction
+    Proof technique for statments in the form "P(i), for all i >= b"
+    Two Parts (both required)
+        Base Case: prove P(b)
+        Inductive step: assume P(k) for some k >= b
+            Prove P(k+1)
+Strong Induction
+    Same as weak induction but with one difference
+    Prove base case, maybe multiple base cases
+        Assume P(x) for all x from b up to k
+Contradiction
+    Assume claim is false
+    Show something impossible must be true
+        Thus claim must be true
+Example/Counter Example
+    Used to prove existence/nonexistence
+    Construct an example and show it meets the criteria
+Induction Exercise
+    Prove that n! > 2^(n+1) for all n >= 5
+        for all n >= 5 (this means it's an induction problem)
+        (Base Case : n = 5) 5! > 2^(6)
+        5! = 120
+        2^6 = 64
+        5! Checks out
+    Inductive step: assume P(k)
+        Supposed k! > 2^(k+1), for some k >= 5
+        Goal for inductive step: prove k + 1
+            (k+1)! > 2^(k+2)
+        (k+1)(k)(k-1)(k-2)...(2)(1) > 2^(k+2)
+        or
+        (k+1)*k! > 2*2^(k+1)
+        k! > (k+1)*2^(k+1)
+Stone Induction example
+A pile with n stones will always take n-1 turns to split up into n piles of stones for all n >= 1
+    Base case:
+        (B/C : n=1) Show a pile with 1 stone takes 0 turns to split up into one pile with one stone
+        * (stone), Already a pile with one stone
+    Induction:
+        Suppose that a pile with k stones takes always takes k - 1 turns to split to piles with 1 stone each
+        Goal: Prove w/ k + 1 stones always take k turns to split
+        Split pile of k + 1 stones into pile of 1 stone and pile of k stones
+            This gives us a pile of k stones which takes k - 1 turns, with the additional turn brings us to k turns
+        After first turn you have two piles of stones
+            X and Y, count of stones in each pile
+            X + Y = k + 1 and each has to be at least 1
+            Biggest they could be is k
+            k >= x,y >= 1
+        Assume a pile with n stones takes n - 1 stones, for all n from 1 to k
+            Pile of x stones will always take x - 1 turns to split
+            Pile of y stones will always take y - 1 turns to split
+            total turns is x + y - 2 + 1(first turn) which is  k - 1 + 1 = k
+
+Base Case: n = 1 F(1) = 1 < 2^1 = 2
+Base Case: n = 2 F(2) = 1 < 2^2 = 4
+Assume: F(k) < 2^(k)
+Suppose F(k + 1) < 2^(k + 1)
+F(k + 1) = F(k) + F(k - 1)
+Since F(k) < 2^k then we must look at F(k - 1)
+F(k - 1) < 2^(k - 1)
+Since we know that F(k - 1) < 2^(k) is true since F(k - 1) < F(k) is true
+and F(k) < 2^(k) is true
+Then F(k) + F(k - 1) < 2^(k) + 2^(k - 1) must be true
+Now suppose we have some number x, where 2 <= x <= k
+Assume: F(x) < 2^(x)
+F(x + 1) < 2^(x + 1), where the minimum value for x + 1 is 3 and the maximum is k + 1
+Since F(x + 1) = F(x) + F(x - 1), which we know will always be less than 2^(x + 1) from the proof of F(k + 1) < 2^(k + 1) then we know that for any value, n, between 1 and k F(n) < 2^(n) will always be true.

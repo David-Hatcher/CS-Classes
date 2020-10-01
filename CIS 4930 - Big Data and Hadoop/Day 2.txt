@@ -1,0 +1,87 @@
+Hadoop originally called Google File System (GFS)
+Core Concept: distribute the data as initially stored in the System
+    Individual nodes can work on data local to those nodes
+        No data transfer over the network is required for initial processing
+    Send the code to the node to process the data locally
+    Data locality
+    Mapper
+    Reducer
+        Program running on some other virtual machine
+    Applications are written in high-level code
+    Nodes talk to each other as little as possible
+        Devs should not write code which communicates between nodes
+        'Shared nothing' architecture
+        Multiple Mappers and Reducers running concurrently
+    Data is spread across the machine in advance
+        Computation happens where the data is stored, wherever possible
+        Data is replicated multiple times on the system for increased availability and reliability
+    When data is loaded into the sys, it is split into blocks
+        typically 64MB and 128MB, configurable
+    Map tasks (the first part of MapReduce sysmtem) work on relatively small portions of data
+        Typically a single block
+    A master program (Resource Manager) allocates work to nodes such that a Map task will work on a block of data stored locally on the node whenever possible
+        Each node has another Daemon, Node Manager, it mananges the resources on the local machine
+        There is communication between Node Manager and Resource Manager
+        Many nodes work in parallel, each on their own part of the overall dataset
+    There is a master node that handles all the scheduling, and a copy of it
+        The scheduler will pick which of version of the block your program will work on
+        If for example the main version of the block, not the copies, is on a computer that has little resources available
+            The scheduler will send your program to a different node to work on a copy of the block
+    The racks hold computers which are connected to a switch and the switches are connected to a router for communication between computers
+    Example
+        Block 1 : Computer C5 on rack 1
+            Back up 1: C1 - on rack 1
+            Back up 2: C10 - on rack 2
+        One back up is stored on same rack, one back up is stored on different rack
+            This is done in case that racks switch goes down for some reason
+Fault Tolerance
+    If a node fails, the master will detect that failure and re-assign the work to a different node
+        Node Manager will periodically talk to Resource Manager to let it know that computer is working fine
+        If there is no message the Resource Manager will make that computer as inactive
+        If it does this it will grab all the tasks from that Node and re-assign those tasks to a different node with the back up blocks
+        Master storage Daemon, Name Node, Local storage Daemon, Data Node
+            These also communicate with each other in the same way
+            This will also re-create back ups of any of the nodes that fail as well
+    Restarting a task does not require communication with nodes working on other portions of data
+        The application is just copied to a machine that has backs of the data that is failed to process
+    If a failed node restarts, it is automatically added back into the system and assigned new tasks
+        Once it restarts, Name Node and Node Manager report to Resource Manager and Data Node
+        Resource Manager and Data Node starts running tasks on them
+        If the Node recovers and rejoins the system then the resources where the blocks were stored it will be freed as they have already been backed up else where
+    If a Node appears to be running slowly, the master can reducdantly execute another instance of the same tasks
+        Results from the first to finish will be used
+        Known as 'speculative execution'
+        Since Reducer task cannot start until ALL Mapper tasks are done
+        If one of the Mapper tasks are running slow, the master can move another instance of the same tasks on a different node
+            This is done to remove the bottleneck created by the slow Mapper task
+        Once one of them finishes the master can kill the tasks of the ones who are not finished
+Hadoop structure
+    A radical new approach to distributed computing
+        Distribute data when the data is stored
+        Run computation where the data is stored
+    Mapper tasks - Word Count
+        One file : Three blocks B1 B2 B3
+        Each Mapper counts the individual words from the block it is working on
+        The Reducer adds them together for the sum of each word for the total file
+    Where the data is stored - Data locality
+Hadoop: Very High-Level Overview
+    Data is split into blocks when loaded
+    Map tasks typically work on a single block
+    A master program manages tasks
+Benefits of Analzing with Hadoop
+    Previously impossible or impractical analysis
+    Lower counts
+        Because of scale out
+        And since the data blocks are smaller the computers don't have to be super fast
+    Less time
+        parallel processing of the data
+    Greater Flexibility
+        One machine fail, the job continues
+        The user doesn't even know the machine failed
+    Near-linear scalability
+    Ask Bigger Questions
+Slave Node: Storage and processing
+Data node: storage, daemon(a software program)
+Slave Node is the physical computer
+Datanode and nodemanager are the daemons
+datanode is a list of blocks stored on the slave node

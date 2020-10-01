@@ -1,0 +1,64 @@
+In report, specify the dataflow
+Line g is just what commands to use to run the MR program
+
+Module 5
+
+    You can set the number of reducers, if you set it to 0 it's a Map-only MapReduce job
+
+Introduction to Debugging
+    Debugging MapReduce code is difficult!
+        Each instance of a Mapper runs as separate tasks
+            Often on a different machine
+        Difficult to attach a debugger to the process
+        Difficult to catch 'edge cases'
+    Very large volumes of data mean that unexpected input is likely to appear
+        Code which expects all data to be well-formed is likely to fail
+    1. Run your code locally first using eclipse
+    2. Then submit to cluster on sample data on the cluster
+    3. Then submit code to whole dataset
+
+    To run in LocalJobRunner mode
+        Configuration conf = new Configuration();
+        conf.set("mapred.job.tracker","local");
+        conf.set("fs.default.name","file:///");
+    Using ToolRunner
+        hadoop jar myjar.jar MyDriver -fs=file:/// -jt=local indir outdir
+    Limitations
+        Dist Cache does not work
+        The job can only specify a single reducers
+        some 'beignner' mistakes that may not be caught
+            For example, attempting to share data between mappers will work, because the code is running in a single JVM
+    logging can be used for debugging or to show warnings from the webAPI
+        Should use try/catch for these as the log files could get MASSIVE
+    
+    What are counters?
+        Counters provide a way for Mappers Reducers to pass aggregate values back to the driver after the job has completed
+            Their values are also visible from the JobTracker's web UI
+            And are reported on the console when the job ends
+        context.getCounter(group,name).increment(amount)
+        in driver code
+            job.getCounters().findCounter(group,name).getValue();
+    Reusing objects
+        It is generally good practive to reuse objects
+            instead of creating many new objects
+        context.write(new Text(word), new IntWritable(1));
+            Creates a new object every single time map is run
+        We can share these objects instead of creating and terminating each one
+        Bring it outside of the map
+            private final static IntWritable one = new IntWritable(1);
+            private Text wordObject = new Text();
+        Inside mappers
+            wordObject.set(word);
+            conetxt.write(wordObject, one);
+    Creating Map-only MapReduce jobs
+        There are many types of job where only a Mapper is needed
+        Examples
+            Image processing
+            File format conversions
+            Input data sampling
+            ETL
+        To create map-only job
+            job.setNumReducerTasks(0);
+        call the Job.setOutputKeyClass and Job.setOutputValueClass
+            not the Job.setMapOutputKeyClass and Job.SetMapOutputValueClass
+            

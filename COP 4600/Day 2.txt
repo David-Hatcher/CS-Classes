@@ -1,0 +1,26 @@
+USF VPN
+    Virtual Private Network
+SHell Commands
+    datewho
+    last
+    echo
+    clear
+    exit
+    mkdir <dir_name>
+    chmod
+    cd <dir>
+    tocuch <filename>
+    vim <filename>
+    wc -l <filename> - gets number of lines in file
+who | wc -l pipe will send the output of who to the command wc -l so it will give you the number of users logged in the system
+head -n 5  - display first 5 lines
+tail -n 5
+cat -n displays line numbers in the file
+sum = $((1+3)) add 1 and 3 and store 4 to sum
+echo "something" > filename - overwrites text in a file
+echo "something" >> filename - appends something in a file
+Both commands will create a file if it doesn't exist
+grep <string> <filename> - prints all lines in a file that contain <string>
+    grep counter sharedmemory.c
+grep -v error sharedmemory.c - prints all lines that DO NOT contain the param
+grep -v error charedmemory | more if there are too many lines returned used the pipe rule

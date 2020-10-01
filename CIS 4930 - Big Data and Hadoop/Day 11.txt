@@ -1,0 +1,123 @@
+Sorting(1)
+    MapReducer is very well suited to sorting large data sets
+    Recall: keys are passed to the Reducer in sorted order
+    Assuming the file to be sorted contains lines with a single value:
+        Mapper is merely the identity function for the value
+            (k,v) -> (v,_)
+        Reducer is the identity function
+            (k,_) -> (k,'')
+    Trivial with a single Reducer
+    Harder for multiple reducers
+        It's sorted within each reducer, but not globally
+    For multiple Reducers, need to choose a partitioning function such that if k1 < k2, partition(k1) <= partition(k2)
+    R0          R1             R2
+    g0(keys) < g1(keys) < g2(keys)
+    You can run the MR on a sample data set and find out a weight of each key then partition based on that, rather that the hashcode(key)
+Sorting as a Speed Test of Hadoop
+    Sorting is frequently used as a speed test for a Hadoop Cluster
+        Mapper and Reducer are Trivial
+            Therefore sorting if effectively testing the Hadoop framework's I/O
+    Good way to measure the increase in performance if you enlarge your Cluster
+        Run and time a sort job before and after you add more nodes
+        terasort is one of the sample jobs provided with Hadoop
+            creates and sorts very large files
+Searching
+    Assume the input is a set of files containing lines of text
+    Assume the Mapper has been passed the pattern for which to search as a special parameter
+        We saw hot o pass parameters to a Mapper in a previous chapter
+    Algorithm
+        Mapper compares the line against the pattern
+        If the pattern matches, Mapper outputs (line,_)
+            or (filename+line,_), or...
+        if the pattern does not match, mapper outputs nothing
+Inverted Index Algorithm
+    Mapper
+        For each word in the line, emit (word,filename)
+    Reducer
+        Identity function
+            Collect together all values for a given key(i.e., all filenmaes for a particular word)
+            Emit (word,filename_list)
+Term Frequency - Inverse Document Frequency
+    TF-IDF
+        Answers the question "how important is this term in a document?"
+    Known as term weighting function
+TF-IDF: Formally Defined
+    TF
+        Number of times a term appears in a document(i.e. the count)
+    IDF
+        idf = log(N/n)
+            N total num of dictsortreversed
+            n number of docs that contain a term
+    TF-IDF
+        TF * IDF = count * log(N/n)
+Overview of algo: 3 MR jobs
+    1 Compute Term Frequency
+    2 Compute n, number of docs each word occurs in
+    3 compute TF-IDF
+Job1
+    Mapper
+        Input: (docid,contents)
+        output: ((term,docid),1)
+    Reducer
+        Sumreducer
+        output: ((term,docid),tf)
+Job2
+    Mapper
+        Input: ((term,docid),tf)
+        Output: (term,(docid,tf,1))
+    Reducer
+        Sums 1s to compute n (number of documents containing term)
+        Note: Need to buffer (docid,tf) pairs while we are doing this
+        Outputs: ((term,docid),(tf,n))
+Job3
+    Mapper
+        Input ((term,docid),(tf,n))
+        Assume N is known (easy to find)
+        Output ((term,docid),TF*IDF)
+    Reducer
+        The identity function, Few partitions
+J1 Mapper -> J1 Reducer -> J2 Mapper -> J2 Reducer -> J3 Mapper -> J3 Reducer
+Word Co-Occurence: motivation
+    Word co-occurence measure the frequency with which two words appear close to each other in a corpus of documents
+Algorithm
+    Mapper
+        map(docid a, doc d){
+            foreach w in d do
+                for each u near w do
+                    emit(pair(w,u),1)
+        }
+    Reducer
+        Sum reducer
+Secondary Sort: motivation
+    Recall that keys are passed to the Reducer in sorted order
+    THe list of values for a particular key is not sorted
+        Order may well change between different runs of the MapReducer job
+    Sometimes a job needs to receive the values for a particular key in a sorted order
+        This is known as a secondary sort
+    Example: Sort by last name, then First name
+    Example: find the latest birth year for each surname in a list
+    Naive solution
+        Reducer loops through all values, keeping track of the latest year
+        Finally, emit the latest year
+    Better solution
+        Pass the values sorted by year in descending order to the reducer, which can just emit the first value
+Implementing Sec Sort: composite keys
+    To implement a secondary sort, the intermediate key should be a composite of the 'actual' natural key, and the value
+    Implement a mapper to cosntruct composite keys
+    let map(k,v) = emit(new Pair(v.getPrimaryKey(), v.getSecondaryKey),v)
+    let getPartition(Pair k, Text v, int numReducers) = return(k.getPrimaryKey().hashCode() % numReducers)
+Sorting Composite keys
+    Comparator classes are classes that compare objects
+        compare(A,B) returns:
+            1 if A>B
+            0 if A=B
+            -1 if A<B
+        Customer comparators can be used to sort composite keys
+            Extend WritableComparator
+            override int compar()
+        Two comparators are required
+            Sort Comparator     Secondary Sort
+            Group Comparator    Partitioner
+
+THIS IS LAST SECTION COVERED IN MIDTERM
+    Multiple Choice and Short answer, and concepts, small coding stuff "not major"

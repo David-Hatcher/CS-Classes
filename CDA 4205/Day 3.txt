@@ -1,0 +1,25 @@
+CPU Time Example
+    Computer A: 2GHz clock, 10s CPU time
+    Designing Computer B
+        Aim for 6s CPU time
+        Can do faster clock, but causes 1.2 x clock cycles
+    How fast much Computer B clock be?
+    4GHz
+    
+    Computer A clock = 3GHz executes a 10^10 cycle program, how long should this take
+    3.33 seconds
+Instruction Count and CPI
+    Clock Cycles = Instruction Count x Cycles per Instruction
+    CPU time = Instruction Count x CPI x Clock Cycle Time
+    CPU Time = (Instruction Count x CPI)/Clock Rate
+    Instruction Count for a program
+        Determined by program, ISA and compiler
+    Average cycles per Instruction
+        Determined by CPU hardware
+        If Different instructions have different CPI
+            Average CPI affected by instruction mix
+CPI in more detail
+    If different instruction classes take different numbers of cycles
+    Clock cycles = sum(CPIi x Instruction Counti)
+    Weighted average CPI
+    CPI = Clock cycles/instruction count = sum(CPIi x (Instruction Counti)/Instruction Count)

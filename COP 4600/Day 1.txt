@@ -1,0 +1,69 @@
+Why Learn About Operating Systems
+    To understand computing better
+    To make better use of computers
+    to write better programs
+    to more easily keep up with advances in computing
+Best Approach to learn in this course
+    Study Slides Carefully
+    TAs handle coding questions
+    Professor handles conceptual questions
+    Start programming assignments early
+    Get programming help from TA during office hours
+    Finish programming assignments early for extra credit
+Read Textbook section 1.1
+Which Concepts help us understand operation Systems
+    Processes
+    Threads
+    Scheduling
+    Coordination
+    Resource Management
+    File Organization
+    Communication
+Our programs never use the hardware
+    The program goes through the OS and the OS uses the hardware
+Operating Systems
+    Make it easier to use the hardware
+        Provides device drivers
+        allocates memory automatically
+        provides synchronization commands
+    Manage resources efficiently ans safely
+Kernal System Software, Application programs
+    Application programs
+        What I write
+    System Software
+        Compilers
+        Linkers
+        Loaders
+        GUI
+    Kernel
+        CPU scheduler
+        Memory Allocator
+        Disk, I/O access
+    The Kernal is the part of the OS that always runs!
+Different features of operating Systems
+    Computer SYstems with different goals
+        Mobile Devices
+        Person Computer Systems
+        Servers
+        Real Time Systems
+        Clustered Systems
+        Distributed Systems
+    The Design and features of operating systems are closely linked to the type of computer systems they are built for
+Personal Computer Systems
+    A single user system running several processes concurrently
+    A single OS manages concurrent processes across 4 processors
+    No need to share resources with other users
+    Ease of use is important
+Multiple User systems
+    A multiple user system running several processes concurrently
+    A single OS manages concurrecnt processes across 4 processors and ensures that each user receives a share of CPU time and has acceptable response Time
+Real Time Computer System (ie. Computer System for Controlling flaps on an air plane)
+    Equipment being controlled requires immediate response which must be provided and guaranteed by the OS
+Distributed System
+    A group of individual computers linked by a communication network
+    No common clock nor memory
+    Separate individual operating systems
+
+Check the practice problems at end of slides
+    Class notes show two main goals of an OS - one of them is to "Make it easier to use the hardware". Which is the other goal stated int he class notes.
+    Describe an important different between an operating system for real-time system control and one for multiple users sharing a computer for a college programming class. Then describe an important similarity.

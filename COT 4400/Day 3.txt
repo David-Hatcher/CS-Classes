@@ -1,0 +1,119 @@
+Loop invariants and algorithm incorrectness
+Today
+    Review
+    Loop invariants
+    Incorrectness
+To prove an algorithm is correct:
+    Prove that it produces the correct ouput for every input
+        Trace an arbitrary instance to find the algorithm's output
+        Prove output is correct
+    Loop invariantes for loops
+    Cases for if statements
+    Recursion: generally proof by induction
+    May also use proof by contradiction
+To prove an algorithm is incorrect:
+    Find a counterexample
+        Instance where algorithm computes an incorrect solution or falls into infinite loops
+
+Working in groups
+    Some exercises this semester will be done in small groups
+    Be sure you're participating
+        Waiting for the answer won't help you learn the material!
+    Recommendation: use a mic
+        Must faster than typing in chat
+        Be sure to unmute yourself when speaking
+    Recommendation: Use shared whiteboard
+        Open Collaborate Panel in lower right
+        Select Share content tab
+        Click share blank whiteboard
+    Whiteboard tools
+        Select: move or delete text or marks
+        Pointer: makes your cursor visible to others
+        Penic: mark whiteboard
+        Shapes: draw a rectangle, ellipse, or line
+        Text: add text to whiteboard (recommended!)
+        Clear: clears entire whiteboard :(
+Loop invariants
+    Critical for correct of algorithms with loops
+    Statement that is true for every iteration of a loop
+    To prove a loop invariant:
+        Prove claim holds after the first iteration
+        Prove claim after iteration k implies claim after iteration k + 1
+    Resembles induction!
+
+    Alternate proof stategy:
+        Prove claim holds true before first iteration
+        Prove claim before iteration k implies claim after iteration k
+Loop Invariant example
+    Algorithm SelectionSort
+    Input: data: array of integers to sort
+    Input: n: number of elements in data
+    Output: permutation of data such that
+        data[1] <= data[2] <= ... <= data[n]
+    
+    for i = 1 to n do
+        let m be the location of the min of data[i..n];
+        Swap data[i] and data[m];
+    end
+    return data;
+    3421 -> 1423 -> 1243 -> 1234 -> 1234
+    Loop Invariant:
+        After every iteration, data[1..i] is sorted
+    Proving loop invariant
+        Prove it's true for the first iteration
+            Trace through the code
+                i = 1
+                m = location of min(data)
+                swap data[1] with data[m]
+            Argue for correctness
+                After the first iteration data[1..1] is sorted and data[1] is <= everything after it
+                    It's sorted because it's a single number and therefore must be
+                    And data[1] is <= everything after it because line 3 found the lowest value in the array and line 4 swapped it with data[i]
+        Prove claim after iteration k implies claim after iteration k + 1
+            Suppose: after iteration k, data[1..k] is sorted and data[k] <= data[k+1..n]
+                m = loc of min(data[k+1..n])
+                swap data[min] with data[k+1]
+            Argue for correctness
+                The loop invariant is correct because:
+                    data[k+1] is less than everything to the right of it because of the search on line 3 and the swap on line 4
+                    data[1..k+1] is sorted because it was previously sorted before coming into iteration k+1,because of the inductive hypothesis,
+                    and we know that data[k] <= data[k+1] because on the previous iteration it was <= everything to it's right.
+            After iteration i = n for the loop, data[1] <= data[2] <= ... <= data[n], by the loop invariant. Hence, data is sorted when it is returned.
+
+
+dotproduct Algorithm:
+Input: a: real array of length n
+Input: b: real array of length n
+Input: n: length of a and b
+Output: dot product of vectors a and b
+
+Pseudocode:
+dot = 0
+for k = 1 to n
+    dot = dot + a[k] * b[k]
+return dot
+
+Assume: two arrays a and b, both with arbitrary length k.
+
+Trace through the code:
+    Line 1:
+        dot = 0
+    Line 2:
+        k = 1
+    Line 3:
+        dot = 0 + a[1]*b[1]
+Argue for Correctness:
+    After the first iteration dot will equal dot, which is zero, plus a[1]*b[1] which is equal to the sum_{i=1}^k (a[i]*b[i]) as i still currently equals 1
+
+Suppose: After iteration k, dot will equal the sum_{i=1}^k (a[i]*b[i])
+
+Trace through code for k + 1:
+    Line 1:
+        Skipped, not in loop
+    Line 2:
+        k = k + 1
+    Line 3:
+    dot = (sum_{i=1}^k (a[i]*b[i])) + a[k+1]*b[k+1]
+Argue for correctness:
+    After the (k + 1)th interation dot will equal the dot product for the values from arrays a and b from 1 to k plus the value for a[k+1]*b[k+1]
+    Hence, the loop invariant holds for every interation of the loop

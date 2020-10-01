@@ -1,0 +1,95 @@
+MapReduce: The Mapper(1)
+    The Mapper
+        Input: key/value pair
+        output: a list of zero or more key value pairs
+    Map(in_key, in_value) -> (inter_key, inter_value) list
+
+    The mapper may use or completely ignore the input key
+        For Example, a standard pattern is to read one line of a file at a time
+            The key is the byte offset into the file at which the line starts
+            The value is the contents of the line itself
+            Typically the key is considered irrelevant
+        If the mapper writes anything out, the output must be in the form of key/value pairs
+Example: Uppercase mapper
+    Turn into into Uppercase
+Example: Explode mapper
+    let map(k,v) = 
+        foreach char c in v:
+            emit(k,c)
+Default mapper is the Identity mapper - DEFAULT MAPPER
+    let map(k,v) =
+        emit(k,v)
+    Returns the same thing it finds
+Shuffle and sort
+    After the map phase is over, all intermediate values for a given intermediate key value are group together
+    Each key value list is passed to a Reducer
+        All values of a particular intermediate key go to the same Reducer
+        The intermediate keys/value lists are passed in sorted order
+    Shuffle splits all different keys into groups
+    Sort combines some groups and send them to the Reducers
+    Reduce processes each key,value list
+The Reducer
+    The Reducer outputs zero or more final key/value pairs
+        in practice, usually emits a single key/value pair for each input key
+        There are written to HDFS
+    reduce(inter_key, [v1,v2,...]) -> (result_key, result_value)
+    gif -> 1231,3997 - reduce() > gif 2614
+    html -> 344,891,788 - reduce() > html 1498
+Sum Reducer - gets sum
+Average Reducer - gets Average
+Identity reducer - just spits out input, DEFAULT REDUCER
+A hadoop cluster is a group of computers working together
+a node is an individual computer in the cluster
+A daemon is a program running on a node
+    HDFS daemons
+        NameNode - holds the metadata for HDFS
+            One per cluster, or one active one standby
+        DataNode - holds the actual HDFS data
+            One per slave node
+MapReduce v1 (MRv1 or classic MapReduce)
+    Uses a JobTracker/TaskTracker architecture
+    One JobTracker per cluster - limits cluster size to about 4000 nodes
+    TaskTracker one per slave node
+    Slots on slave nodes designated for Map or Reduce Tasks
+MapReduce v2(MRv2)
+    Built on top of YARN(Yet Another Resource Negotiator)
+    Uses ResourceManager/NodeManager architecture
+        Increases scalability of cluster
+    Node resources can be used for any type of Task
+        Improves cluster utilization
+        Support for non-MR jobs
+MRv1 daemons
+    JobTracker - one per cluster
+        Manages MapReduce jobs, distributes individual tasks to TaskTrackers
+        Handles all the jobs on the cluster
+        Handles total job progress
+    TaskTracker - one per slave node
+        Starts and monitors individual Map and Reduce tasks
+        Handles the tasks on that single node
+        Reports back to JobTracker with individual task progress
+MRv2 daemons
+    ResourceManger - one per cluster
+        Starts ApplicationMasters, allocates resources on slave nodes
+    ApplicationMaster - one per job
+        Request resources, manages individual Map and Reduce tasks
+        Collections data from the NodeMangers on slave nodes
+        Reports progress to JobHistory server
+    NodeManager - one per slave node
+        Manages resources on individual slave nodes
+    JobHistory - one per cluster
+        Archives jobs' metrics and metadata
+Slave Node v2
+    DataNode - storage
+    NodeManager - processing, starts and terminates VM, monitors VM progress and report to ApplicationMaster
+Steps
+    1. Client submits all information for one specific jobs to Resource Manager, "Application Request"
+    2. Resource Manager starts ApplicationMaster, sends all information from the client to the ApplicationMaster
+    3. ApplicationsMaster talks to NameNode to find information about where needed blocks for the required file are
+    4. NameNode responds with the information requested
+    5. ApplicationMaster asks ResourceManager for resources
+    6-1. ResourceManager assigns resources and tells ApplicationMaster, here are the VM you have requested
+    6-2. Also informs NodeManager to start a new VM, with specified required resources for that VM. This happens on all nodes that have the data
+    7. Forwards mapper task code to Slave Nodes where the VMs are located
+Submitting a Job
+    .jar(source code) and XML(config file)
+
