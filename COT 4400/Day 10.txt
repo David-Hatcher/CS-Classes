@@ -1,0 +1,149 @@
+CBS Lower Bound
+    All require Theta(nlgn) time to be correct
+    Main Idea
+        -Every possible permutation needs its own execution path
+            Sequence of instructions executed
+            n! permutations, so we need >= n! execution paths
+        Every comparison doubles # of potential execution paths
+            Execution paths = 2^k
+            Min comparisons: 2^k >= n! -> k = Omega(nlgn)
+Algorithm Design strategies
+    Blueprints for efficient algorithm Design
+    Adaptable to a range of problems
+    Strategy #0: exhaustive search
+        Aka "brute force" method
+        Test all possibilities for the solution
+        Report the correct/best solution
+Exhaustive search example
+    Exhaustive sorting
+
+    Pros:
+        Applicable to most problems
+        Always get the correct/optimum answer
+        Easy to design describe
+        Makes proof of correctness Easy
+    Cons
+        Almost always slowest solution
+        Often infeasible
+        Exponential or factorial number of tests are impractical for realistic problems
+Divide-and-conquer
+    Goal
+        Reduce complexity of high-complexity algorithms
+    Outline
+        Divide large problems into one or more subproblems of roughly the same size
+            E.G split array into 2 halves, 3 thirds, etc
+        Solve subproblems via recursion
+        Combine solutions to subproblems into solution for full problems
+        solve small problems directly (base)
+    Intuition
+        if combining solutions is easier than solving directly, divide-and-conquer tends to be better
+
+Divide-and-conquer examples
+    General Strategy
+        Divide problem into equal parts
+        Solve subprobs recursively
+        Combine solutions
+        Solve small instances directly
+    MergeSort
+        Split array in half
+        recursively sort each half
+        Merge sorted arrays
+        base case: 0 or 1 element
+
+Searching
+    Input:
+        data: sorted array of length n
+        T: target value
+    Output: Index i such that data[i] = t, or -1 if t not in data
+    Exhaustive search
+        Check all values for t
+        return when found
+        Worst-case: O(n)
+    Optimization: stop searching if data[i] > t
+        Doesn't improve worst case
+    Naive Binary search
+        Split array in half
+        search each half 
+        return t if found
+        base case: array size 1
+        T(n) = T(n/2) + Theta(1)
+        Theta(n)
+    Actual bin search
+        Only one half has t
+        so only look at half each time
+        T(n) = T(n/2) + Theta(1)
+        T(n) = Theta(lgn)
+D-A-C
+    Pros:
+        Reduces complexity for several problems
+        Easy to prove correctness via strong induction
+        Easy to analyze with Master Theorem
+        Works very well if parallel computing
+    Cons:
+        Not universally applicable, problem must exhibit optimal substructure
+            Solution must be related to subproblem solution
+        Sometimes has poor complexity even with optimal substructure
+            Dynamic programming solves this problem
+D-A-C Exercise
+    Develop an efficient algorithm for natural number exponentiation
+    Input
+        a: base of exponent (real number)
+        n: exponenent(non negative)
+    Output: a^n
+    Divide problem into equal parts
+    Solve subproblems recursively
+    Combine solutions
+    solve small instances directly
+
+    def exp(a,n):
+        if(n > 0):
+            return a*exp(a,n - 1)
+        else:
+            return 1
+
+    if(n = 1), return a
+    else if n is even,
+        t = exp(a,n/2)
+        return t * t
+    else if n is odd,
+        t = exp(a,n/2)
+        return a * t * t
+Organizing data
+    Nearly all interating algorithms perform operations on data
+    Organization significantly impacts performance
+    Main Idea
+        Spend time upfront to organize data well
+        Reduce complexity on common operations
+    Trade-off: reduce time complexity at expense of space
+    Questions
+        What are my main operations
+            What data structure would accelerate these?
+        Does sorting make problem easier?
+            e.g. replace linear search with binary search
+        Am i recalculating the same things over and over
+        Does computing an index (metadata) help?
+Why are we strudying data structures?
+    Data structures are a fundamental component of algorithms
+    Data organization strongly impacts performance
+    Example: SelectionSort
+        n^2 all the time
+    Heap: takes Theta(n) time to build and Theta(lgn) time to delete min
+    Transforms THeta(n^2) Selection Sort into Theta(nlgn) HeapSort
+Data structures in memory
+    Contiguous
+        Allocate single chunk of memory
+        Retrieve elements by location data's index in chuck
+        Very fast if elements are accessed consecutively (caching)
+        No memory wasted on storing pointers
+        Follwing k links takes O(k) time vs O(1) for pointer arithmetic
+    Link-based
+        Data are stored in small islands connected via pointers
+        Retrieve elements by starting at head/tail/root and traversing links
+        Supports data with irregular structure (graphs, trees)
+        Easier for memory manager to Allocate
+        Easy to modify structing by changing links (vs. copying data)
+    Hybrid
+
+Stacks and Queues
+    Abstract data structures
+    

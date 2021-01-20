@@ -1,0 +1,93 @@
+Graph Traversal terminology
+    Walk: sequence of vertices joined by edges
+        If directed, must obey directionality of edges
+        May include the same vertex or edge multiple times
+        Length of walk: number of edges (vertices -1)
+            if weighted, sum of edge weights
+        Path: walk with no repeated vertices or edges
+        Circuit: walk that begins and ends at the same vertex
+            A.k.a, "closed walk"
+        Cycle: nontrivial path that begins and ends at the same vertex
+Graph Connectivity terminology
+    Connected: two verticies have a path between them
+        Also, a graph in which all verticies are Connected
+        Theorem: if there exits a (u,v)-walk, there exists a (u,v)-path
+    Component: maximal set of connected vertices in a graph
+        Maximal = cannot be enlarged by more vertices
+    Distance: legnth of the shorted path between two vertices
+        Only defined for connected vertices
+        Denoted d(u,v) or dg(u,v)
+        Postive definite, symmetric (if undirected), triangle inequality
+Graph Traversal
+    Traversal: iterating through graph in connected order
+        Basis for many graphs algorithms
+        Start at a specific vertex, iterate through all connected vertices
+    Two main strageies: breadth-first and depth-first Traversal
+        Both mark vertices in order as they go
+    BFS
+        mark all vertices as undiscovered
+        add v0 to queue
+        mark v0 as discovered
+        while queue is not empty:
+            dequeue vertex v
+            engqueue children of v that are undiscoverd
+            mark v as explored
+            mark children as discovered
+        if any vertex is undiscovered, choose one and restart
+    DFS
+        Recursive algorithm
+            Simpler code than BFS
+            Implcicitly stack-based
+        DFS:
+            Call DFS_recursive(v0)
+            if any vertex still undiscovered, choose one and restart
+        DFS-recursive(v):
+            mark v as discovered
+            for c in N(v):
+                if c is unexplored
+                    call DFS-recursive(c)
+            mark v as explored
+        Observation: vertices are discovered iff they arein stack/queue
+BFS and DFS traversal trees
+    Traversal tree
+        Set edges traversed by BFS or DFS,
+        Augmented with other edges of graph
+    DFS: non-tree edges are ancestors("back edges")
+    BFS: non-tree-edges are on same or next level ("cross edges")
+Example: graph Distance
+    Recall: length of the shortest path between two vertices
+        In unweighted graph, fewest number of edges
+    Should we use BFS or DFS? Why?
+        Hint: what is d(a,e) in the graph below
+    BFS: level = Distance
+        Label distance as you go OR use a sentinel for the end of a level
+    Why this works:
+        all edges are tree edges or cross edges
+        no edge moves more than 1 level down
+        shorted path uses tree edges
+BFS vs DFS
+    Both BFS and DFS:
+        Traverse one compenent at a time
+        Take O(n+m) time
+        Traversal trees have special properties
+            Sometimes critical, sometimes unimportant
+    DFS is somewhat easier to implement
+        DFS somewhat better with memory
+    Usage depends on problem
+BFS and DFS application examples
+    Both:
+        Component detection
+        Cycle detection
+    BFS
+        Unweighted distance
+        Radius and center of unweighted graph
+        betweenness centrality
+            Ranks vertices by "importance"
+            Counts shortest paths that pass through a vertex
+    DFS
+        Cut edge or cut vertex detection
+        Sorting (on BST)
+        Topological sorting
+            Order vertices of Directed Acyclic graph (DAG) so all eges point to right
+        Backtracking
+        

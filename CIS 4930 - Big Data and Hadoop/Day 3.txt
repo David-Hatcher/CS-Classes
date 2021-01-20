@@ -1,0 +1,111 @@
+A set of machines running HDFS(HAdoop Dist FIle System) and MapReduce is known as Hadoop Cluster
+    Individual machinse are known as nodes
+    A Cluster can have as few as one node, as many as several thousand
+        More nodes = better performances
+We will work with Pig and Hive, but will need to know what HBase, Flume, Oozie, Sqoop and other
+    members of the ecosystem are used for. Pig and Hive we will need to know how to use them.
+Hadoop Core Components
+    MapReduce/Spark/Processing Software
+    Hadoop Distributed File System
+Hadoop Ecosystem
+    Pig, Hive, HBase, Flume, Oozie, Sqoop.... etc
+Each Block is typically 64MB or 128MB in size
+Each block is replicated mulitple times
+    Default is to replicate each block three times
+    Replicas are stored on different nodes
+        This ensures both reliability and availability
+MapReduce Consists of two phases: Map, then Reduce
+    Between the two is a stage known as the shuffle and sort
+    Mapper feeds the information to the reducer
+    For 3 Mapper and 2 Reducer we must set up 3x2(6) connections because each Mapper sends some data to each Reducer - this is the shuffle stage
+    It must set up TCP connections between different nodes throguh switches and routers
+    TCP Incast problem, too many TCP connections that overwhelm switches and routers and they start dropping packages
+        If the package gets dropped the source will wait some time before resending the package
+    TCP was designed for wide area network connect
+    Round Trip Time(RTT) - this is in ms
+    1Gbps or 10Gbps delay is in ns
+    The round trip waits about 200 ms - Timeout
+    To fix this they made some new tcp protocols to be used in hadoop clusters
+    The shuffle is automatically done inside the cluster, the user does not need to handle it
+    Each Mapper tasks works on one block of data
+    We can define the blocks of data, or use the physical block of data
+    After mappers are complete the Mapper system distributes the intermediate data to Reducer nodes
+    Each Mapper handles roughly the same volume of data, so each mapper finishes roughly the same time
+    Once the first Mapper finishes it can start to send it's data to the Reducer
+    But reducer cannot start until ALL Mapper data has been completed
+HDFS is a filesystem written in Java
+    Based on Google's GFS
+Sits on top of native filesystem
+    Such as ext3, ext5, or xfs
+Provides redundant storage for massive amounts of data
+    Using redily-available, industry-standard computers
+Data is distributed across many machines at LOAD TIME
+    Different blocks from the same file will be stored on different machines
+    This provides for efficient MapReduce processing
+A master node called the NameNode keeps track of which blocks make up a file, and where those blocks are located
+    Known as the metadata
+    NameNode also handles data resource management
+One node is used for maintenance
+    Starts running one application called NameNode
+    NameNode keeps track of the overall data locations
+Slave nodes are used for storage, worker nodes
+    These nodes run the data daemon DataNode
+    DataNode handles the local storage
+Although the files are split into 64MB or 128MB blocks, if a file is smaller than this the full 64MB/128MB will not be used
+    It will only use up the required size, so if it's 30MB it will only use 30MB, the maximum is the block size
+Blocks are stored as standard files on the DataNodes in a set of directories specified in Hadoop's configuartion files
+Without the metadata on the NameNode, there is no way to acces the files in the hdfs cluster
+When a client application wants to read a file
+    It communicates with the NameNode to determine which blocks make up the file, and which DataNodes those blocks reside on
+    It then communicates directly with the DataNodes to read the data
+    The NameNode will not be a bottleneck
+1. Client -> asks NameNode
+2. NameNode -> client file1 {block1 : nodes[a,b,c],block2 : nodes[b,c,d],block3: nodes[a,b,d],...}
+3. Client hdfs -> talks directly to the DataNodes to read the datablocks
+Options for accessing HDFS
+    FsShell command line: hadoop fs, put and get
+    Java API, MapReduce
+    Ecosystem Projects
+        Flume - collects data from network sources
+        Sqoop - transfers data between HDFS and RDBMS
+        Hue - Web-based interactive UI. Can browse, upload, download, and view files
+The NameNode daemon must be running at all times
+    If the NameNode stops, the cluster becomes inaccessible
+High availibility mode (in CDH4 and later) this is a production version, both systems are just as powerful
+    Two NameNodes: active and standby
+Classic mode - SND is normally a less powerful system
+    One NameNode
+    One "helper" node called SecondaryNameNode
+        Bookkeeping, not backup
+Copy file foo.txt from local disk to user's direction in HDFS
+    hadoop fs -put foo.txt foo.txt
+Get a directory listing of the user's home directory in HDFS
+    hadoop fs -ls
+Get a directory listing of the HDFS root directory
+    hadoop fs -ls /
+Display the contents of the HDSF file /user/fred/bar.txt
+    hadoop fs -cat /user/fred/bar.txt
+Copy that file to the local disk, named baz.txt
+    hadoop fs -get /user/fred/bar.txt baz.txt
+    retrieving procedure
+Create a directory called input under the user's home directory
+    hadoop fs -mkdir input
+Delete the directory input_old and all its contents
+    hadoop fs -rm -r input_old
+What is MapReduce
+    MapReduce is a method for distributing a task across multiple nodes
+    Each node processes data stored on that node
+        Where possible
+        This cannot be done for the Reduce portion, only the Mapper
+    Consists of two phases:
+        Map
+        Reduce
+    A job is a 'full program'
+        A complete execution of Mappers and Reducers over a dataset
+        In MapReduce 2, the term application is often used in place of 'job'
+    A task is the execution of a single Mapper or Reducer over a slice of data
+    A task attemp is a particular instance of an attempt to execute a task
+        There will be at least as many task attempts as there are tasks
+        If a task attempt fails, another will be started by the JobTracker
+        Speculative execution (see later) can also result in more task attempts than completed tasks
+        

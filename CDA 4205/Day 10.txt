@@ -1,0 +1,112 @@
+Fat v is an ALU(Arithmetic Logic Unit)
+Mulitplication
+    1000*1001, 1000 = mutliplicand, 1001 = multiplier
+    Left shift mulitplier, right shift muliplicand
+        after left and right shift, if the least sig bit of multiplier is a 1 then add the right shifted multiplicand to the product
+        Muliplier       Multiplicand
+        1001               1000            Add
+        0100              10000            Dont add
+        0010             100000            Dont add
+        0001            1000000            Add
+        Total product   1001000
+Faster multiplier
+    Uses multiple adders
+        Cost/performance trade/off
+        Takes a lot more area and has a much higher power consumption
+    Can be piplined
+        Several mulitplication performaned in parallel
+
+RISC-V Mulitplication
+    Four Mulitply instructions:
+        mul: Mulitply
+            Gives the lower 64 bits of the product
+        mulh: multiply high
+            Gives the upper 64 bits of the product, assuming the operands are signed
+        mulhu:
+            Gives the upper 64 bits of the product, assuming the operands are UNsigned
+        mulhsu:
+            Gives the upper 64 bits of the product, assuming one operand is signed and the other is UNsigned
+        Use mulh result to check for the 64-bit overflow
+Division
+    Divisor shift right, quotient shift left
+    Can use same hardware as multiplier
+Faster
+    Can't use paralle hardware as in mulitplier
+        Subtraction is conditional on sign of remainder
+    Faster Dividers (eg SRT divison) generate multiple quotient bits per step
+        Still require multiple steps
+RISC-V Division
+    Four Instructions:
+        div, rem: signed divide, remainder
+        divu, remu: unsigned divide, remainder
+    Overflow and division-by-zero don't produce errors
+        Just return defined results
+        Faster for the common case of no error
+Right Shift and Division
+    Left shift by i places mulitplies an integer by 2^if
+    Right shift divides by 2^i?
+        Only for unsigned integers
+    For signed integers
+        Artihmetic right shift: replicate the sign bit
+        Eg -5/4
+            11111011 >> 2 = 11111110 = -2
+            rounds toward -inf
+        c.f
+            11111011 >>> 2 = 00111110 = +62
+The Big Picture
+    Finite HW resources means arithmetic operations can create results too large or too small to represent with physical limits (word/doubleword size)
+    Unsigned arithmetic defined: A op B % n
+        Op = operation
+        n = # bits
+    We can manually deal with overflow w/o exceptions using code to check expected sign of output vs actual sign
+Fixed Point
+    Computer arithmetic that represents numbersin which the binary point is Fixed
+    Fixed number of bits before and after binary point
+    Equates to fixed range precision
+        eg 2 bits for fraction = 2^2 possible fractions, can only represent increments of 0.25 (2^(-2))
+    Examples
+        10.01 -> 2.25
+        1100.001 -> 12.125
+        0101.101 -> 5.625
+    Arithmetic with fixed point uses the same procedures as regular binary
+    No actual 'binary point' in the hardware - just tracks the scale/offset factor eg
+        (00101101,0) - > 00101101 = 45
+        (00101101,1) ->  0010110.1 = 22.5
+        (00101101,2) ->  001011.01 = 11.25
+        (00101101,3) ->  00101.101 = 5.625
+        (00101101,4) ->  0010.1101 = 2.8125
+        Notice they're all just the previous number divided by 2
+    Shifting the binary point left just divides by toward
+        but is that all?
+    Fixed word size = limited resources
+        Extemes: all int part, or all dec part
+        (100101101,0) = 45
+        (100101101,8) = 0.17578125
+    Either can we represent 2^n different values
+        (xxxxxxxx,0) = 0 to 255 in steps of 1
+        (yyyyyyyy,8) = 0 to 0.99609375 in steps of 2^-8 = 0.00390625
+    Trade-off required range with required precision
+Floating Point
+    Computer arithmetic that represents numbers in which the binary point is not fixed
+    Add certain rules/implicit or "hidden" values
+    Representation for non-integral numbers, including very small or very large numbers, inf -inf, NaN
+    Like Scientific notation
+        -2.34 * 10^56           Normalized
+        0.002 * 10^-4           Not Normalized
+        987.02 * 10^9           Not Normalized
+    In binary
+        +- 1.xxxxxxxx(2) * 2^(yyyy)
+    Types float and double in C
+Floating Point Standard
+    Developed in response to divergence of representations
+        Portability issues for scientific code
+    Now almost universally adopted
+    Two representations
+        Single Precision (32-bit)
+        Double Precision (64-bit)
+    [Sign] [Exponent] [Fraction]
+    Single has 8 bits for exp, 23 bits for fraction
+    double has 11 bits for exp, 52 bits for fraction
+    x = (-1)^s *(1+Fraction) * 2^(exponent - bias)
+    S: sign bit (0 non-negative, 1 negative)
+    bias is [2^(n-1) - 1]

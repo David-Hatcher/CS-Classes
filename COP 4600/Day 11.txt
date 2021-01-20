@@ -1,0 +1,13 @@
+Critical Region
+
+    add 1 to line_p1
+    store count in R1_p1
+    add 1 to R1_p1                  => count = count + 1
+    store R1_p1 in count
+
+1. p1 runs and after some time an interrupt occursafter inst 3, line_p1 = 5000, count = 4999, R1_p1 = 4999
+2. P2 runs and interrupt at line 5, line_p2 = 2000, R1_p2 = 6999, count = 6998
+3. p1 runs and after some time an interrupt occurs after executing inst 5. line_p1 = 9999, R1_p1 = 11998, count = 11997
+4. p2 runs until it exits the while loop and prints the value of count. count = 24999
+5. p1 runs until it exits the while loop and prints the value of count. count = 11999
+

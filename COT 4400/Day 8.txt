@@ -1,0 +1,93 @@
+Algorithm Analysis
+    Identify loops and function calls
+        everything else is Theta(1)
+    loops
+        Estimate loop body running time
+        Estimate number of iterations
+            Increment by c: divide range by c to get iterations
+            Multiplying by c: take logc of the end/start ratio
+        If iterations don't depend on i: i*time per iterations
+        Otherwise: sum up iterations
+        Function calls:
+            Other fuctions analyze sep
+            recursive
+
+Finding a recurrence
+    Big Idea: define function to represent time in terms of parameters
+    Identify recusrive calls
+        use function to describe time
+    Analyze everything else as normal
+    Example RecursiveInsertionSort
+    T(n): time to sort an array of size n
+    Line 3 takes T(n-1)
+    Line 8 and 10 are function calls
+    Line 8 O(n)
+    Line 10 O(n)
+    Rest of the lines Theta(1)
+    T(n) = T(n-1) + O(n)
+    T(n-1) <- # and size of recursive calls
+    O(n) <- Non-recursive code
+
+Recursion tree Analysis
+    Technique to analyze algorithm complexity of recursive algorithms
+    Main Idea
+        Draw a tree that represents all of the recursive calls
+            Start with n
+            Add children for recurisve calls
+            Repeat until you hit the base case
+        Add up complexity of each level of t he tree
+        Find tree height
+        Add up the total complexity of all levels
+    Example
+        T(n) = T(n-1) + Theta(n), T(1) = Theta(1)
+        n -> n-1 -> n-2 -> ... -> 1
+        Theta(n) -> Theta(n-1) -> Theta(n-2) -> ... -> Theta(1)
+        sum(i=1->n) Theta(n) = Theta(n^2)
+        Total complexity Theta(n^2)
+
+Recursion Tree Example
+    T(n) = 2T(n/2) + Theta(n), T(1) = Theta(1)
+                        n                   Theta(n)
+                #  n/2     n/2              2Theta(n/2)
+                n/4  n/4 n/4 n/4            4Theta(n/4)
+                ................
+                1111111111111111            (2^lgn)Theta(1) = nTheta(1)
+                Size(i) = n/(2^i)
+                count(i) = 2^i
+    sum(i = 0->1,n) 2^i (n/2^i) = sum(i = 0->1,n) n
+    Total complexity Theta(nlgn)
+
+The Master Theorem
+    Many recursive algorithms have complexity of the form:
+        T(n) = aT(n/b) + f(n)
+        n/b: size of recurisve calls
+        a: number of recursive calls (often a = b)
+    Master Theorem
+        Gives complexity for T(n) based on a, b, and f(n)
+            Calculate c = logb(a)
+            Compare complexity of f(n) to n^c
+                if f(n) = Theta(n^c), T(n) = Theta(f(n)lgn)
+                otherwise if f(n) is strictly smaller than O(n^c), T(n) = Theta(n^c)
+                    f(n) = O(n^(c-e)) for some e > 0
+                    if f is a polynomial deg(f) < c
+                Otherwise if f(n) = Omega(n^(c+e)) and f is regular, T(n) = Omega(f(n))
+                    deg(f) > c
+                    Strictly more than n^c
+                    Regular: af(n/b) < f(n) for large n
+                    For this class can assume regularity
+    Almost T(n) = Theta(n^c + f(n)) unless n^c and f(n) are same size
+    For purposes of the master theorem, you may ignore floor and ceiling
+    E.g., T(n) = T(floor(n/2)) + T(ceil(n/2)) + Theta(n)
+                = 2T(n/2) + Theta(n)
+    Warning: cases 1+3 must be polynomially different (not log)
+        deg(f) < c or def(f) > c
+
+Example T(n) = T(n/2) + Theta(1)
+    a = 1, b = 2, f(n) = Theta(1)
+    Calculate c
+        c = lg(1) = 0
+    Compare n^c and f(n)
+        n^0 = Theta(1)
+    Complexity
+        Theta(Theta(f)) = Theta(lgn)
+

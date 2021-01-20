@@ -1,0 +1,107 @@
+We can reduce the volumes for the shuffler by sending the key, value pairs not as invididuals, (ex, (the,1) (the,1) (the,1))
+    but as a partial sum (ex. (the,3))
+The shuffler is a bottleneck
+This brings in the idea of Combiners, to combine the key pair values into a single key pair value
+The combiner comes between the mapper and partitioner, on the local mapper machines
+    The paritioner determines the final destination so it wouldn't have all the values from all machines just the local ones
+Three models
+    Driver
+        Configurations for map/reduce job then submit the map/reduce job to cluster
+    Mapper
+    Reducer
+ToolRunner
+    You can use ToolRunner in MapReduce driver classes
+        This is not required but is best practice
+    ToolRunner uses the GenericOptionsParser class internally
+        Allows you to specify configuration options on the command line
+        Also allows you to specify items for the Distributed Cache on the command line (see later)
+    Distributed Cache
+        Gets the required libraries, lookup tables, resources... before you start running your mapper code
+    Adds flexibility for whole framework
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+
+public class WordCount extends Configured implements Tool{
+
+    public static void main(String[] args) throws Exception{
+        int exitCode = ToolRunner.run(new Configuration(), new WordCount(), args);
+        System.exit(exitCode);
+    }
+
+}
+
+ToolRunner Command Line options
+    ToolRunner allows the user to specify configuration options on the command line
+    Commonly used to specify hadoop props using the -D flag
+        Will override any default or site props in the conf
+        but will not override those set in driver code
+    $ hadoop jar myjar.jar MyDriver \
+    -D mapred.reduce.tasks=10 myinputdir myoutputdir
+    Note that -D options but appear before any additional program arguments
+    Can specify an XML conf file with -conf
+    Can specify the default filesystem with -fs uri
+        Shortcut for -D fs.default.name=uri
+
+The setup Method
+    It is common to want your mapper or reducer to execute some code before the map or reduce method is called for the first time
+        Initialize data structures
+        Read data from external file
+        set parameters
+    The setup method is run before the map or reduce method is called for the first time
+        public void setup(Context context)
+        Builds out whatever you need before the first time you call your mapper
+The cleanup Method
+    similaryly you may wish to preform some action(s) after all the records have been processed by your Mapper or Reducer
+    The cleanup method is called before the Mapper or Reducer terminates
+        public void cleanup(Context context) throws IOException, InterruptedException
+public class MyDriverClass{
+    public int main(String[] args) throws Exception{
+        Configuration conf = new Configuration();
+        conf.setInt("paramname",value);
+        Job job = new Job();
+    }
+}
+
+The Combiners
+    Often, Mappers produce large amount of intermediate data
+        That data must be passed to the Reducers
+        This can result in a lot of netwrok traffic
+    It is often possible to specify a combiner
+        Line a 'mini-Reducer'
+        Runs locally on a single Mapper's output
+        Output from the combiner is sent to the Reducers
+    Combiner and Reducer code are often identical
+        Technically this is possible if the operation is performed is commutative and associative
+        Input and output data types for the combiner/reducer must be identical
+    The combiner uses the same signature as the Reducer
+        Outputs zero or more (k,v) pairs
+        The actual method called is the reduce method in the class
+            Uses the SAME reducer code
+        reducer(inter_key, [v1,v2,...]) ->
+                            (result_key, result_value)
+    It is turned off by default, you must tell the hadoop client that you want to use it
+    job.setCombinerClass(SumReducer.class); //This will enable the combiner
+
+Accessing HDFS Programmatically
+    Can be done but not reccomended
+        Configuration conf = new Configuration()
+        FileSystem fs = FileSystem.get(conf);
+    The conf object has read in the Hadoop conf files, and therefor knows the address of the NameNode
+    A file in HDFS is represented by a Path object
+        Path p = new Path("/path/to/my/file");
+
+The Distributed Cache: Motivation
+    A common requirement is for Mapper or Reducer to need access to some 'side data'
+        Lookup tables
+        dictionaries
+        standard conf values
+    One option: read direction from HDFS in the setup method
+        Using the API seen in previous sections
+        works, but is not scalable
+    The distributed cache provides and API to push data to all slave nodes
+        Transfer happens behind the scenes before any task is executed
+        Data is only trasnferred once to each node, rather
+        Note: distributed cache is read-only
+        Files in the distributed Cache are automatically deleted from slave nodes when the job finishes

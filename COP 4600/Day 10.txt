@@ -1,0 +1,40 @@
+Disabling Interrupts
+    A possible approach to providing mutual exclusion, progress, and bounded waiting
+    P1 disables interrupts as it enters it's critical region. P2 cannot inter it's critical region. P1 enables interrupts as it leaves it critical section
+    For Process P2:
+        repeat
+            Disable interrupts
+                critical section
+            Enable interrupts
+                remainder section
+        until false
+    Disadvantages:
+        Not safe to give control of interrupts to users
+        Process could hang up in critical section and system will have to be rebooted
+        Would not work with multiple CPUs
+Semaphores
+    A semaphore is a protected variable
+    It can only be modified by wait and signle operations
+    also by an initialize operations
+    Binary semaphoers are either 0 or 1
+    Counting semaphores are 0, 1, 2, 3...
+    Wait and signal operations on semaphores are executed without interruptions
+    If more than one process attepts a wait or a signal operation on a semaphore, only one process will be allowed to proceed. That is mutual exclusion is enforced also on semaphore operations
+
+    wait (semaphore) means                  while semaphore <= 0 block
+                                                semaphore = semaphore - 1
+
+    signal (semaphore) means                semaphore = semaphore + 1
+
+    mysem = 1
+    repeat
+        wait(mysem)                         while mysem <= 0 {block}
+            critical section                mysem = mysem -1
+        signal(mysem)                       mysem = mysem + 1
+            remainder section
+    until false
+
+    Basically the semaphore is init to 1, then it goes into the repeat, since the value is greater than 0 this process is able to go into the critical section
+    It will then make the semaphore 0, if another process tries to enter this critical section, the other process will be blocked until the first process finishes it's
+    critical section and increases the value of mysem to 1, so now the other process can go into the critical section
+    

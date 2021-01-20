@@ -1,0 +1,147 @@
+Shared Memory
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/shm.h>
+#include <stdlib.h>
+#include <unistd.h>
+#define SHMKEY ((key_t) 7890)
+
+typedef struct{
+    int value;
+} shared_mem;
+shared_mem *counter;
+
+/*
+This function increases the value of shared variable counter by one all the way to 50000
+*/
+
+process1 (){
+    int line = 0;
+
+    while(line < 50000){
+        line++;
+        counter->value = counter->value + 1;
+    }
+    printf("from process1 counter = %d\n",counter->value);
+    exit(0);
+}
+
+process2(){
+    int line = 0;
+    while(line < 50000){
+        line++;
+        counter->value = counter->value + 1;
+    }
+    printf("from process2 counter = %d\n",counter->value);
+    exit(0);
+}
+
+main(){
+    key_t key = 123; /*Shared memory key*/
+    int shmid;
+    int shmid;
+    int pid1,pid2,pid3;
+    int status;
+    char *shmadd;
+    shmadd = (char*)0;
+    /*This asks the OS to give you shared memory*/
+    if((shmid = shmget(SHMKEY,sizeof(int),IPC_CREAT | 0666)) < 0){
+        perror("shmget");
+        exit(1);
+    }
+    /*This one attaches the shared memory to the variable counter from the top*/
+    if((counter = (shared_mem *)shmat(shmid,shmadd,0)) == (shared_mem *)-1){
+        perror("shmat");
+        exit(0);
+    }
+    counter->value = 0;
+    fflush(stdout);
+    if((pid1 = fork()) == 0){
+        process1(); /*First child is going to execute process1()*/
+    }
+    /*use this statement to reach the correct count*/
+    //sleep(2);/*This is not the solution though*/
+    if((pid1 != 0) &&(pid2 = fork()) == 0){
+        process2(); /*Second child is going to execute process2()*/
+    }
+
+    if((pid != 0) && (pid2 != 0)){
+        pid3 = wait(&status);/*parent waits for one process to end*/
+        pid3 = wait(&status);/*parent waits for the other process to end*/
+        printf("fromt parent counter = %d\n",counter->value);
+        printf("\t\tEnd of simulation");
+    }
+    /*Release the shared memory*/
+    if((shmetl(shmid,IPC_RMID,(struct shmid_ds*) 0)) == -1){
+        perror("shmetl");
+        exit(0);
+    }
+}
+
+LOOK OVER SLIDE 12 IN DETAIL
+
+
+Critical Section
+    A process modifying a shared variable is in a criticle section or region
+    Only one process at a time should be allowed to modify the shared variable
+    This is called mutual exclusion
+
+    A proper solution to access critical regions should include:
+        1. Mutual exclusion as indicvated about
+        2. Progress - that is processing executing outside of their critical regions should not prevent other processes from entering their critical region
+        3. Bounded waiting
+
+Understand where the critical section is
+
+Software solution
+    Overall Structure
+    Process 1                       Process 2
+    repeat                          repeat
+        entry section                   entry section
+            Critical secont                 Critical secont
+        exit section                    exit section
+    until false                     until false
+
+You could put a stop in the entry section and remove the stop in the exit section
+    A Bad Version:
+        This is a SPINLOCK
+            Program sits and tests for value until it can go into it's critical section
+        entry section 2 = while turn != 2 do no-op
+        exit section 2 = turn = 1
+
+        entry section 1 = while turn != 1 do no-op
+        exit section 1 = turn = 2
+
+        This approach forces alternating access to the critical section
+
+    An improved version
+
+        But this can create deadlock when both flags are set true because of interrupts
+
+        p2 entry:
+            flag[2] = true
+            while flag[1] do no-op
+        p2 Exit:
+            flag[2] = false
+
+        p1 entry:
+            flag[1] = true
+            while flag[2] do no-op
+        p1 Exit:
+            flag[1] = false
+
+    The right way
+        p2 entry:
+            flag[2] = true
+            turn = 1
+            while flag[1] and turn = 1 do no-op
+        p2 Exit:
+            flag[2] = false
+
+        p1 entry:
+            flag[1] = true
+            turn = 2
+            while flag[2] and turn = 2 do no-op
+        p1 Exit:
+            flag[1] = false

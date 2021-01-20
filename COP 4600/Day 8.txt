@@ -1,0 +1,76 @@
+Independant Concurrent processes
+    These do not require coordination although they execute concurrently
+    Independent - do not share data with other processes - therefore are not affected by other processes running concurrently
+    Each process changes its own variable in its own address space
+    Process 1 counter variable is not accessible to process 2.
+    Process 2 counter variable is not accessible to process 1.
+
+The need for coordination, Synchronization and Communication
+    Modifying and sharing information by two or more processes
+        Modifying a common (or shared) variable
+        Modifying a common file
+        Modifying a common database
+        Using the output of a process as input to another
+    Parallel Operation
+        Break a task into several subtask.
+        A subtask may need to wait for the results of another subtask
+        Subtasks may modify the same variable
+
+Asynchronous Concurrent processes
+    These execute concurrently and require coordination because they're sharing the variable "counter"
+    Variable "counter" is declared so that it is accessible to both processes
+
+What can go wrong with asynchronous concurrent processes?
+    The one high level language instruction is equivalent to 3 machine language instructions.
+    A Process may change states from running to ready before the variable counter is updated.
+    Process 1:
+        register1 = counter
+        register1 = register1 + 1
+        counter = register1
+    Process 2:
+        register2 = counter
+        register2 = register2 + 1
+        counter = register2
+    Assume that initially counter is set to 0 and that is a line enter at each terminal
+    process1 runs:          register1 = counter       //register1 = 0
+    process1 runs:          register1 = register1 + 1 //register1 contains 1
+    process2 runs:          register2 = counter       //register2 = 0
+    process2 runs:          register2 = register2 +1  //register2 = 1
+    process1 runs:          counter = register1       //counter = 1
+    process2 runs:          counter = register2       //counter = 1
+
+Creating Processes in LINUX to experiment with ansynchronous concurrent proccess
+
+#include <stdio.h>
+
+main(){
+    int pid1;
+    pid1 = fork();
+
+    if(pid1 == 0){
+        printf("Hello from child1\n");
+        exit(0);
+    }else{
+        printf("Hello from parent\n");
+    }
+}
+
+When child is initialized the pid1 is set to 0 no matter what the parents value was
+The child process starts from the last line run in the parent process
+
+Create a program that forks two processes and then create a program that creates a child which creates a grandchild
+
+#include <stdio.h>
+
+int main(void){
+    int x, y, z;
+    x = -5;y=-9;z=-1;
+    y = fork();
+    y = fork();
+    if(y > 0) z = fork();
+    else x = fork();
+    printf("x = %d y =%d z = %d\n",x,y,z);
+}
+
+when first fork goes off child has -5 for x, 0 for y and -1 for z
+Parent process will have some value 100, pid for the child

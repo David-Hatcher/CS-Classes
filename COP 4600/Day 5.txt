@@ -1,0 +1,53 @@
+Device Controllers
+    The Controller is dedicated to monitor and control the device.
+    It relieves the OS from this task
+    Getting data in and out of the device is extremely slow when compared to CPU speeds. Typing a word response via keyboard can take a couple of seconds
+        how many instructions can a CPU execute during that time?
+    The Controller generates an interrupt, and that interrupt stops the CPU
+    The Device driver is software, which is part of the OS.
+        That is the way in which the OS communicates with the controller
+        After the driver tells the controller what to do, the driver is done and the controller functions independently
+    When an interrupt occurs the OS comes in does it's thing, then sets the CPU on another process
+        The interrupt is a physical signal that stops the fetch decode execute cycle
+        To switch processes the OS ALWAYS does it
+    For each interrupt the CPU accesses the interrupt vector and loads the address of that interrupts service routine
+    An interrupt service routine is a set of instructions
+        1. Save contents of Program Counter
+        2. Load Program Counter with address of interrupt service routine
+        3. Interrupt service routine saves other register contents
+            These are saved in the process control block, a data structure of the OS
+        4. Interrupt service routine does whatever is needed to service device that caused interrupt
+        5. OS picks a process to start running
+    After every instruction is executed CPU checks if interrupts have been requested
+    Read Text for nonmaskable and maskable interrupts
+        Maskable can be ignored temporarily
+    Interrupt priorities
+    Steps during an interrupt
+        1. A user's process requests a read (or write) operation on the device - THIS GENERATES AN INTERRUPT
+        2. The OS schedules the device driver process to perform that read (or write) operation when the controller is idle.
+            If your program has a read instruction is generates an interrupt, the OS then comes in and schedules the read and gives that information to your process
+        3. The driver places an "input" command into the controller's command register. For a "write" operation the driver first places the data in the
+            controller's data register and then the driver places an "output" command into the controller's command register.
+        4. The driver saves bookkeeping information about this I/O overation on the device status table
+        6. The driver gives control to the OS Scheduler
+        5. Other processes are scheduled by the OS
+        7. When "our" controller's I/O is finished, it generates an interrupt.
+        8. The interrupt service routine for this controller("Device handler") gets the bookkeeping information from the proper device status table
+        9. The interrupt service routine stores the input data into the user process's memory space
+        10. For an output operation it merely notes that the output is completed
+        11. The user process is now allowed to run again when the OS scheduler selects it
+    Direct I/O
+        The CPU takes the information from the device controller and puts it into the main memory
+    Direct Memory Access I/O
+        The device controller itself puts the device controller information into main memory
+    Both are still controlled by the OS
+    User Process - Uses commands to interface with device driver like "open, close, read, write"
+    OS - interface to device driver - Grants use of the device, schedules the use of the CPU by the driver, allocates buffers
+    OS - Device Driver - monitors the state of the controller, issues specific commands to read or write, and reads and writes the data.
+    Controller - Waits for a command to do work, does the work, and notifies the driver (in polling) or generates an interrupt
+    The device driver is part of the OS. it executes privileged instructions as it controls the device and it reads and writes into different user memory spaces
+    Buffering
+        The controller has a buffer that can store a bit of data and still read data from the device
+        So if the device driver is busy the controller can still work
+    Protecting system resources
+        CPU - No process is allowed to monopolize the CPU

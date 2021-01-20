@@ -1,0 +1,99 @@
+Complexity Analysis
+    What are the factors that contribute to the running time of an algorithm?
+        Processor Speed
+        Input length
+        loops
+        # of instructions
+        memory
+        caching effects
+        types of instructions
+    His list
+        Processor Speed
+        Number of instructions executed
+        Cache Coherency
+        Resource conflicts
+    Which of these are import when comparing algorithms?
+        Processor speed affects fast and slow algorithms equally
+            Not an important factors
+    What can we most reliably control when designing an algorithm?
+        Number of instructions executed
+
+Ram model of computation
+    Set of assumptions that make analysis more reasonable
+    Assumptions
+        All basic operations(assignment, arithmetic,brancing,etc...) take 1 operation
+            loops and functions do not qualify
+        Memory acces is instantateous
+            All variables are in registers
+        We have infinite memory
+    Cons
+        Different operations take different number of clock cycles
+        Cache locality has significant impact on performance
+        Virtual memory can slow performance
+    Pros
+        Can actually analyze algorithms
+Ram Model Example
+Algorithm findMind
+Executed: 1                 Line 2: 1 operation
+Executed: n-1(arguable n)   Line 3: 2 operations, assign and compare
+Executed: n-1               Line 4: 3 operations, two pointer arithmetics, and one comparison
+Executed: n-1(at most)      Line 5: 1 operation
+Executed: n/a               Line 6: 0 operations
+Executed: n-1               Line 7: 1 operation, jump to top of for loops
+Executed:1                  Line 8: 1 operation, return
+Total ops: <= 7(n-1) + 2 = 7n - 5
+
+Big-oh Notation
+    Technique for abstracting away details of Complexity
+        Can be used for time complexity, space complexity, etc...
+    Main Idea: most improtant aspect of complexity is how fast it grows relative to input size
+        Focus on asymptotic eventual growth rate
+        fast functions will eventually pass slow functions
+
+Justitification of big-oh
+    Algorithm runtime with c=1,running at ghz
+    Lesson: on large data, coefficients not as important
+Big-oh
+    Upper bounds("at most")
+    f(n) = O(g(n)) iff there exists positive constants c and n0 such that f(n) <= cg(n) for all n >= n0
+    Translation: f is smaller than some multiple of g eventually (and stays smaller)
+        f isn't growing faster than g
+    Example
+        prove that 7n^2 + 19n - 4444 = O(n^2)
+        Goal 7n^2 + 19n - 4444 <= Cn^2, for all n >= n0, C > 0, n0 > 0
+        Find some value for C and n that work for it
+        7n^2 + 19n - 4444 <= 7n^ + 19n
+            19n <= n^2 when n >= 19
+        C = 8, n0 = 19
+
+Big-Omega picture
+    Lower bound("at least")
+    f(n) = Omega(g(n)) iff there exists positive constants c and n0 such that f(n) >= cg(n) for all n >= n0
+    Translation: f is bigger than some multiple of g eventually( and stays bigger)
+        Small values of n don't matter, g isn't growing faster than f
+    Example:
+        Prove that 7n^2 + 19n - 4444 = Omega(n)
+        Goal: for c and n0 > 0, f(n) >= cn, for all n >= n0
+        7n^2 + 19n - 4444 >= 19n - 4444
+            Find multiple of n that is eventually smaller than -444
+        7n^2 + 19n - 4444 >= 19n - 4444n
+        C = -4425, n0 = 1, can't use C must be positive
+        7n^2 + 19n - 4444 >= 19n - 18n
+        C = 1, n0 = (4444/18)
+
+Big-Theta picture
+    Upper and lower bound("same rate as")
+        f(n) = Theta(g(n)) iff there exist positive constants c1,c2 and n0 such that c1g(n) <= f(n) <= c2g(n) for all n >= n0
+
+Prove: n^2 -2n + 1 = O(n^2)
+f(n) = O(g(n)) iff there exists positive constants c and n0 such that f(n) <= cg(n) for all n >= n0
+
+Goal: n^2 -2n + 1 <= Cn^2, for all n >=n0, C > 0, n0 > 0
+        n^2 - 2n + 1 <= n^2 + 1
+        1 <= n^2 when n >= 1
+        n^2 - 2n + 1 <= n^2 + n^2
+        n^2 - 2n + 1 <= 2n^2
+        C = 2, n0 = 1
+
+
+(n-1)^2

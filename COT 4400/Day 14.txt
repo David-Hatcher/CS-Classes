@@ -1,0 +1,96 @@
+Dynamic programming
+    Algorithm design strategy
+    Similar to divide-and-conquer
+    Useful when divide-and-conquer would be inefficient
+DP motivating example: Fibonacci
+    F(n) = 1, if n = 1 or 2, F(n-1) + F(n-2), if n > 2
+    You've probably been told that this function is inefficient
+    T(n) = T(n-1) + T(n-2) + Theta(1)
+    Complexity: Theta(1.61^n) = Theta(Golden Ratio^n)
+Why does this take so long?
+    LOTS of calls made because so many are repeated
+    We are calculating the same things over and over again
+    Intuition: save sub-results
+A Better Solution
+    Input: n: index of Fibonacci number to compute
+    Output: Fn
+    Algorithm
+    fib = Array(n);
+    initialize fib to -1;
+    return DynamicFib(n);
+
+    DynamicFib(n)
+    if fib[n] = -1 then
+        if n = 1 or 2;
+            fib[n] = 1;
+        else
+            fib[n] = DynamicFib(n-1) + DyanmicFib(n-2)
+        end
+    end
+    return fib[n];
+
+    Each Fib number computer once
+    Total complexity: Theta(n)
+Dynamic programming
+    Recursion augmented with map to save sub-results
+        Usually array-based map
+            Dimensionality depends on number of parameters
+    Useful when:
+        Problem has recursive structure
+        More than one recursive calls
+        problems overlap
+    Related Concept: memoization
+        Function that stores solutions to previous problems
+            Uses a map
+            Returns immediately when calling with previously-seen value
+        Can be used to solve dynamic programming problems
+            Can be used for non-recursive functions, too
+When to use dynamic programming
+    Does this problem exhibit optimal substructure?
+        Make one decision
+        Solve smaller versions of the problem
+        Combine solutions
+        Find and solve base cases
+    No: try another method
+    Describe optimal substructure
+    Try a small example
+    Does substructure overlap?
+        No: Divide-and-conquer
+        Yes: dynamic programming
+        Overlap usually happens ~2 levels down in a recursion tree
+A more complex example
+    Binomial coefficients ("n choose k")
+        n choose k = n!/(k!(n-k)!)
+        20 choose 3 = 20!/(3!(17)!)
+        20 choose 3 = 1140
+    Formula might cause overflow
+    Alternative: Pascal's triangle
+example
+    Two arguments -> 2D map
+    Example: C(4,2)
+    Input: n,k binomial coefficient to compute
+    Output (n k)
+    binom = Array(n,k)
+    init binom to 0;
+    return Memobinom(n,k);
+    
+    if binom[n,k] > 0 then
+        return binom[n,k];
+    else if k = 0 or k = n then
+        binom[n,k] = 1;
+    else
+        binom[n,k] = MemoBinom(n-1,k-1) + Memobinom(n-1,k)
+    end
+    return binom[n,k];
+Implementing memoization
+    Five step procedure
+    1. Implement naive recursive Algorithm
+        Based on recurrence
+    2. Decide data structure and sentinel value (sent val is a value to represent something we haven't seen yet)
+        Data structure depends on the number of parameters
+        Pick an invalid return value as sentinel
+    3. Add "memoization check" to the beginning of the Algorithm
+        If solution is in data structure return it
+    4. Store solution before returning
+    5. Write helper function to init data structure
+    

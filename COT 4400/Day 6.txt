@@ -1,0 +1,136 @@
+Big-Oh Properies example
+    Use Big-Oh properties to establish the following:
+        1. If f(n) = 13n^2 + 1234n + 91.2n*sqrt(n) then f(n) = Theta(n^2) use the facts that n = O(n^2) and sqrt(n) = O(n)
+
+    f(n)    = 13n^2 + 1234n + 91.2n*sqrt(n)    Goal Theta(n^2)
+            = Theta(13n^2 + 1234n + 91.2n*sqrt(n))
+            = Theta(13n^2) + Theta(1234n) + Theta(91.2n*sqrt(n))
+            = Theta(n^2) + Theta(n) + Theta(n*sqrt(n))
+            = Theta(n^2 + n) + Theta(n*sqrt(n))
+            = Theta(n^2) + Theta(n*sqrt(n))         Largest Term
+            = Theta(n(n + sqrt(n))
+            = Theta(n)Theta(n+sqrt(n))
+            = Theta(n)Theta(n)                      Largest Term
+            = Theta(n^2)
+
+Revenge of the logarithms
+    Logarithm: inverse exponential function
+    y = lnx <--> x = e^y
+    Natural log(ln): inverse e^x
+        Will be called lg(n) = log2(n)
+    Logarithms of other base: logb(x)
+        log2(x) is very common in algorithms
+    Computer logs of other bases
+        logb(x) = ln(x)/ln(b)
+        All logs are scalar multiples of one another
+    Log properties
+        lg(ab) = lg(a) + lg(b)
+        lg(a^b) = b*lg(a)
+        sum(i=1 -> n,1/i) = Theta(lg(n))
+
+Summations
+    Summations show up frequently in analysis
+    Notation
+        "Dotty Notation": 1 + 2 + 3 + ... + n
+        Compact Notation: Summation notation
+    Useful identities
+        Growth rate of these three is bound by the n value on the Summation
+            if it were sum(i=1->n^2,i) = Theta(n^2)
+        sum(i = 1 -> n,i) = Theta(n^2) or O(n^2) or Omega(n^2)
+        sum(i = 1 -> n,i/n) = Omega(lg(n))
+            For the following two look for the largest term, first is 2^n, second is 1
+        sum(i = 1 -> n,2^i) = Omega(2^n)
+        Growth rate here is ALWAYS constant \/
+        sum(i = 1 -> n,1/(2^i)) = Omega(1)
+
+Logarithm property example
+    Prove that lg(n!) = Theta(nlg(n))
+
+Algorithm analysis
+    Identify loops and function calls
+        Everything else is Theta(1)
+        Be careful, function calls in pseudocode dont always look like function calls in code
+    For loops:
+        Estimate number of iterations (Key point estimate)
+            Incrementing b c: divide range by c to get iterations
+            Multipling by c: take logc of the end/start ratio
+        Estimate loop body running time
+            Look at the stuff in the loop and analyze it from that, largest term from any line inside the loop
+        Does loop run time depend on iteration #?
+            Does the first iteration of the loop take the same amount of time as the last iteration
+            if not: total = # interations * time per iteration
+            Otherwise: total = sum of all iterations
+                sum(i=1->,complexity(n))
+    For functions:
+        None-recusive: analyze separately
+        Recursive: set up a recurrence and solve (later)
+    Overall complexity: sum of complexities
+        Largest loop/function call
+
+Selection sort
+
+for i = 1 to n-1 do
+    min = i;
+    for j=i+1 to n do
+        if data[j] < data[min] then
+            min=j;
+        end
+    end
+    Swap data[i] and data[min]
+end
+return data;
+
+Swap, 3 assignments takes a constant amount of time - Theta(1)
+Line 3, constant Theta(1)
+Line 5,6,7 constant Theta(1)
+For inner loop, Theta(n-i)
+    Constant time per iteration
+    Number of iterations * time per iteration
+    Theta(n-i) * Theta(1) = Theta(n-i)
+Outer loop, Theta(n) approx
+
+
+Prove that lg((n+1)!) = Theta(n lg n)
+
+lg((n+1)!)  = lg((n+1)(n)(n-1)...(3)(2)(1))
+            = lg(n+1) + lg(n) + lg(n-1) + ... + lg(3) + lg(2) + lg(1)
+            <= lg(n+1) + lg(n+1) + lg(n+1) + ... + lg(n+1) + lg(n+1) + lg(n+1)
+            <= (n+1)lg(n+1)
+            <= (n+1)lg(n+n)
+            <= (n+1)lg(2n)
+            <= nlg(2n) + lg(2n)
+            = O(nlg(2n) + lg(2n))
+            = O(nlg(2n))                                Largest Factor
+            = O(nlg(n) + nlg(2))
+            = O(nlg(n) + n)
+            = O(nlg(n))                                 Largest Factor
+
+lg((n+1)!)  = lg((n+1)(n)(n-1)...(3)(2)(1))
+            = lg(n+1) + lg(n) + lg(n-1) + ... + lg(3) + lg(2) + lg(1)
+            >= lg(n+1) + ... + lg((n+1)/2)              (n+1)/2 factors
+            >= lg((n+1)/2) + ... + lg((n+1)/2)          (n+1)/2 factors
+            >= ((n+1)/2)lg((n+1)/2)
+            >= ((n+1)/2)lg(n/2)
+            >= ((n+1)/2)lg(n) - ((n+1)/2)lg(2)
+            >= ((n+1)/2)lg(n) - ((n+1)/2)(1)
+            = Omega(((n+1)/2)lg(n) - ((n+1)/2)(1))
+            = Omega(((n+1)/2)lg(n))                     Largest Factor
+            = Omega((n/2)lg(n) + (1/2)lg(n))
+            = Omega((n/2)lg(n))                         Largest Factor
+            = Omega(nlg(n))                             Ignore constant coefficients
+
+If f(n) = lg((n+1)!) if bound by both O(nlg(n)) and Theta(nlg(n)) then it must also be bound by Omega(nlg(n)) by definition
+
+
+
+Prove F(n) = Omega(1.5^n)
+Base Case, n = 11, F(n) = 89, 1.5^n = 86.498
+Assume that F(k) >= c(1.5)^k for some k >= 11
+    F(k+1)  = F(k) + F(k-1)
+            >= c(1.5)^k + c(1.5)^(k-1)          From induction hypothesis
+            >= c(1.5 + 1)(1.5)^(k-1)
+            >= c(2.5)(1.5)^(k-1)
+            >= c(2.25)(1.5)^(k-1)               transitive property
+            >= c(1.5)^(k+1)
+            = Omega(c(1.5)^(k+1)), for all n >= n0
+            c = 1, n0 = 11

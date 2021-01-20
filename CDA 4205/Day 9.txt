@@ -1,0 +1,74 @@
+Static / Dynamic Instructions
+    Simple metric describes length of program
+    Static instruction count
+        Literal number of Instructions
+        Does not consider loops (even fixed # iters)
+    Dynamic Instruction count
+        How many instrs. execute at runtime
+        Actual instruction count of the program
+        Later will include "stall cycles" waiting for memory of orhter operands
+
+Instruction set extensions
+    m: integer multiply, divide, remainer
+    A: atomic memory operations
+    F: single-precision floating point
+    D: double-precision floating point
+    C: compress Instructions
+        16-bit encoding for frequently used Instructions
+
+Fallacies
+    Powerful instructions -> higher preformance
+        Fewer instructions required
+        But complex instructions are hard to implement
+            May slow down all instructions, including simple ones
+        Compilers are good at making fast code from simple instructions
+    Use assembly code for high preformance
+        But modern compilers are better at dealing with modern processors
+        More lines of code => more errors and less productivity
+    Backward compatibility => instruction set doesn't change
+        But they do accrete more instructions
+
+Pitfalls
+    Sequential words are not at sequential addresses
+        Increment by 4, not by 1!
+    Keeping a pointer to an automatic variable after procedure returns
+        e.g., passing pointer back via an argument
+        Pointer becomes invalid when stack popped
+
+
+Chapter 3 Arithmetic for computers
+
+    Physical hardware resources limit the magnitude of values that can be represented
+    Different binary encodings have different limitations
+        Signed integer
+        Unsigned integer
+        Fixed point
+        Floating point
+    Operations on integers
+        Addition and subtraction
+        Multiplication and division
+        Dealing with overflow
+    Floating-point real numbers
+        Representation and operations
+    Ovreflow if result out of range
+        Adding pos and neg opers, no overflow
+        Adding two pos oper
+            overflow if result sign is 1
+        Adding two neg
+            overflow is result sign is 0
+    Sub: overflow if result out of range
+        subt two pos or two neg opers no overflow
+        subt pos from neg
+            overflow if sign is 0
+        subt neg from pos
+            overflow if sign is 1
+
+    Arithmetic for Multimead
+        Graphics and media processing operations on vectors of 8-bit and 16-bit data
+            Use 64-bit adder, with partitioned carry chain
+                Operate on 8x8-bit, 4x16-bit, 2x32-bit vectors
+            SIMD(single-instruction, multiple-data)
+        Saturating operations
+            On overflow, result is largest representable values
+                c.f. 2s-complement modulo Arithmetic
+            e.g. clipping in audio, saturation in video

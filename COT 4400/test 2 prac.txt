@@ -1,0 +1,23 @@
+BFS:
+Input:  G = (V, E):  graph with vertex set V and edge set E
+Input:  m, n:  order and size of G, respectively
+Pseudocode:
+Mark all vertices of G as undiscovered
+q = Queue()
+let root be the first undiscovered vertex in G
+degV = deg(root)
+i = 1
+While some vertex of G is still undiscovered
+    Let v0 be the next undiscovered vertex in G
+    q.Enqueue(v0)
+    Mark v0 as discovered
+    While q is not empty:
+        v = q.Dequeue()
+        Mark v as explored
+        For u in N(v):
+            If u is discovered and not explored then:
+                return true
+            If u is undiscovered, q.Enqueue(u) and mark u as discovered
+        End for
+    End while
+End while

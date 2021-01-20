@@ -1,0 +1,162 @@
+Input format
+    Input Files Stored on HDFS
+    Tells the cluster how to split the data into Input split
+    Also tells the cluster how to read your data for the Record Reader
+    Mapper in key,value format
+        Intermediate data is not stored to the HDFS
+    Partitioner gets key,value pair and determines which reducer to send it too
+        P0 goes to reducer 0, P1 goes to reducer 1
+    Reducer 0 takes all the P0 from all the different machines
+    Reducer 1 takes all the P1 from all the different machines
+    Reducer then merges data and outputs the (key, value list)
+    The (key,value list) is stored in the output file on HDFS
+
+WordCount
+    3 portions
+        The driver code -> XML
+            Code that runs on the client to configure and submit the job
+        The Mapper
+            .jar
+        The Reducer
+            .jar
+Getting Data to the Mapper
+    The data passed to the mapper is specified by an InputFormat
+        Specified in the driver code
+        defines the location of the input data
+            Typically a file or directory
+        Determines how to split the input data into input splits
+            Each Mapper deals with a single input split
+        Creates a RecordRead object
+            RecordRead Parses the input data into key/value pairs to pass to the mapper
+Example: TextInput format
+    The default
+    Creates LineRecordReader objects
+    Treats each \n-terminated line of a file as a value
+    Key is the byte offset of that line within the file
+Other Standard InputFormats
+    FileInoputFormat
+        abstract base class used for all file-based InputFormats
+    KeyValueTextInputFormat
+        Maps \n-terminated lines as "key [separator] value"
+            By default, [separator] is a tab
+            1234    klj lksd lkjs -> key will be 1234, value is klj lksd lkjs
+    SequenceFileInputFormat
+        Binary file of (key,value) pairs with some additional metadata
+        filename is the key, file content is the value
+    SequenceFileAsTextInputFormat
+        Similar but maps (key.toString(),value.toString())
+Key and Value are Objects
+    Keys and values in Hadoop are Java Objects
+        Not primitives
+    Values are objects which implement Writable
+        Writable has the operations, read and write
+        IntWritable for ints
+        LongWritable for longs
+        FloatWritable for floats
+        DoubleWritable for doubles
+        Text for strings
+        etc...
+    Keys are objects with implement WritableComparable
+        WritableComparable has the operations, read and write, as well as compare
+Driver Code: introduction
+    The driver code runs on the client machine -> XML
+    It configures the jobs, then submits it to the cluster
+
+Creating a New Job Objects
+    The job class allows you to set configuration options for your MapReduce Job
+        The classes to be used for your Mapper Reducer -> default identity
+        The input and output directories
+        Many other options -> # Reducers, by default just 1,
+    Any options not explicity set in your driver code will be read from your Hadoop configuration files
+    The default inputFormat will be used unless epcified otherwise
+        job.setInputFormatClass(keyValueTextInput.class)
+    FileInputFormat.setInputPaths()
+        Specifies where the input paths is
+        single is setInputPath
+    FileOutputFormat.setOutputPath()
+        sets the output directory for which the reducers will write their final output
+    job.waitForComplete()
+        test to see if job is complete blocks driver code
+    job.Submit()
+        Does not block driver code
+    
+    
+import org.apache.hadoop.fs.PATH;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.Job;
+
+public class WordCount{
+    public static void main(String[] args) throws Exception{
+        if (args.length != 2){
+            System.out.printf("Useage: WordCount <input dir> <output dir>\n");
+            System.exit(-1);
+        }
+        Job job = new Job();
+        job.setJarByClass(WordCount.class);
+        job.setJobName("Word Count");
+
+        FileInputFormat.setInputPaths(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        job.setMapperClass(WordMapper.class);
+        job.setReducerClass(SumReducers.class);
+
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(IntWritable.class);
+
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
+
+        boolean success = job.waitForCompletion(true);
+        System.exit(success ? 0 : 1);
+    }
+}
+
+
+The mapper code
+
+imports...
+
+public class WordMapper extends Mapper<LongWritable, Text, Text IntWritable>{
+    @Override
+    public void map(longWritable key, Text value, Context context) throws IOException, InterruptedException{
+        String line = value.toString();
+
+        for(String word : line.split('\\W+')){
+            if (word.length() > 0){
+                context.write(new Text(word), new IntWritable(1));
+            }
+        }
+    }
+}
+
+The reducer code
+
+imports...
+
+public class SumReducer extends Reducers<Text, IntWritable, Text, IntWritable>{
+    @Override
+    public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
+        int wordCount = 0;
+        for(IntWritable value : values){
+            wordCount += value.get();
+        }
+        context.write(key, new IntWritable(wordCount));
+    }
+}
+
+An Introduction to Unit Testing
+    A 'unit' is s small piece of code
+        a small piece of functionality
+    A unit test verifies the correctness of that unit of code
+        A purist might say that in a well-written unit test, only a single 'thing' should be able to fail
+        Generally accepted rule-of-thumb: a unit test shoudl take less than a second to complete
+
+JUnit basics (1)
+    @Test
+    
+    @Before
+    

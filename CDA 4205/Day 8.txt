@@ -1,0 +1,94 @@
+32-bit constants
+    Most constants are small
+        12-bit immediate is sufficient
+    For the occasial 32-bit constant
+        lui rd, constant
+            copies 20-bit constant to bits [31:12] of rd
+            extends bit 31 to bits [63:32]
+            clears bits [11:0] of rd to 0
+            lui x19, 976 // 0x003D0
+        0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1101 0000 0000 0000 0000
+            addi x19,x19,128 //0x500
+        0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0011 1101 0101 0000 0000 0000
+Brand Addressing
+    Branch instructions specify
+        Opcode, two registers, target address
+    Most branch targets are near branch
+        Forward or backward
+    SB format
+        imm[12]     imm[10:5]       rs2     rs1     funct3      imm[4:1]        imm[11]     opcode
+        Immediate field is split to fit with normal instruction formats
+    PC-relative Addressing
+        Target address = PC + immediate * 2
+    Position Independant Code
+        Allows you to reference addresses based on where you currently are in the code
+
+Jump Addressing
+    Jump and link (jal) target uses 20-bit immediate for larger range
+    UJ format
+        imm[20]     imm[10:1]       imm[11]     imm[19:13]      rd      opcode
+    For long jumps, eg, to 32-bit absolute address
+        lui: load address[31:12] to temp register
+        jalr: add address[11:0] and jump to target
+        Compiler or assembler should handle this for you
+PC-Relative addressing only allows accessing a word, not byte, halfword, or doubleword
+
+Translation and Startup
+C Program
+    Compiler
+        Assembly language Program
+            Assembler
+                Object: Machine language module     Object: library routing (machine language)
+                    Linker
+                        Executable: Machine language Program
+                            Loader
+                                Memory
+Static Linking
+    Benefits
+        Everything is self contained
+    Cons
+        Exe is larger
+        Can't pick up new versions of libraries
+
+Producing an object module
+    Assembler or compiler translates program into machine instructions
+    Provides information for building a complete program from the pieces
+        Header
+            Describes contents of object module
+        Text Segment
+            Translated instructions
+        Static data Segment
+            Data allocated for the life of the program
+        Relocation information
+            For contents that depend on absolute location f loaded program
+        Symbol table
+            Global definitions and external regs
+        Debug info
+            For associated with source code
+
+Linking object modules
+    Produces and executable image
+        Merges segments
+        Resolve lables (determine their addresses)
+        patch location-depending and external regs
+    Could leave location dependencies for fixing by a relocating load
+        but with v memory, no need to do this
+        program can be loaded into absolute location in v mem space
+
+Loading a program
+    load from image file on disk into memory
+        read header to determine segments sizes
+        create virtual address space
+        copy text and init data into memory
+            or set page table entries so they can be faulted in
+        Set up arguments on stack
+        Init registers (sp, fp, gp)
+        jump to startup routine
+            copies arguments to x10, ... and calls main
+            when main returns do exit syscall
+
+Dynamically linked
+    Only link/load library procedure when it is called
+        Requires procedure call to be relocated
+        avoids image bloat caused by static linked of all(transitively) referenced libraries
+        automatically pinks up new lobrary versions

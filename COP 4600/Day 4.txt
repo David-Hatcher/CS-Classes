@@ -1,0 +1,50 @@
+Basic Hardware Organization Concepts
+Read Textbook Sections 1.2 to 1.6
+
+Users
+/\
+|
+\/
+Application programs
+Operating system
+Hardware
+
+Many operating system features depend on the hardware
+
+The Basic von Neumann Architecture
+(See png for picture of this)
+
+Instructions and data for concurrently running processes stored in main memory
+Instructions are brought into CPU for execution
+Data are brought into CPU for computation
+CPU and device controllers execute in parallel
+    Controller can execute in parallel with the CPU so they can do their own thing
+    The controller connected to the disk can be getting data from the disk to put into memory
+        at the same time as the CPU is doing it's thing
+
+The Basic CPU
+Registers
+    Program counter instruction register
+    (Memory on CPU)
+    If multiple processes are running and one stops, all of the information needs to be stops if P1 needs to stop for some reason
+ALU
+    Arithmetic and logical functions
+Control
+    Controls what is done
+
+The Fetch - Decode - Execute Cycle
+    Fetch
+        Brings contents of memory address stored in program counter and store the contents instruction register. Increment program counter by one.
+    Decode
+        Interpret the contents of the instruction register
+    Execute
+        Do what the instructions say
+    Start -> fetch -> decode -> execute -> stop
+                /\                    \/
+                |_____________________|
+    At any part of this cycle, inbetween steps, and interrupt can occur.
+        If an interrupt occurs the CPU will stop
+The Controller is dedicated to monitor and control the device
+It relieves the O.S. from this task
+Getting data in and out of the device is extremely slow when compared to CPU speeds.
+Typing a word response via keyboard and take a couple of seconds - how many instructions can a CPU execute during that time.

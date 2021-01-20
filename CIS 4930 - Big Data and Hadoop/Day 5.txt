@@ -1,0 +1,104 @@
+Spark
+    Apache Spark is a fast, general engine for large-scale data processing on a cluster
+    Originally developed UC Berkeley's AMPLab
+    Open Source Apache project
+    Benefits over MapReduce
+        Faster
+        Better Suited for interative algorithms
+            Can hold itermediate data in RAM< resulting in much better performance
+        Easier API
+            Supports Python, Scala, Java
+        Supports real-time streaming data
+Hive and Pig: High Level Data languages
+    The Motiveation: MapReduce is powerful but hard to master
+    The Solution: Hive and Pig
+        Languages for querying and manipulating data
+        Leverage existing skillsets
+            Data analysts who use SQL
+            Programmers who use scripting languages
+        Open Source Apache Projects
+            Hive initially developed at facebook
+            Pig initially developed at Yahoo!
+Hive
+    What is Hive?
+        HiveQL: An SQL-like interface with Hadoop
+    Select * FROM purchases WHERE price price > 10000 ORDER BY storeid
+    Hive uses MetaStore
+    It uses the MetaStore to get the table stucture\
+    Language: HiveQL
+    Table definitions stored in MetaStore
+    Programmatic access: JDBC, ODBC
+Pig
+    What is Pig?
+        Pig Latin: a dataflow language for transforming large data skillsets
+    Load the Data and build a table from it, then filter that table
+        purcahses = LOAD "/user/dave/purchases" AS (itemID, price, storeID, purchaserID);
+        bigticket = FILTER purchases BY price > 10000;
+    Run time table structure definition
+    If you don't define the column names Pig will use default table names
+    Programmatic access: PigServer(Java API)
+Oozie
+    Oozie
+        WOrldflow engine for MapReduce Jobs
+        Defines dependencies between Jobs
+    The Oozie server submits the jobs to the server in the correct sequence
+    Can determine which job is next depending on outcome of previous job
+    We will investigate Oozie later in the course
+Mahout
+    Mahout is a machine learning library written in Java
+    Used for
+        Collaborative filtering (recommendations)
+        Clustering (finding naturally occurring "groupings" in data)
+        Classification (determining whether new data fits a category)
+V1 - JobTracker Monitors the tasks on each of the slavenodes
+V2 - Resource Manager focus on the resources of the nodes to determine where to send tasks
+Network in slave nodes:
+    10GB
+Memory in slave nodes:
+    48-96GB Ram, Spark++
+Switch
+    Dedicated switching infrastructure required because Hadoop can saturate the Network
+        All nodes talking to all nodes
+Master Node Are More Important
+    For master nodes(active and standby)
+    JobTracker(MRv1) or ResourceManager(MRv2) (active and standby)
+        Some installations just use a single JobTracker and ResourceManager
+    Each typically runs on separate machine
+    Master node machines are high-quality services
+        Ram
+            24GB for clusters of 20-
+            48GB for 21-300
+            96GB for 300+
+        For master nodes you can scale up or run multiple machines to handle it with a splitter in front to split up resourcemanagement
+    New nodes are automatically used by Hadoop
+
+Introduction to MapReduce
+    MapReduce abstracts all the 'housekeeping' away from the developer
+        Developer can simply concentrate on writing the Map and Reduce functions
+    The Mapper
+        Each map task typically operates on a single HDFS block
+        Map tasks usualy run on the node where the block is stored
+    Shuffle and Sort
+        Sorts and consolidates intermediate data from all mappers
+        Happens after all map tasks are complete and before reduce tasks start
+    Reducer
+        Operates on shuffled/sorted intermediate data (map task output)
+        Produces final output
+    When you input a file, it splits it into multiple data blocks
+    When you do MapReduce you must specify the input file format
+    Hadoop housekeeping
+        File Reader
+        File Writer
+    Input files -> input format ->   |
+                                    \/
+                                    Input Split 1
+                                    Record Reader
+                                    Mapper
+                                    Partitioner(Partitions intermediate data output based on key value pairs) --> shuffle and sort
+        Number of Partitions based on number of reducers,
+                                        \/
+                                    Reducer
+                                    Output format
+                                    Output File
+    Line Reader
+        Byte offset is the 

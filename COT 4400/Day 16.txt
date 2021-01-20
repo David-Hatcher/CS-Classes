@@ -1,0 +1,90 @@
+GreedySearch Variants
+    Earliest Workshop first
+        Counter example first work shop takes all day
+    Shortest workshop first
+        Counter example: short workshop that overlaps two longer workshops that would have been find
+    Earliest workshop end first
+        Guarenteed to be correct
+        Proof Idea: when you pick the one that ends first, you eliminate the fewest workshops that don't overlap
+        Could also do, starts latest
+Essential terminology
+    Order: number of vertices in the graph
+        Usually denoted as n (or |V|)
+    Size: number of edges in the graph
+        Usually represented as m (or |E|)
+        Graph complexity can depend on both n and m
+            m = O(n^2)
+    Adjacent: two vertices with an edge between them
+    Incident: vertex and an edge where edge connects to vertex
+    degree: number of vertices adjacent to a given vertex
+        deg(v) or degG(v)
+        Max degree: delta or delta(G)
+        min degree: littleDelta or litteDelta(G)
+    Neighborhood: set of vertices adjacent to a given vertex
+        Denoted N(V) or NG(v)
+Handshaking Lemma
+    For any simple graph G = (V,E),
+        sum deg(v) = 2|E|
+    where deg(v) is the degree of vertex v in the graph G
+Common graph matrices with a matrix
+    Graph(n):
+        Init nxn matrix with 0s
+        O(n^2)
+    AddEdge(u,v):
+        Change Auv = 1
+        O(1)
+    RemoveEdge(u,v):
+        Auv = 0
+        O(1)
+    IsAdjacent(u,v):
+        Check for 1 in Auv
+        O(1)
+    GetNeighbors(v):
+        Scan row of v matrix and add u if list is Auv = 1
+        O(n)
+    Space: N^2
+Adjacency list
+    stores list (or dictionary) of neighbors for each vertex
+    Neighbors are often sorted
+        Sometimes use hash table for large graphs
+    Can store edge weights or labels in struct/object
+    Optimization: neighbors can be stored in a single array
+    space: n + m
+Edge list
+    List of all edges in graph
+        usually sorted
+        Undirected: may or may not include "reverse" edges
+    Edge weights or lables appear after vertex IDs
+    Order and vertex labesl represented separately
+    Space: m
+
+Matrix: good for small graphs or dense graphs
+    Dense: significant fracton of edges exist, m = O(N^2)
+Adj. list: good for sparse graphs
+    Most "real world" graphs are sparse
+Edge list: commonly used to store on disk
+
+Optimizing adjacency list
+    Main Idea
+        Store neighbors in hash table
+    Graph(n): O(n)
+    AddEdge(u,v): Insert O(1)
+    RemoveEdge(u,v): Delete O(1)
+    IsAdjacent(u,v): Search O(1)
+    GetNeighbors(v): iterate O(deg(v))
+    Space: O(m+n)
+
+    All O(1)
+    More complexity
+    Higher coefficients
+    Poor worst-case performance
+Graph algo analysis
+    Analysis similar to general algorithm analysis
+    Complexity given in terms of graph features
+        n: order (vertices)
+        m: size(edges)
+        deg(v): all neighbors of given vertex
+        delta: max degree
+    ALso depends on graph representation
+    sometimes useful to add up function calls separately
+    

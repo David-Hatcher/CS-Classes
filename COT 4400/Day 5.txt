@@ -1,0 +1,76 @@
+Proving Big-Oh
+    f(n) <= (__)g(n)  n >= (__)
+        Both blanks positive
+    Finding smallest c or n0 isn't necessary
+        Choosing well can make your life easier, though
+    Small powers of n are bounded above by larger powers
+    Functions with negative coefficients are bounded above by zero
+    Large coefficients are bounded above by n
+        With sufficiently large n0
+Big-Oh proof example
+    Prove that n(n-1)(2n+1) = O(n^3)
+    Goal: n(n-1)(2n+1) <= (__)n^3 , For all n >= (__)
+    2n^3 - n^2 - n <= 2n^3 (Looking for upper bound, can drop negative terms)
+    C = 2, n0 = 1
+Now with positive values
+    2n^3 + n^2 + n <= (__)n^2
+                    <= 2n^3 + n^3 + n^3 , n >= 1
+    C = 4, n0 = 1
+Big-oh Exercises
+    sum(i=1 to n) = O(n^2)
+    n(n+1)/2 = (n^2)/n + n/2 <= (__)n62
+                            <= n^2 / 2 + n^2 / 2
+                            <= n^2
+        C = 1, n0 = 1
+
+    for any x > 0, if f(n) = Theta(g(n)), then xf(n) = Theta(g(n))
+    (__)g(n) <= xf(n) <= (__)g(n), for all n >= (__)
+    We know that there must be a c1 and c2 that make f(n) = Theta(g(n)) true since it's defined in the problem statement
+    c1g(n) <= f(n) <= c2g(n), for all n >= n0
+    multiple through by x
+    xc1g(n) <= xf(n) c2g(n), for all n >= n0
+    c1 = xc1, c2 = xc2, n0 = n0
+
+    Prove sum(i=1 to n) = Omega(n^2)
+        f(n) = Omega(g(n)) iff there exists positive constants c and n0 such that f(n) >= cg(n) for all n >= n0
+        drop half of it
+            1 + 2 + ... n >= n/2 + ... + n
+                            >= n/2 + n/2 + ... + n/2
+                            >= (n/2)^2 = n^2 / 4
+        C = 1/4, n >= 1
+Analysis of Big-Oh
+    Pros
+        Provides a useful summary of the growth rate of the complexity
+        Compact
+        Simple: eight classes cover most useful algorithms
+    Cons
+        Ignores contributions from coefficients and lower-order terms
+        Doesn't rank algorithms with same growth rate
+        Doesn't rank algorithms on small inputs
+        Some of the "best" algorithms have extremely large coefficients, making them impractical for many purposes
+Properties of Big-Oh notation
+    Reflexivity
+        f(n) = O(f(n)), f(n) = Omega(f(n)), and f(n) = Theta(f(n))
+    Antisymmetry
+        f(n) = O(g(n)) <-> g(n) = Omega(f(n))
+Combination Properties
+    Addition
+        O(f(n)) + O(g(n)) = O(f(n) + g(n)) ( works for all three)
+    Mulitplication
+        O(f(n))O(g(n)) = O(f(n)g(n))
+    All three ignore constant coefficients
+        for all x > 0, f(n) = O(g(n)) -> xf(n) = O(g(n)), (works for all three)
+    Only the largest term matters
+        f(n) = O(g(n)) -> O(f(n) + g(n)) = O(g(n))
+
+Attendence
+
+Use the properties of Big-Oh notation to prove that 2n^2 - 18n + 18 = O(n^2). 
+
+2n^2 - 18n + 18 = O(2n^2 - 18n + 18)            Reflexive
+                = O(2n^2) - O(18n) + O(18)      Envelopment Reverse
+                = O(n^2) - O(n) + O(1)          Remove constant coefficients
+                = O(n^2 - n) + O(1)             Envelopment
+                = O(n^2) + O(1)                 Largest term (n = O(n^2))
+                = O(n^2 + 1)                    Envelopment
+                = o(n^2)                        Largest term (n = O(n^2))

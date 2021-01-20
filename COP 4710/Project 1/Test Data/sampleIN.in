@@ -1,0 +1,47 @@
+load_coaches c.txt
+
+print_coaches
+
+add_coach KERR01 2015 Steve Kerr 73 9 15 9 GSW
+
+print_coaches
+
+add_coach KERR01 2016 Steve Kerr 67 15 16 1 GSW
+
+print_coaches
+
+remove_coach coach_id=BEGIN01
+
+print_coaches
+
+coaches_by_name Steve
+
+coaches_by_name John
+
+load_teams t.txt
+
+print_teams
+
+add_team TB1 Tampa Bulls N
+
+print_teams
+
+remove_team team_id=END
+
+print_teams
+
+teams_by_city_league Washington A
+
+add_team LAL Los+Angeles Lakers N
+
+add_team LAC Los+Angeles Clippers N
+
+add_team LAS Los+Angeles Sparks A
+
+teams_by_city_league Los+Angeles N 
+
+best_coach 1993
+
+search_coaches first_name=Steve season_win=73
+
+exit

@@ -1,0 +1,133 @@
+Review: Sorting Algorithms
+    Selection Sort
+        Iteratively swap min into next spot
+        Best/Word case Complexity Theta(n^2)
+    InsertionSort
+        Interatively insert next value into sorted array
+        Best/Worst Omega(n)/O(n^2)
+    Bubblesort
+        Swap consecutive elements that are out of order
+        repeate until no swaps occur
+        Best/Worst Omega(n)/O(n^2)
+Merge Sort
+    Fast Algorithm for Sorting
+        InsertionSort and SelectionSort are O(n^2)
+    Description
+        Split array into two halves
+            Sort half-arrays recursively
+                Base case: one element
+        Combine two sorted half-arrays into one sorted array
+    Fill in result left-to-right
+    Min is min(left) or min(right)
+    2nd value is next value of the selected half or min(unselected half)
+    continue until both arrays have emptied into result
+        After one array is empty just add the other
+    Time to combine: Theta(n)
+    T(n) = 2T(n/2) + Theta(n)
+QuickSort
+    Another nlgn algorithm for Sorting
+    Splits dataset according to value, not position
+        Small half: less than some value
+        Large Half: larger than some value
+        Pivot: the value used to split the dataset
+    Pseudocode
+        Select Pivot
+            Naive strat: pick first element
+        Start at left and right ends of the array
+            swap values larger than pivot to RHS of array
+            swaps values smaller than pivot to LHS of array
+            equal values can go on either side
+        Insert pivot where two "halves" meet
+        Recursively sort each "half"
+            Base case: arrays with 0 or 1 elements
+QuickSort Complexity
+    Choose Pivot
+        Different strats
+    Swap elements
+        Everything left of pivot is <, right of pivot is >
+    Recursive on both sides
+    Step 1: Theta(1)
+    Step 2: Theta(n)
+    Recursion
+        Depends on pivot!
+        T(n) = T(L) + T(R) + Theta(n)
+    Best Case: T(n) = 2T(n/2) + Theta(n)
+        Theta(nlgn)
+    Worst Case: T(n) = T(n-1) + Theta(n)
+        Theta(n^2)
+Analysis of QuickSort
+    Once the two halves are sorted, entire array is sorted
+        Can use tail Recursion
+            The compiler can unwind function and turn it into a loop
+    Pivot might not divide dataset exactly in half
+    Pivot value impacts runtime
+    Pivot selection strategies
+        First/Last
+            Simple
+            Bad on sorted or constant data
+        Median-of-three
+            Choose median of first, last, and middle elements
+            Partitions sorted data well
+        Random
+            Always average case, unless constant values
+        Media
+            Overhead of calculating is too high: Theta(n)
+    Constant data can be fixed by splitting array into <,=, and >
+        Code is more complex
+Average/expected case Complexity
+    Best case
+        least amount of time
+        InsertionSort is O(n)
+    Worse case
+        most amount of time
+        InsertionSort is O(n^2)
+    Average-case complexity
+        Average complexity across all possible inputs
+        Always falls between best and worst case
+        E.g., inner loop of InsertionSort needs to shift n/2 elements on average: Theta(n^2/2) = Theta(n^2)
+    Expected-case complexity
+        Similar to average-case, but with assumptions about inputs
+Average-case complexity of QuickSort
+    Total Complexity: O(nH)
+    Where is the pivot?
+        with random pivot, 50% change to be in the middle 50%, > the lower 25% < the upper 25%
+        Reduces "big" side to 3/4 of the size, for most of the time
+            if you can say it happens 100% of the time then h = log4/3(n)
+            if other pivots do nothing: h = 2log4/3(n) => O(nlgn)
+Comparison-based sorting Algorithms
+    Sorting algos that operate by comparing pairs of elements
+        Everything we've discussed so far
+        All O(n^2) or O(nlgn)
+    Is there a faster sorting algorithm?
+        No!
+        At least not comparison-based
+    Proof Idea
+        Based on execution paths of algorithm
+            Instructions executed for a given input
+            If statements, loop conditions, etc.
+        Execution path defines what comparisons and swaps algorithm makes
+        Execution path must be different for different inputs
+CBS Algorithm lower-bound
+    Array of size n has n! total permutations
+        Min # of execution paths to be correct
+    Each comparisons: 2 outcomes
+        true or false
+    # of execution paths after k comparisons
+    you need at least 2^k comparisons
+    2^k >= n!
+    # comparisons to distinguish n! outcomes: lg(n!) = Theta(nlgn)
+
+
+The counterfeit coin problem:
+Input:  a stack of n coins, all identical except for one counterfeit, which weighs less
+Output:  index of counterfeit coin
+Primary operation:  weigh any two sets of coins on a scale
+Returns <, >, or =
+
+What is the number of possible outputs for an input of size n?
+n
+How many execution paths do k weighings yield?
+3^k
+Find a lower bound on the weighings required for this problem.
+lgn or log3(n)
+

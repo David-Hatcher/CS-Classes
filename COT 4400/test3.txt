@@ -1,0 +1,47 @@
+1
+    a.
+    Input: G = (V,E): graph in which to find MaxST
+    Input: n,m order and size of G
+    output: Maximum Spanning tree of G
+
+    edge = Array(n)
+    Let heap be a heap where every vertex has value 0;
+    Choose v0 and increase it's value in heap to inf;
+    for i = 1 to n do
+        v = heap.DeleteMax();
+        if v != v0, add (v,edge[v]) to MST;
+        for u in N(v) do
+            if u in heap and d(u,v) > value(u) then
+                Increase value of u to d(u,v) in heap;
+                edge[u] = v;
+            end
+        end
+    end
+    return MST
+
+    b.
+    a data structure that would be useful for this would be a max heap, to store each of the vertices and the current distances in to be able to find the vertex and is currently the furthest away from the Maximum Spanning Tree
+
+2
+    a: discovered, explored
+    b: discovered, explored
+    c: discovered, explored
+    d: discovered, explored
+    e: discovered, explored
+    f: discovered, explored
+    h: discovered, explored
+    g: discovered, explored
+
+
+    visit: a, b, d, c, e, f, g, h
+    explore: e, c, d, b, h, g, f, a
+3
+
+4.
+Line 3 O(n + mlgn)
+Line 4: worst case n iterations
+Line 5: O(1)
+Line 6: O(n+m)
+Line 7: O(1)
+O(n + mlgn n^2 + nm)
+O(m*n + n^2)

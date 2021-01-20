@@ -1,0 +1,43 @@
+How to Study for test
+    Use slides as focal point
+    Ask, why is he putting this slide in this module, What does he want to say with that slide
+    Definitely know the shell script information
+        Know how to decipher a script or write a simple script
+
+Context Switching
+    Context switching is the name given to saving the state of a user process and then loading the CPU with the state of a new user process
+    The time taken for context switching is computer time lost
+    MEMORIZE THIS
+        P1 has CPU
+            Interrupt occurs
+        OS has the CPU
+            Save state of P1 onto the process control block- this will be needed when P1 gets the CPU again!
+            Service the interrupt - using the interupt service routine
+            Select new user process P2 - there is an algorithm for this selection of the next process
+            Restore state of P2 and restart CPU
+        P2 has the CPU
+    Context Switching time or computer time lost Depends on
+        Memory Speed
+        speed of saving registers
+        # of registers
+    Check Textbook for:
+        How mulitple register sets can speed context switching
+            Allows you to store all of your current registers on the CPU rather than moving to main memory
+        Typical times for context switching
+            Less than 10 micro seconds
+I/O and CPU bound processes
+    I/O Bound
+        Process spends most of it's time doing I/O
+    CPU Bound
+        Process spends of its time doing computations
+    If all process are I/O bound then the CPU is mostly idle
+    If all processes are CPU bound then processes are always waiting on the CPU
+    Thus the importance of having the right mix of processes for multiprogramming
+    *For a multi user system the size of the time slice should be large enough so that the large majority of the interactive requets take less time than the time slice*
+
+States
+    Ready
+    Running
+    Waiting/Block
+    Suspended-Ready
+    Suspended-Waiting

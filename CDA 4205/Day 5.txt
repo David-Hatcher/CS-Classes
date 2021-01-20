@@ -1,0 +1,115 @@
+Chapter 2
+    Instructions: Language of the Computer
+Instruction Set
+    The repertoire of instructions of a Computer
+    Different computers have different instruction sets
+        But with many aspects in common
+    Early computers had very simple instruction sets
+        Simplified implementation
+    Many modern computers also have simple instruction sets
+        RISC - Reduced instruction set computers
+        CISC - Complex instruction set computers
+        RISC shifts the requirement for complex operations onto the compilers
+The RISC-V Instruction Set
+    Developed at UC Berkeley as open ISA
+    Used as example throughout the book
+    Now Managed by RISC-V Foundation
+    Typical of many modern ISA
+        See RISC-V ref data tear-out card
+    Similar ISA have large share of embedded core market
+        Applications in consumer electronics, network/storage equipment, camera, printers, ...
+Arithmetic operations
+    Add and subtract, three operands
+        Two sources and one destination
+        add a, b, c // a gets b + c
+    All Arithmetic operations have this form
+    Design Principle 1: Simplicity favours regularity
+        Regularity makes implementation simpler
+        Simplicity enables higher performances at lower cost
+Arithmetic example
+    C Code:
+        f = (g + h) + (i + j);
+    Compiled RISC-V (pseudo*)code:
+        add t0, g, h //temp t0 = g + h
+        add t1, i, j //temp t1 = i + j
+        add f, t0, t1 //f = t0 + t1
+Register Operands
+    Arithmetic instructions use register operands
+    RISC-V has 32 * 64-bit register file
+        Use for frequently accessed data
+        64-bit data is called a "doubleword"
+            32 * 64-bit general purpose registers x0 to x30
+                One is read-only 0, brings us down to 31 total
+                Others may be reserved as well in different processors
+        32-bit data is called a "word"
+        16-bit data is called a "halfword"
+        8-bit data is a "byte"
+            4-bit data is a "nibble"
+            2-bit data is a "crumb"
+        1-bit data is...a bit.
+    *Note on naming: other ISAs have different definitions for a "word" size. E.g. x86-32 "word" is 16 bit, and dword is 32 bit, quadword is 64bit...
+Register Operands
+    Refer to "source" and "destination" registers
+    "Register Transfer" model
+        Data starts in registers
+        Transformed by combination logic
+        Transferred back into registers
+    Instructions are usually in the form:
+        <mnemonic> <destination>, <source1> <source2>
+        <mnemonic> <source1>, <source2>
+        <mnemonic> <destination>
+        <mnemonic> <source1>
+    Design Principle 2: Smaller is faster
+RISC-V registers
+    x0: the constant value 0
+    x1: return address
+    x2: stack pointer
+    x3: global pointer
+    x4: thread pointer
+    x5-x7,x28-x31: temporaries
+    x8: frame pointer
+    x9,x18-x27: saved registers
+    x10-x11: function arguments/results
+    x12-x18: function arguments
+RISC-V Registers, Simplified
+    RARs understands "simplified" register names like t0-t6, s0-s11, a0-a7
+    This is a convention defined by RISC-V
+        t# are "temporaries"
+        s# are "saved"
+        a# are "arguments"
+    Helps collaboration
+Register Operand example
+    C Code:
+        f = (g + h) - (i + j);
+        f,...j in x19,x20...x23
+    Compiled Risc-V code:
+    add x5, x20, x12
+    add x6, x22, x23
+    sub x19, x5, x6
+Memory Operands
+    Main memory used for composite data
+        Arrays, structures, dynamic data
+        Need too many regs? Store in memory (temporarily)
+    To apply arithmetic operations
+        Load values from memory into registers (REGS)
+        Perform desired operation(s) (OPS)
+        Store result from register to memory (when needed)
+Memory Operands
+    Memory is byte addressed
+        Each address identifies an 8-bit byte
+    RISC-V is Little Endian
+        0A0B0C0D a: 0D, a+1: 0C, a+2: 0B, a+3: 0A
+        Least-significant byte at least address of a word
+        Big endian: most-significant byte at least address
+    RISC-V does not require words to be aligned in memory
+        Unlike some other ISAs
+Memory Operand Examples
+    C Code:
+        A[12] = h + A[8]
+            h in x21, base address of A in x22
+    Compiled RISC-V code:
+        Index 8 requires offset of 64
+            8 bytes per doubleword
+        ld(load doubleword) x9, 64(x22) //8 bytes * index 8
+        add x9, x21, x9
+        sd x9,96(x22)

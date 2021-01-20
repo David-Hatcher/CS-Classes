@@ -1,0 +1,110 @@
+Eight Great Ideas
+    Design for Moore's Law
+    Use abstraction to simplify Design
+    Make the common case fast
+    Preformance via paralellism
+    Performance via pipelining
+    Performance via predicition
+    Hierarchy of memories
+        Smaller is faster
+    Dependability via redudancy
+Below Your Program
+    Application software
+        Written in high-level languages
+    System software
+        Compiler: translates HLL code to machine code
+        Operating system: service code
+            Handling input/output
+            Managing memory and storage
+            Scheduling tasks & sharing resources
+    Hardware
+        Processor, memory, I/O controllers
+Levels of Program Code
+    High-level languages
+        Level of abstraction closer to problem domain
+        Provides productivity and portability
+    Assembly languages
+        Textual representation of instructions
+    Hardware representation
+        Binary digits (bits)
+        Encoded instructions and data
+A safe place for data
+    Volatile main memory
+        Loses all data when powered off
+    Non-Volatile secndary memory
+        Does not lose data when powered off
+Inside the Processor
+    Datapath: performs operations on data
+    Control: sequences datapath, memory, ...
+    Cache memory
+        Small fast SRAM memory for immediate acces to data
+        Various organizations to "hide" data access latency
+    CPU = Control + Datapath
+Abstraction
+    Abstraction helps us deal with complexity
+        Hide lower-level detail
+    Instruction set architecture (ISA)
+        The hardware/software interface
+    Application binary interface
+        The ISA plus system software interface
+    Implementation
+        The details underlying the interface
+Semiconductor Technology
+    Semiconductor: substance that does not conduct electricity well
+    Silicon: a type of Semiconductor
+    Dopant: substance used to produce the desired electrical characteristics in a Semiconductor(e.g. Boran, Phosphorous)
+    Transister: on/off switch controlled by an electrical signal
+    Single Crystal Ingot: rod composed of a single Si crystal that is 8=12 inches diameter and 1-2 foot long
+    Wafer: a signle slice(<0.1" thick) from the Ingot
+    Die: individual rectangular section cut from the wafer, aka chip
+    Yield: % of wafers that work
+    Cost per die = cost per wafer / dies per wafer * Yield
+    dies per wafer ~ wafer area/die area/die
+    yield = working chips / total chips
+Defining Performance
+    How do you define what is the best performance?
+    Figure of merit - a metric that we define that takes into account the important factors we're looking for
+    EDP - Energy delay product
+        Used in low power design
+        energy used * delay for processing?
+    Response time
+        How long to do a tasks
+    Throughput
+        Total work done per unit time
+    How are response time and throughput affected
+        Replacing the processors with a faster version
+        Adding more processors?
+    We'll focus on response time for now
+    Define performance = 1 / Execution time
+    X is n time faster than Y
+        Performance X / Performance Y = Execution time Y / Execution time X = n
+    Example: time taken to run Program
+        10s on A 15s on B
+        Execution time B / Execution time A = 15 s / 10 s = 1.5
+        So A is 1.5 times faster than B
+Measuring Execution time
+    Elaspsed time
+        Total response time, including all aspects
+            Processing, I/O, OS overhead, idle time
+        Determines system performance
+    CPU time
+        Time spent processing a given job
+            Discounts I/O time, other jobs' shares
+        Comprises user CPU time and system CPU time
+        Different programs are affected differently by CPU and system performance
+    CPU vs Elapsed time could be very different depending on the program
+        Data intensive, could be low cpu time but high elapsed time because of the transfer speeds
+        Computer intensive, could be high cpu time because of the computational requirements
+CPU clocking
+    Operation of digital hardware governed by a constant-rate clocking
+    Clock period: duration of a clock cycle
+        e.g 250ps = 0.25ns = 250*10^(-12)
+    Clock freq: cycles per second
+        4.0ghz = 4000MHz = 4.0*10^9Hz
+    CPU Time = CPU Clock Cycles * Clock Cycle Time
+             = CPU Clock Cycles / Clock Rate
+    Performance improved by
+        Reducing number of clock cycles
+        Increasing clock rate
+        Hardware designer must often trade off clock rate against cycle conduct
+    

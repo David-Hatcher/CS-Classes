@@ -1,0 +1,124 @@
+Stacks and Queues
+    Stack
+        push, pop, peek
+        Clears out new work quickly
+    Queues
+        enqeue, dequeue, peek
+        More fair: delay between enqueue() and dequeue() balanced
+    Deques("decks")
+        Supports all for ops
+Stack/Queue implementation
+    Generally implemented as arrays
+        All ops Theta(1) time*
+    General Strategy
+        capacity: allocated array size
+        size: number of elements/used capacity
+        Stack: add/remove from end
+        Queue: add to end, remove from front
+            wrap around to beginning once at end
+            full or empty when "head" and "tail" meet
+        Pop/dequeue are straightforward
+        Increase size when adding elements
+        Increase capacity when array is full
+Array enlargement policy
+    Bad policy: increment by 1
+        Cost: Theta(n) every time
+        n pushes: Theta(1+2+...+n) = Theta(n^2)
+        Average cost per push: O(n)
+    Better policy: increment by k (k=10,100,etc)
+        Cost: Theta(n) every kth time
+        n pushes: Theta(1 + (1+k) + ... + (1 + k*floor(n/k))) = Theta(n^2/k)
+        average cost per push: Theta(n/k)
+        caution: space trade-off
+            increment by 1B: small stacks will be mostly empty space
+    "Best" Policy: double array size
+        Cost: Theta(n) after powers of two
+        n pushes: Theta(1+2+4+...+2^lgn) = Theta(n)
+        average cost per push: Theta(1)
+        Array will be at least half-full if not deleting
+This is called Amortized analysis
+Summary:
+    Operation   Stack                   Queue               Deque
+    Push(x)     Theta(1), amort         n/a                 Theta(1), amort
+    pop()       Theta(1)                n/a                 Theta(1)
+    enqueue()   n/a                     Theta(1), amort     Theta(1), amort
+    Dequeue()   n/a                     Theta(1)            Theta(1)
+    build       Theta(n)......
+
+    All operations are amortized constant-time
+    Do not support random access
+    Choice of stack/queue changes order elements are removed
+        Stack: LIFO
+        Queue: FIFO
+Stack/Queue Exersize
+    The Josephus Problem accepts two intergers n and k. Then we arrange n objects in a circle, numbered 1-n, and we removed every kth object, until only one is left returning the ID of the remaining element.
+    For example, Josephus(5,3) = 4
+
+Set or dictionary
+    Abstract data type for storing and retrieving values
+        Multiple valid implementation
+    Primary operations
+        Search(x): returns the location of x in the set, or NIL if not contained
+        Insert(x): adds x to the set
+        Delete(x): removes x from the set
+    Additional operations
+        Build(data); construct data struct from unsorted array
+        Min(), Max(): returns the location of the largest/smallest element.
+        Successor(x), Predecessor(x): returns the next largest/smallest element than x
+Binary Search Trees
+    Non-linear linked data structures
+        Recursive data structures
+            Each node defines a BST (subtree)
+    Each node has two children
+        Use NIL link if no child on left/right
+        All elements in left subtree are equal or smaller
+        All elements in right subtree are equal or larger
+    Nodes also generally store parent pointer
+        NIL for root
+    Delete(x)
+        Binary Search for value
+        Special cases depending on children
+            0 children: Delete
+            1 child: replace w/ child
+            2 children: find right ST min, swap
+        Worst case analysis
+            Theta(h) to find x
+Balanced Binary Search Trees
+    How tall are BSTs?
+        Best Case: lgn
+        Average case: lgn
+        Worst Case: n
+    Balanced BSTs
+        Sophisticated variants of BST
+        Guarantee Theta(lgn) height with constant overhead
+            Red-Black trees, AVL trees, etc.
+        We are not going to cover details of Balanced BSTs
+Hash Tables
+    Sparse Array-based data structures
+    Insert elements according to a hash function
+        Function that maps elements in domain to integers 0 to size of array minus one (m-1)
+        Must take Theta(1) time
+    Example hash function
+        f: int -> [0,m-1]
+        f(x) = x mod m
+        Most hash functions use modulus to ensure range
+    Hash Table example
+        Size = 10, hash function: mod 10
+        Inserting 3,15,27,82,96,100
+        [100,,82,3,,15,96,27,,]
+        insert 25
+            COLLISION
+            Two basic solutions
+                Separate chaining
+                    Each location is the head of a linked list
+                    Append new element to list
+                    Never "need" to reallocate
+                Open addressing
+                    Find the next open location, insert there
+                        can scan quadratically to avoid congestion
+                    No links, so table can be larger with same memory
+                    Deleting elements is tricky
+                    Need to manage capacity carefully
+            Both potentially require scanning to find element
+
+

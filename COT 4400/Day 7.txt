@@ -1,0 +1,77 @@
+Algorithm analysis
+    Identify loops and function calls
+        Everything else is Omega(1)
+    Instruction in sequence: add up the complexity
+    Loops:
+        Estimate number of iterations
+        Estimate loop body running time
+        If the time does not depend on i: mulitply length by iterations
+        Otherwise, sum up iteration lengths
+    Analyze helper functions separately
+    Recursive functions: set up a recurrence and solve
+    sum(i) = Theta(n^2)
+    sum(1/i) = Theta(lgn)
+    sum(2^i) = Theta(2^n) bound by biggest number
+    sum(1/2^i) = Theta(1) bound by the smallest number
+
+Analysis exercise
+    If increment is not 1
+        take range of loop and divide it by the increment value
+        step i = n/i
+
+    for i = n -1 to 1 step -1 do
+        for j = 1 to n - i, step i do
+            if data[j] > data[j+1]
+                swap data[j] and data[j+1];
+            end
+        end
+    end
+    return data;
+
+    inner loop contents is Theta(n)
+    total loop time is Theta(n/i)
+    outer loop iterations Theta(n)
+    sum(n/i){i = 1 -> n-1} = n*Theta(lgn - 1) = Theta(nlgn)
+
+Recursive Analysis
+    Challege: recursive functions call themselves repeatedly(down to base case)
+    Main Idea: use recurrence to define runtime recursively
+        Solve recurrance
+    Example: factorial
+        T(n): time to computer n!
+        Algorithm Factorial
+        if n = 0 then
+            return 1;
+        else
+            temp = factorial(n-1)
+            return n*temp;
+        end
+        Lines 1+2 = Theta(1)
+        lines 4+5 = T(n-1)
+        T(n) = T(n-1) + Theta(1)
+
+Recursion tree analysis
+    Technique to analyze algorithm complexity of recursive algorithms
+    Main Idea
+        Draw a tree that represents recursive calls made by the algorithm
+            Start with n, split according to size and # of recursive calls
+            Useful step, estimate tree height
+        Add up complexity of each level of tree
+            Apply nonrecursive complexity to every node
+        Add up total complexity of all nodes
+    Example
+        T(n) = T(n-1) + Theta(n)            Recursive InsertionSort
+                        n                                                               Theta(n) time for this recurrance
+                        n-1                 One call of size n-1                        Theta(n-1) time for this recurrance
+                        n-2                                                             Theta(n-2)
+                        n-3                                                             Theta(n-3)
+                        ...
+                        1                   Size one is base case for insertion sort    Theta(1)
+Example
+    T(n) = 2T(n-1) + Theta(1)                                                           Height = n
+                        n                                                               Theta(1)
+                  n-1       n-1                                                         2*Theta(1)
+                n-2n-2      n-2n-2                                                      4*Theta(1)
+                        ...                                                             8*Theta(1)
+        1111....................1111                                                    (2^n)*Theta(1)
+    This comes to a sum(2^n){i=0->n} Total complexity is Theta(2^n)

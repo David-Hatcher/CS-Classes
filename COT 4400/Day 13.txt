@@ -1,0 +1,135 @@
+Union-Find Data structure
+    Aka disjoint set data structure
+    Purpose: represents partition of dataset
+        Identify whether elements belong to the same subset or not
+    Operations
+        Init(n): set up each element (1..n) in its own subset
+        Union(x,y): combine subset containing x and y together
+        Find(x): return a partition ID for a given element
+    Representation: array of pointers (integers)
+        Find: follow pointers until you find a self-loop
+            Self-loop is partition ID ("root")
+        Union: point Find(a) to b
+Union-find example
+    init(7)
+        1,2,3,4,5,6,7
+    Union(1,2)
+        Point Find(a) -> b
+        Find(1): 1 now points to 1
+        2,2,3,4,5,6,7
+    Union(1,4)
+        2,4,3,4,5,6,7
+    Union(6,7)
+        2,4,3,4,5,7,7
+    Union(3,5)
+        2,4,5,4,5,7,7
+    Union(3,6)
+        2,4,5,4,6,7,7
+    Find(3)
+        7
+Optimizing Union-Find
+    Union complexity depends on Find
+    Find complexity depends on height of tree
+    Worst Case:
+        O(n)
+    First Idea: add Find(a) to Find(b) (or vice versa)
+        a -> ra -> b -> rb, a -> ra -> rb, b ->rb
+    Seconds Idea: add the smaller tree to the larger (union by rank)
+        1,2,3,4 -> a -> b, becomes 1,2,3,4 -> a <- b
+    Third Idea: flatten structure when we call Find()
+        a -> a1 -> a2 -> a3 -> ra becomes a -> ra, a1 -> ra, a2 -> ra
+        path compression
+Revisit
+    init(7)
+        1,2,3,4,5,6,7
+    Union(1,2)
+        2,2,3,4,5,6,7
+    Union(1,4)
+        2,2,3,2,5,6,7
+    Union(6,7)
+        2,2,3,2,5,7,7
+    Union(3,5)
+        2,2,5,2,5,7,7
+    Union(3,6)
+        2,2,5,2,7,7,7
+    Find(3)
+        7
+        2,2,7,2,7,7,7
+Find(x)
+    recursively point to answer
+    O(inverse arckermann function), amortized
+    Generally less than 4 for any conceivable n
+        Algo: Find(x)
+        if unionfind[x] != x then
+            id = Find(unionfind[x]);
+            unionfind[x] = id;
+        end
+        return unionfind[x];
+Union(a,b)
+    Call find on both sides first
+    Alwayus point to larger tree
+    O(inverse arckermann function)
+        Algorithm: Union(a,b)
+            ra = Find(a);
+            rb = Find(b);
+            if szie[ra] > size[rb] then
+                swap ra and rb;
+            end
+            unionfind[ra] = rb;
+            size[ra] = size[ra] + size[rb];
+The Ackermann function
+    incredibly fast growing function
+    first few values:
+        3,7,61, 2^2^2^65536 - 3, ...
+Data structure example
+    Hierarchical clustering
+        Input:
+            data: array of n points
+            c: number of clusters
+        Output: c clusters
+    1. Initially, each point is a cluster
+    2. Calculate distance between clusters
+        Single linkage: cluster distance is min distance b/w points
+        Complete linkage: cluster distance is max distance
+    3. Merge two nearest clusters
+    4. Continue until c clusters left
+Implementing hierarachical clustering
+    Strategy
+        Use priority queue (heap) to find min distance
+            Update as clusters merge?
+        Use Union-find to represent cluster membership
+            Union as clusters merge
+        Single linkage: don't recompute distances, just ignore if already joined
+            No need to update heap
+            if Find(u) = Find(v)
+    Example: data are integers, distance is abs. value c = 1
+        -4,-2,-1,3,4,7,9
+    dist  2  1  4 1 3 2
+        merge -2,1 and 3,4 dist = 1
+        merge -4,-2 and 7,9 dist = 2
+        merge 4,7 dist = 3
+        merge -1,3 dist = 4
+Union-Find Exercise
+    Perform single-linkage hierarchical clustering on the array below
+    until everything is in one cluster
+        distance is abs value
+    Draw the union-find data structure after each step
+            -4,-2,-1,3,4,7,9
+    Rules:
+        if given a choice, merge the cluster with the leftmost element
+        Merge elements left-to-right
+            -4,-2,-1,3,4,7,9
+            merge -2,-1
+                -4,-1,-1,3,4,7,9
+            merge 3,4
+                -4,-1,-1,4,4,7,9
+            merge -4,-2
+                -1,-1,-1,4,4,7,9
+            merge 7,9
+                -1,-1,-1,4,4,9,9
+            merge 4,7
+                -1,-1,-1,9,4,9,9
+            merge -1,3
+                -1,-1,9,9,9,9,9
+            or as index values
+                3,3,7,7,7,7,7

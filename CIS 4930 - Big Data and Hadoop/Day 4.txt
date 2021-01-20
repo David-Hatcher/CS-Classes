@@ -1,0 +1,64 @@
+Inside Hadoop
+    NameNode often has Secondary NameNode, or Backup
+        Contains Metadata for files
+        NameNode keeps track of available hard disk storage resources accross whole cluster
+        NameNode can create a blocklist for all the DataNodes from the meta data, but just uses
+            the blocklists from the slavenodes instead of having to deal with it since the NameNode
+            is the bottleneck
+        Most functions that can be offloaded to other machines will be
+    On production almost always exact backup of NameNode
+    Slave Daemon, DataNode
+        Runs on each SlaveNode
+        Each DataNode sends a heart beat signal to NameNode
+            And includes blocklist of all blocks stored on that local machine
+    Client sends request
+    NameNode responds with Metadata
+    Then the client accesses data blocks from slave nodes
+
+The Mapper
+    Each Map Tasks typucally operates on a single HDFS block
+    Map Tasks usually run on the node where the block is stored
+Shuffle and Sort
+    Sorts and consolidates intermediate data from all mappers
+    Happens as Map tasks complete and before reduce tasks start
+    Each mapper sends data to every reducer
+The Reducer
+    Operates on shuffled/sorted itermediate data (Map task output)
+    Produces final output
+Each Mapper handles roughly the same amount of data
+Mapper shuffles to the Reducers depending on the Key from the (key,value) pair
+    There is no guarantee that each Reducer will get the same amount of data
+Example: The WordCount Mapper
+    Can be done with line reader
+        Mapper creates a key value pair for each line of the file
+            the value is the extracted content of each line
+            the key is the byte off set for the line
+            line 1 key is 0, if there are 50 bytes in like one then the key for line 2 is 50
+    These go through shuffle and sort and become the intermediate data
+        Which is basically every word with the count from each key value pair, ex the 1,1,1,1
+    SumReduce:
+        This sums all the data from each word
+    Mapper output is stored on local slave node, NOT HDFS
+    Final Result is stored on HDFS
+
+MapReduce: The Mapper
+    Happod Attemps to ensure that Mappers Run on nodes which hold their portion of the data locally, to avoid network traffic.
+If there is a single reducer then output will be shuffled/sorted
+But if not each individual output will sorted but TOTAL output will not be sorted
+
+HBASE
+    NoSQL database
+    Can store massive amounts of data
+        Petabytes+
+    High write throughput
+    Handles sparse data well
+        No wasted space for empty columns in a row
+    Limited access model
+        Optimized for look up of a row by key rather than full queries
+        No transactions: single row operations only
+        Only one column (the 'row key') is indexed
+FLUME: Real-time data import
+    What is flume?
+        A service to move large amounts of data in real time
+        Examople: storing log files in HDFS
+    

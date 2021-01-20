@@ -1,0 +1,140 @@
+Today
+    Induction review
+    Definitions
+    Algorithm correctness
+    Loop invariants
+Induction review
+    Proof technique to prove a claim for all n >= b
+    Base case:
+        Prove claim at b
+    Induction hypothesis (weak)
+        Suppose claim is true for some k >= b
+    Induction goal
+        Prove claim for k + 1
+    Strong Induction
+        changes induction hypothesis
+        Important when P(k) isn't enough to prove P(k+1)
+    Strong inductive hypothesis
+        Suppose claim is true for all n from b up to k, for some k >= b
+    Mulitple base cases
+        Needed when assuming claim for k-1, k-2, etc.
+        Suppose claim is true from lowest base case to k, k >= max base case
+What is an Algorithm
+    -A well-defined, step-by-step procedure for solving a problem
+        Can be more than just computer programs
+    Problem: a general task in which we are given some input and need to compute some corresponding output
+        Example - The minimum problem: given a set of values that can be compared, output the smallest value in that set
+    Instance: a particular input for a problem
+    Solution: the corresponding output for a problem Instance
+        Examples:
+            Min(5,3,14) -> 3
+            Min(-1,-1,-1,-1,-1) -> -1
+            min("Gallup","Trot","Canter") -> "Trot" if length, "Canter" in alpha order, "Trot" in terms of speed of the horse
+Lets Look at a concrete Example
+    Problem: sorting a list of numbers
+    Algorithm
+        Input: data: an array of integers to sorting
+        Input: n: the size of the data
+        Output: permutation of the data such that
+                data[1] <= data[2] <= ... <= data[n]
+        Algorithm: SelectionSort
+        for i = 1 to n do
+            let m be the location of the min value in data[i..n];
+            Swap data[m] and data[i];
+        end
+        return data;
+    Pseudocode
+        - Algorithm description between code and English
+        - Code-like to eliminate ambiguity
+        - English-like for simplicity
+    Convention: most of pseudocode will number arrays 1 to n, unlike 0 to n
+        data[i..j] represents subarray of data from index i to index j, includes both end points i and j
+How do we determine correctness?
+    Correct
+        For every input, the algorithm must terminate with the Solution
+    Proof of correctness
+        1. Start with an arbitrary input
+        2. Describe what the agorithm does
+            if statements: proof by cases
+            for/do/while loops: often need loop invariants
+            Recursive function calls: induction or strong induction (weak induction -> n-1, otherwise strong induction)
+            Other function calls: solves associated problem
+        3. Prove that output meets problem criteria (and terminates)
+    Sometimes you can use contridiction
+        Often used for optimization algorithms (max/min, best/worst, etc.)
+        Suppose algorithm gets the wrong answer and show a contridiction
+    Incorrect
+        Find a counter example
+    Algorithm: Recursive InsertionSort
+        Input: data: an array of integers to sorting
+        Input: n: the size of the data
+        Output: permutation of the data such that
+                data[1] <= data[2] <= ... <= data[n]
+        if n > 1 then
+            RecInsertionSort(data[1..n-1]);
+            Let ins = data[n];
+            Let j be the last index of data[1..n-1] <= ins, or 0 if all are > ins;
+            Shift data[j+1..n-1] to the right one space;
+            data[j+1] = ins;
+        end
+        return data;
+    Proving algorithm is correct
+        With recursive algorithm we use induction, since there is an n - 1 we can get away from weak induction
+        first step, base case
+        Base Case: n = 1, Let data be an arb. array of size 1
+        Describe what algorithm does
+            If statement, size 1 if statement fails -> returns data (no change)
+            Was problem solved? All arrays of size 1 are sorted trivially, so RIS is correct for n = 1
+        Induction Step/Hypothesis - prove that RIS is correct for all arrays of size n >= 1
+            Suppose: RIS is correct for all arrays of size k, for some k >= 1
+            Goal: RIS if correct for all arrays of size k + 1
+            Let data be an arbitrary array of size k + 1.
+            Describe what the agorithm does
+                Line 2
+                    n = k + 1
+                    n > 1 thus if check succeeds
+                Line 3
+                    RIS(data[1..k + 1 - 1])
+                    The array is size k therefore by our supposition array of size k is sorted.
+                Line 4
+                    ins = data[k + 1]
+                Line 5
+                    if statement: proof by cases
+                    Case 1: everything in data[1..k] > ins, j = 0
+                        Line 6:
+                            Shift values 1..k one space to the right
+                        Line 7: place ins in space 1
+                        Algorithm then terimnates and returns data
+                        Argue the algorithm is correct
+                            We can argue that values from 2..k+1, are sorted because of the recursive call correctly sorted the array before it was shifted
+                            That leaves the inequality between the first and second item, which we can argue is true because of the case assumption from line 5
+                            The entire array is sorted at this point
+                    Case 2: j becomes some value between 1..k
+                        Line 6:
+                            shift values from data[j+1..k] one to the right
+                        Line 7:
+                            place ins into data[j+1]
+                        Algorithm then terminates and returns data
+                        Argue the algorithm is correct
+                            We can argue the values from 1..j and values j+2..k as these values were sorted before by the IH
+                            We can then argue that the value at j+1 is in the correct place based on the assumption from line 5
+
+
+
+Base case: For some arbitrary numbers k1 and k2.
+Suppose: max is correct for all values k1 and k2.
+Describe what the algorithm does
+	Line 1:
+		If Statement: Proof by cases
+			Case 1: k1 is greater than k2
+                max will terminate and return k1
+                We can argue that the function is correct for this case as it terminates and returns k1 which is the greater
+                of the two numbers based on our assumption for case 1
+            Case 2: k1 is not greater than k2
+                max will terminate and return k2
+                Case 3: k2 is greater than k1
+                    We can argue that the function is correct for this case as it terminates and returns k2 which is greater than
+                    k1 based on our assumption from case 3.
+                Case 4: k2 is equal to k1
+                    We can argue that the function is correct for this case as it terminates and returns k2 which is equal to k1
+                    and as both numbers are the equal to each other, either is the max.

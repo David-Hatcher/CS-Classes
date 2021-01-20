@@ -1,0 +1,76 @@
+Performance Summary
+    The BIG picture
+    CPU = (instructions/program) * (Clock cycles/instructions) * (seconds/clock cycle) = seconds/program
+    Performance depends on:
+        Algorithm: affects IC, possibly CPI
+        Programming language: affects IC, CPI
+        Compiler: affects IC, CPI
+        Instruction set architecture: affects IC, CPI, Tc(cycle time)
+Power Trends
+    In CMOS IC techonology
+        Power = Capacitive load * Voltage^2 * Frequency
+    100 watts was a power wall, where they could no longer disapate enough heat
+    Changed to multicore processors
+    Cannot control Capacitive Load
+    But can control Voltage and Frequency
+    Power and Clock Rate are corrolated(hence they grow together)
+    Leakage power became a major issue (transistor not "off enough" even when "off")
+    Eventually ran into "power wall" - practical limit for cooling commodity microprocessors (not everyone has liquid nitrogen cooling)
+    Mulitple simultaneous factors
+        Switch to multicore
+        Advances in fabrication technology (small transistors, new materials...)
+    Dark Silicon
+        Portions of the CPU that are turned off temporarily because the power consumption is too high
+    Suppose a new CPU has
+        85% of capacitive load of old CPU
+        15% voltage and 15% freq red
+    See Calc1.png
+Multiprocessors
+    Multicore microprocessors
+        More than one processor per chip
+    Requires explicitly parallel Programming
+        Compare with instruction level parallelism
+            Hardware executes multiple instructions at once
+            Hidden from the programmer
+        Hard to do
+            Programming for performance
+            load balancing
+            Optimizing communication and synchronization
+SPEC CPU Benchmark
+    Programs used to measure performance
+        Supposedly typical of actual workload
+    Standard Performance Evaluation Corp (SPEC)
+        Develops benchmarks for CPU, I/O, Web, ...
+    SPEC CPU2006
+        Elapsed time to execute a selection of programs
+            Negligible I/O, so focuses on CPU performance
+        Normalize relative to reference machine
+        Summarizees as geometric mean of performance ratios
+            CINT2006 (integer) and CFP2006(floating-point)
+        See formula1.png
+        nth root of product of all numbers
+    Geometric Mean ensures a fair comparison
+        One comparison cannot be optimized to be MUCH better than the reference machine
+        and therefore causing the ratio to be much higher than it is in reality
+    SPEC Power Benchmark
+        Power consumption of server at different workload levels
+Pitfall: amdahls' law
+    Improving an aspect of a computer and expecting a proportional improven in overall performance
+        Timp = (Taffected)/(improvement fact) + Tunaffected
+    Example: multiple accounts for 80s/100s
+        How much improve in mutiply performance to get 5x overall?
+            2 = 80/n + 20     - Can't be done
+        Corollary: make the common case fast
+    Must Know
+        Original time consumed for some function
+        Potential speedup factor
+    THis combined with cpu is good place to start
+Cost/performance is Improving
+    Due to underlying technology development
+Hierarchical lays of abstraction
+    In both hardware and software
+Instruction set architecture
+    The hardware/software interface
+Execution time: the best performance measure
+Power is a limited factor
+    Use parallelism to improve performance
