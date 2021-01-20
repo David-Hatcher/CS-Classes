@@ -1,0 +1,124 @@
+HashTable Operations
+    Search(x)
+        Hash Element
+        Scan Linked List(or until empty location)
+        Worst case: O(n)
+        Algorithm: Search(x)
+            loc = hash(x);
+            return table[loc].Search(x);
+    Insert(x)
+        Hash Element
+        Append to linked list(or scan for open location)
+        Worst case: O(1) or O(n)
+        Algorithm: Insert(x)
+        ins = new HashNode(x);
+        loc = hash(x);
+        ins.next = table[loc];
+        table[loc] = ins;
+    Delete(x)
+        Hash Element
+        Delete from linked list (or mark as deleted)
+        Worst Case: O(n)
+        ALgorith: Delete(x)
+            loc = hash(x)
+            node = table[loc];
+            if node.value = x then
+                table[loc] = node.next;
+                free node;
+            else  while node.next != NIL do
+            next = node.next;
+            if next.value = x then
+                node.next = next.next
+                free node;
+Why would anyone use a hash table?
+    Bad worst-case but great expected-case
+    Expected case assumptions
+        Hash function produces O(1) collision
+            each inserted value has O(1) duplicates
+        m = O(n)
+    Search(x)
+        Hashing and scanning take O(1) time
+    Insert(x)
+        Hashing and scanning take O(1) time
+    Delete(x)
+        Hashing and scanning take O(1) time
+Map
+    Abstraction of a function
+    Main Operations
+        Insert(x,y): declares that f(x) = y
+        Delete(x): declare that f(x) does not have a value
+        Search(x): returns y such that f(x) = y or nil if f(x) does not have a value
+Two Main Implementations
+    Array-Based Map
+        Array of all possible x values
+        stores f(x) in arr[x](nil if not initialized)
+            8   2   3   4   12  2   2
+            A   B   C   D   E   F   G
+        All main operations are constant time
+        Only useful when input domain is small
+    Set-based map
+        Aka hash map
+        Set of ordered (x,y) pairs
+        Pairs added/searched according to x value
+        Search returns associated y value
+        Time complexity determined by hash table or BBST
+The power of maps
+    Maps are very useful for storing values that we computed repeatedly
+        Especially when we can use direct maps
+    Example: Discrete Fourier Transform
+    Can also improve best-case performance for any algorithm
+        Build a map that contains problem instances and solutions
+        Before running another algorithm, test wheter input is in map
+        If so, return the answer
+        Best case typically constant or linear time
+        Best case analysis not useful to compare algorithm quality
+Priority queues
+    Abstract data type for finding maxima or minima
+    Main operations:
+        Insert(x): adds a value to the priority queues
+        Max()/Min(): returns max/min value
+        DeleteMax()/DeleteMin(): deletes and returns the max/min value from the priority queues
+        Analogous to enqueue, dequeue, peek
+    Primary implementation: heap
+        Complete binary tree (expect maybe bottom level)
+        Heap property
+            Every child has value <= its parent's value(max-heap)
+            Every child has value >= its parent's value(min-heap)
+            Consequence: root node is max(or min)
+        Extra Op:
+            Heapify(arr): builds a heap from an unsorted array
+Heap Implementations
+    Implemented as array
+    Root stored at index 1
+    Children of element i stored at 2i and 2i+1
+        Parent at floor(i/2)
+        ,1,2,3,4,5,6,7
+    Because heaps are complete, array has no "gaps"
+Priority queue operations
+    Descriptions assume max-heap
+    Insert(x):
+        Append to array
+        Swap parents until parent is larger (or at root)
+        O(lgn) time
+    Max():
+        return root
+        O(1)
+    DeleteMax()
+        Swap max with last element and call PercolateDown(1)
+        percolateDown(i)
+            If heap[i] is smaller than its max child, Swap
+            If so, repeate on that element until it is larger than max child or a leaf
+            O(lgn) time
+        O(lgn) time
+    Heapify()
+        Call PercolateDown(i) from end to beginning
+        Half have no children, half of rest have 1 child, expect
+        O(n) total time
+    BST has similar complexity, but higher coefficients
+    Great at finding max (or min)
+    Other Operations (min/max, search, predecessor, etc.) are not good
+        Min-max heap can do either, but is more complex
+    Fibonacci heap has even better complexity
+        More complex, higher coefficients, less space efficient
+        Fairly slow unless data is quite large
+

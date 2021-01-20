@@ -1,0 +1,22 @@
+Attendance
+a-b, 5
+d-h, 2
+h-g, 1
+h-f, 7
+f-e, 3
+f-c, 6
+f-i, 8
+a-b, 10
+Attendance
+Given the solution of Clique Decision problem, a graph C containing k vertices
+You would need to perform the following to determine if this is a valid solution:
+Input: Graph G, Graph C, and int k
+check if there are k vertices in Graph C                    O(1)
+for each vertex in C as v                                   This loop will run k times
+    for each other vertex in C as u                         This loop will run k-1 times
+        check if isAdjacent_G(u,v)                          O(1) if using an adjacency matrix
+    end
+end
+
+Since the inner loop will run k-1 time and the outer loop will run k times, and each inner loop has O(1)
+the total time complexity will be O(k^2), thus the solution can be validated in poly-time as such this is an NP problem.

@@ -1,0 +1,23 @@
+Key Concepts
+    Relational model
+        Started in the early 1970s (E. Codd)
+        Dominating model
+        No-SQL - there is still a relational component
+Relational model
+    Tables (relations)
+    Main Components of a relation schema
+        Table name
+        Attributes (columns)
+        Constraints
+            Domain constraints: rules about valid data in an attribute
+                Type + other conditions (app-spec)
+            Key constraints: 
+Key Constraints
+    SuperKey: A subset of attributes that is a unique ID of a row
+    Candidate(lean/essential) key:
+        Is a subset of the attributes
+        Is an ID of a row
+        No proper subset of it is a superkey
+        Ex: (SSN,Bdate): proper subsets: (SSN),(Bdate) SSN is already a superkey thus this is not a candidate key
+        There can be multiple candidate keys
+    Problem: Given (SSN), (Fname,Lname,Bdate)

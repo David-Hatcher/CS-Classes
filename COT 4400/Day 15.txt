@@ -1,0 +1,92 @@
+Iterative Dynamic Programming
+    Main Idea
+        Solution to the problem is stored in the data structure
+            Filling in data structure solves the problem
+        Recursion not needed if cells we need are already filled in
+    Process
+        Analyze dependencies to choose appropriate order
+        Write for loop(s)
+        Inside loop(s): naive recursive algorithm
+            replace calls with lookups
+            replace return with assignment
+            change variable to loop variable
+        Allocate data structure before
+Iterative example
+    Fibonacci numbers
+        Each value is sum of two previous values
+    Recurrence: F(n) = F(n-1) + F(n-2)
+    One parameter
+        1D array
+    Identify Dependencies
+        Each cell needs the two cells to the left
+        Move in opposite direction of recursive dependencies
+    Base cases
+        Must start here
+    Need to iterate left-to-right
+        When calculating F(n)
+            F(n-1) and F(n-2) already solved
+Optimining iterative DP
+    Sometimes possible to improve space complexity
+    Main Idea
+        Don't store entire data structure
+        Only store what's necessary to valuelate future values
+    Example: Fibonacci numbers
+    Each cell only needs preivous two values
+        Values not useful after moving three away
+    Optimization: only store previous two values
+        Constant space complexity
+Iterative DP Summary
+    Decide on data structure
+    Analyze recursive dependencies and decide iteration order
+    Write for lookups
+    Add naive code inside for loop
+        Replace original variables with loop variables
+        Replace recursive calls with lookups
+        Replace rutn statements with writes
+    Initialize array at start and return final answer at end
+    Consider whether space complexity can be reduced (affects 4)
+        Can we "forget" parts of the data structure?
+        Other minor optimizations are possible
+    Analyze like an iterative algorithm
+        LCS: loop through all cells, compare to concatenate values
+        O(nm) if we assume concatenation is O(1)
+
+Strategy: greedy algorithms
+    Usually Applied to optimization problems
+        "Find the best/largest/smallest/etc..."
+    Outline
+        Formulate the problem as sequence of decisions
+            E.g which element to add to/remove from a set
+        Always select the best possible option
+
+Greedy Example
+    Problem: knapsack problem
+    Input: array of positive integers data (size n), and target weight t
+    output: largest subset of data with sum <= t
+
+    example data = {2,3,8,7,7,6}, t = 21
+        Soltuion: {2,3,6,7} or {2,3,6,8}
+
+    1 What is our sequence of decision?
+        What number do we add next?
+    2 What option is the best
+        Add the smallest remaining element
+
+
+Input: Heap, a max heap of size n
+Output: Largest heap path
+
+Algorithm: MHP
+
+sum = heap[root].value()
+currentNode = heap[root]
+while currentNode has left or right children
+    if leftChild.value > rightChild.value
+        sum = sum + leftChild.value
+        currentNode = leftChild
+    else
+        sum = sum + rightChild.value
+        currentNode = rightChild
+    end
+end
+return sum

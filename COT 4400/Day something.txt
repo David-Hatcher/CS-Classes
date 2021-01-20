@@ -1,0 +1,104 @@
+P: can be solved in poly-time
+NP: can be verified in poly-time
+    This is provided with a solution
+NP-Hard: At least as hard as all NP problems
+    P = NP if any NPH problem in P
+    To prove: later today
+NP-Complete: NP and NP-Hard
+    All poly-time reducible to each other
+    To prove: NP and NP-Hard
+Karp's 21 problems
+
+Cooks Theorm
+    Sat is NP:
+        SAT can be verified in poly-time
+        Given expression and assignment of variables,
+        construct expression tree
+            (P or Q) and (P or not Q) and (not P or Q)
+    Sat is NP-Hard:
+        For any problem in class NP, there is some poly-time reduction
+            -Much Harder!
+        Main Idea
+            Let X be a decision problem in NP
+            Algorithm to solve X:
+                Must be some Turing Machine T that verifies solution to X
+                    Turning Machine: Mathematical model for computers
+                Create a Boolean expression B that "runs" T and evaluates to return value
+                Evaluate SAT on B
+                If B is satisfiable, T must return true
+            Complexity: polynomial + SAT
+
+Proving NP-Hardness
+    To prove A is NP-Hard
+        Pick an NP-Hard problem B
+            Known to unknown ("backwards")
+        Find poly-time reduction from B to A
+            Transform b into a
+            solve a
+            transform solution
+    BE CAREFUL: Very easy to get backwards
+        Algorithm NPH-reduction
+            Transform NP-Hard problem into candidate;
+            Solve candidate problem
+            Transform solution and return;
+        Always reduce NPH to unknown problem
+        Think of NPH as a "lower bound"
+    To prove A is NP-Complete:
+        Prove NP-Hard and NP
+
+3-Sat
+    Input: boolean expression in 3-CNF
+        Expression is and of clauses
+        Each cloause is or of 3 literals (variables/negations)
+    Example: (x or x or not y) and (not x or y or y)
+    Output: is the expression satifiable?
+    Prove that 3-Sat is NP-Hard via reduction with SAT.
+
+    Input: expr: any boolean expression
+    Algorithm SAT-to-3-satifiable
+        t = transform expr into 3-CNF
+    return 3SAT(t);
+
+    input: expression: 3-CNF expression
+    algorithm: 3-SAT-to-SAT
+    return SAT(expr);
+
+Independent Set (IS)
+    Input: graph G
+    Output: largest set of vertices with no edges between them
+
+    Decision problem:
+        Input: graph G and integer k
+        Output: does G have a IS of size k
+
+Reduce 3-Sat to IS
+    Reduction
+        Construct graph G with vertex for each literals
+            literal: variable or negated variable
+        Add edges between literals in the same clauses
+        Add edges between negations
+        Return IS(G,# clauses)
+
+Clique
+    Input: graph G
+    Output: largest set of vertices fully connected by edges
+
+    Decision problem:
+        Input graph G and interger k
+        Output; does G have a clique of size k?
+        Clique is NP:
+            given a potential clique
+            check every pair is adjacent
+    Reduce IS to CLQ
+        Reduction
+            Construct complement graph Gc
+                Contains an edge iff original graph does not
+            Return Clique(Gc,k)
+
+Vertex cover
+    Input: G
+    Output: smallest set of vertices adjacent to every edge
+
+    Deicison problem:
+    Input: G and int k
+    output does G have VC of size k?

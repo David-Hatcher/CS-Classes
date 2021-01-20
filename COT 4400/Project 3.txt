@@ -1,0 +1,108 @@
+1.  Simple directed weighted labelled graph, store it in an adjacency list
+2.  The vertices represent each square on the board and contain labels to determine whether alice should grow or shrink and be named for their place on the board
+        (ie, v1,1 v1,2 ... v7,6 v7,7)
+    The edges will represent the other vertices that this point can connect to, each edge will have a weight that is the
+        distance between the two vertices
+3.
+
+Input: r, numbers of rows of the maze
+Input: c, number of columns of the maze
+Input: squares, 2D array where each index contains a square, which contains the arrows(ie n,s,e,w,ne,se,nw,sw) it has and if alice should grow or shrink
+Algorithm: BuildMaze
+
+adjList = Graph(r*c);   //This list will be have the key of (r,c) where r represents the row of the square and c represents the column of the square
+                        //And the value will be a struct, that contains the speed change value, speedChange, and it's adjacencies, with the distance to them
+                        //thus addEdge will take three parameters, u, v, dist
+for i = 1 to r do
+    for j = 1 to c do
+        if squares[i,j] has grow:
+            adjList(r,c).speedChange = 1;
+        else if squares[i,j] has shrink:
+            adjList(r,c).speedChange = -1;
+        else
+            adjList(r,c).speedChange = 0;
+        end if
+        for each arrow in list of arrows:
+            if arrow is n:
+                for k = i - 1 to 1 do
+                    adjList.AddEdge((i,j),(k,j),i-k)
+                end
+            else if arrow is s:
+                for k = i + 1 to r do
+                    adjList.AddEdge((i,j),(k,j),k-i)
+                end
+            else if arrow is e:
+                for k = j + 1 to c do
+                    adjList.AddEdge((i,j),(i,k),k-j)
+                end
+            else if arrow is w:
+                for k = j - 1 to 1 do
+                    adjList.AddEdge((i,j),(i,k),j-k)
+                end
+            else if arrow is ne:
+                dist = 1,x = i-1,y = j+1;
+                while x != 0 and y != c do
+                    adjList.AddEdge((i,j),(x,y),dist)
+                    x--,y++,dist++;
+                end while
+            else if arrow is nw:
+                dist = 1,x = i-1,y = j-1;
+                while x != 0 and y != 0 do
+                    adjList.AddEdge((i,j),(x,y),dist)
+                    x--,y--,dist++;
+                end while
+            else if arrow is sw:
+                dist = 1, x = i+1,y = j-1;
+                while x != r and y != 0 do
+                    adjList.AddEdge((i,j),(x,y),dist)
+                    x++,y--,dist++;
+                end while
+            else if arrow is se:
+                dist = 1, x = i+1,y = j+1;
+                while x != r and y != c do
+                    adjList.AddEdge((i,j),(x,y),dist)
+                    x++,y++,dist++;
+                end while
+            end if
+4.
+
+Input: G, Graph from BuildMaze
+Input: (sr,sc), Start location, vertex on the graph
+Input: (gr,gc), Goal Location, vertex on the graph
+Output: Path to reach the goal position from the start position
+
+goalPath = list();
+goalPath = DepthFirstMazeTraversal((sr,sc),(gr,gc),1,goalPath);
+return goalPath;
+
+DepthFirstMazeTraversal
+Input: (gr,gc), goal location
+Input: (c1,c2), current location
+Input: s, interger representing player speed
+Input: Path, a list of the vertices in the current path, with the speed at which they were reached in the form (u,d)
+Output: The path from the initial location to the goal location
+
+s += (c1,c2).speedChange;
+if (gc,gr) == (c1,c2)
+    return Path;
+else if s == 0:
+    remove last added vertex from Path;
+    return Path;
+else:
+    for each vertex in N((c1,c2)) as u:
+        if distance to neighbor is s and (u,d) is not in Path:
+            currentPath = Path;
+            currentPath.append(u,d);
+            Path = DepthFirstMazeTraversal((gr,gc),u,s,currentPath);
+        endif
+        if (gc,gr) in Path:
+            return Path;
+    end for
+end if
+
+
+
+
+I would use reducting 2.
+
+This reduction transform would take poly time to create the array from the 3-CNF boolean expression, O(n) as it would need to look at all of the literals in E and add them to the array data. Thus the total time to complete this would be O(n + SS) making this poly time.
