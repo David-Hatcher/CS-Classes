@@ -1,0 +1,199 @@
+Key Concepts
+    A Data model
+    A schema is a design
+    A rel. instance is a set
+        No duplicates
+        No ordering among members
+    Relational model
+        Started in the early 1970s (E. Codd)
+        Dominating model
+        No-SQL - there is still a relational component
+    Number of attributes of a table is called the degree (arity) of the table
+    Number of rows of a table is called cardinality
+    Query Language
+Relational model
+    Tables (relations)
+    Main Components of a relation schema
+        Table name
+        Attributes (columns)
+        Constraints
+            Domain constraints: rules about valid data in an attribute
+                Type + other conditions (app-spec)
+            Key constraints:
+            Referential constraints: certain column(s) of table A (referncing table) is the primary key of table B (referenced table), foreign key, A and B CAN be the same table
+Key Constraints
+    SuperKey: A subset of attributes that is a unique ID of a row
+    Candidate(lean/essential) key:
+        Is a subset of the attributes
+        Is an ID of a row
+        No proper subset of it is a superkey
+        Ex: (SSN,Bdate): proper subsets: (SSN),(Bdate) SSN is already a superkey thus this is not a candidate key
+        There can be multiple candidate keys
+    Problem: Given (SSN), (Fname,Lname,Bdate)
+Relational Algebra
+    Alg. System: operators and operands (a domain of values)
+    Rel. Alg.
+        Domain: relational instances
+        Operators: selection(sigma, flat o), projection(PI), rename(row,squiggle p), union(U), intersection(upsidedown U, Ո), set difference(-), product(x), join(bowtie), division(/)
+                    \______________Uniary_______________/       \_______________________________________________Binary_____________________________________________________/
+Selection
+    sigma_c (R) -> S
+    c = cond logical op cond
+    cond: a op b | a op C
+    EX: Salary > 50000
+        SSN = Dno AND Salary > 50000
+    D(R) = D(S)
+     |R| >= |S|
+Project(ion)
+    PI_Ai(R) -> S, Ai subset A(attributes of table R)
+    EX. PI_bdate,salary (Employee)
+    D(R) >= D(S)
+     |R| ==  |S|
+
+Set Operators (Union, Intersect, set difference)
+    R Union S = things in R OR S
+    R Ո S = things in R AND S
+    R - S = things in R but NOT S
+    All Require Union Compatible:
+    1. Same # of attributes
+    2. There is a one-to-one mapping of types of those attributes
+        (int, string, float) U,Ո,-  (int, string, float)
+
+Cartesian Cross Product (X)
+    R X S -> T
+    R = [x1,...,xm]
+    S = [y1,...,yn]
+    T = [(x1 y1),...,(x1 yn),...,(xm,y1),...,(xm,yn)]
+    D(R) + D(S) = D(T)
+    |R| * |S| = |T|
+
+Join (bowtie)
+    R JOINc S = Selectc (R X S)
+    c = some condition
+    R joinc S = selectc(R X S)    theta-join
+    c = R.e = S.d AND R.E = S.G   equi-join
+    R join S = selectc(R X S)     Natural join
+        R = [A,B,C,D] S = [C,E,F,G]
+        R join S = Select(R.C = S.C)(R X S)
+
+Division /
+    R / S -> T
+    R [X,Y] / S [Y] -> T [X]
+    The attributes(columns) of R must be the Superset of the attributes in S.
+    S = [Y1,Y2,Y3]
+    R = [(X1,Y1),(X2,Y2),(X1,Y2),(X1,Y3),(X2,Y3),(X3,Y1),(X4,Y2),(X2,Y1),(X3,Y6)]
+    T = [X1,X2]
+    Xi in ProjectionX(R) and there exists Xi,Yj for all Yj in S
+
+Rel. Algebraic Queries
+    *Primary Key, **Foreign key
+    emp(Eid*,ename,age,salary)
+    works(Eid*,did**,s_time)
+    Dept(Did*,location,mgr_id**)
+        Q1. Find the names of all employees who are younger than 45 and with salaries in the range of [80K,100K]
+        Project_ename(SelectC(emp))
+        C1= age < 45 && salary >= 80K && salary <= 100k
+        SELECT ename FROM EMP WHERE age < 45 AND salary > 80k AND salary < 100k
+
+Join Queries
+    Q2. Find the IDs and locations of the depts where John Doe works.
+        works Join dept
+        Project_did_loc(Select_C1(E x W x D))
+        C1= e.eid == w.eid && w.did == d.Did && e.ename = John Doe
+
+    Q3 Find names of all emps who work in dept 1
+
+        Project_ename(Select_C2(Select_C1(E x W)))
+        C1 = e.Eid == w.Eid
+        C2 = did == 1
+
+    Q4 Find the IDs of those who work on dept 1 OR dept 10
+        Project_eid(Select_C1(works))
+        C1 = did == 1 || did == 10
+
+        #1 IDs who work in dept 1
+        #10 IDs who work in dept 1
+            Select_w.did==1(works)      Ո       Select_w.did==10(works)
+
+    Q5 Find names of those who work on dept 1 OR/AND/BUT NOT dept 1
+           Rename(Y) -> (Select_w.did==1(works)      U       Select_w.did=10(works))
+           Project_ename_eid(Select_C1(emp X Y))
+           C1 = emp.Eid == Y.Eid
+
+        p(q4) -> T_1            This -> Project_eid(Select_w.did==1(works)      Ո       Select_w.did==10(works))
+        Project_ename(Select_T_1.Eid=E.Eid(T_1 X Emp))
+
+    Q6. Find the Ids of employees who work for EVERY dept in Brooklyn
+        rename(T1)_T1.Did->did -> Project_Did(Select_loc=Brooklyn(Dept))
+        rename(T2) -> Project_eid_did(W)
+        T1 / T2
+
+    Q6-1 Find the sailors names who reservered ALL green boats
+        Boats(BID,bcolor) -> key = BID
+        Reservers(BID,SID,price) -> key = BID,SID
+        Sailers(SID,name,rating) -> key = SID
+        Rename(T1) -> Project_BID(Select_bcolor=green(Boats))
+        Rename(T2) -> Project_BID_SID(Reserves) / T1
+        Project_name(Select_s.SID==T2.SID(Sailors X T2))
+
+    Q7 Find the names of those who worked on AT LEAST two different departments
+        Rename(Project_eid_did(w)) -> T1
+        Rename(Project_eid_did(w)) -> T2
+        Rename(Select_T1.eid=T2.eid_AND_T1.did!=T2.eid(T1 X T2)) -> T3
+        Rename(Projection_eid(T3)) -> T4
+        Project_ename(Select_T4.eid=E.eid(T4 x E))
+
+    Q8 Find the names of those who worked on EXACTLY two different departments
+        Q7 - Q7-3 (basically those who work in at least 2 minus those who work in at least 3)
+
+    Q9 Find the names of employees who make more money than his/her manager
+        E1 W D E2
+        E1 = Eid ename Sal
+        W = Eid did
+        D = Did Mgr_id
+        E2 = Eid Sal
+        Rename(Select_E1.Eid=W.Eid(E1 X W)) -> T1
+        Rename(Select_T1.did=D.Did(T1 X D)) -> T2
+        Rename(Select_T2.Mgr_id=E2.Eid(T2 X E2)) -> T3
+        Select_E1.Sal>E2.Sal(T3)
+    Q10: Find the names of those who have the highest salary
+        E1 E2
+
+        Rename(Project_E2.Eid(Select_E1.Eid!=E2.Eid_AND_E1.Sal > E2.Sal(E1 X E2))) -> Losers
+        Rename(Project_Eid(E) - Losers) -> Winner
+        Project_ename(Select_Winner.Eid=E.Eid(Winner X E))
+
+Etended Relational Algebra
+    Aggregates and Grouping
+    Aggregate: a statistical analysis of the values in a column
+        EX: min, max, avg, sum, cnt, distinct
+    G_AG(Column)_AG(Column)(R)
+
+    G_min(c)(R) -> T (Returns a table with min(c) = 3)
+        |T| == 1
+        D(T) == # of AGs
+
+    G_min(c),sum(c)(R) -> T (Returns table with min(c) = 3, sum(c) = 20)
+
+    G_cnt(distinct A)(R) -> T (cnt = 2)
+
+    Grouping:
+        aiG(R)
+        A_G_min(C),cnt(B)(R) ->column0 = A, column1 = min(c), 3 rows R0 = gamma,7,2, R1 = beta,3,2
+
+        A,B_G_min(C)(R) -> 3 columns, C0 = A, C1 = B, C2 = min(c), 3 rows, R0 = gamma,gamma,7, R1 = gamma,beta,7, R2 = beta,beta,3
+
+    Q10 revisit
+        G_max(sal)->H_Sal(E) -> T1
+        Project_E.ename(Select_E.salary==T1.H_Sal(E X T1))
+
+    Q7 and Q8 revist, "Find the names of those who worked on atleast, exactly, or at most x different departments
+        W.Eid_G_cnt(did)->num(W) -> T1
+        Select_T1.num>=x(T1) -> T2
+        Select_T2.Eid==E.Eid(T2 X E)
+
+    Q11 For each department, print the department name and the average salary of employees working in it.
+
+
+SQL
+

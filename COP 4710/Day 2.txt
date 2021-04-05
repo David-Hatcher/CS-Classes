@@ -1,16 +1,8 @@
 Key Concepts
-    A Data model
-    A schema is a design
-    A rel. instance is a set
-        No duplicates
-        No ordering among members
     Relational model
         Started in the early 1970s (E. Codd)
         Dominating model
         No-SQL - there is still a relational component
-    Number of attributes of a table is called the degree (arity) of the table
-    Number of rows of a table is called cardinality
-    Query Language
 Relational model
     Tables (relations)
     Main Components of a relation schema
@@ -19,8 +11,7 @@ Relational model
         Constraints
             Domain constraints: rules about valid data in an attribute
                 Type + other conditions (app-spec)
-            Key constraints:
-            Referential constraints: certain column(s) of table A (referncing table) is the primary key of table B (referenced table), foreign key, A and B CAN be the same table
+            Key constraints: 
 Key Constraints
     SuperKey: A subset of attributes that is a unique ID of a row
     Candidate(lean/essential) key:
@@ -30,23 +21,3 @@ Key Constraints
         Ex: (SSN,Bdate): proper subsets: (SSN),(Bdate) SSN is already a superkey thus this is not a candidate key
         There can be multiple candidate keys
     Problem: Given (SSN), (Fname,Lname,Bdate)
-Relational Algebra
-    Alg. System: operators and operands (a domain of values)
-    Rel. Alg.
-        Domain: relational instances
-        Operators: selection(sigma, flat o), projection(PI), rename(row,squiggle p), union(U), intersection(upsidedown U), set difference(-), product(x), join(bowtie), division(/)
-                    \______________Uniary_______________/       \_______________________________________________Binary_____________________________________________________/
-Selection
-    sigma_c (R) -> S
-    c = cond logical op cond
-    cond: a op b | a op C
-    EX: Salary > 50000
-        SSN = Dno AND Salary > 50000
-    D(R) = D(S)
-     |R| >= |S|
-Project(ion)
-    PI_Ai(R) -> S, Ai subset A(attributes of table R)
-    EX. PI_bdate,salary (Employee)
-    D(R) >= D(S)
-     |R| ==  |S|
-

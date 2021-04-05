@@ -1,0 +1,103 @@
+Desirable Properties of a Hash Function
+    Consider a hash function Hash
+        performance
+
+
+
+HMAC(k,m) = h(h(k_p XOR v1 || m) || k_p XOR v2)
+
+k = key
+k_p = key padded
+v1 = a predetermined value
+v2 = a predetermined value
+m = message
+
+Modes of operation
+    Questions
+        Does information leak?
+        Can ciphertext be manipulated profitably?
+        Parallel processing possible?
+        Do ciphertext errors propagate?
+    ECB Electronic code book
+        worst
+        split plaintext and encrypt each one individually
+        easiest mode of operation
+        duplicate messages leak information because you can see they're the same from the Cipher
+            discloses repetition
+        Information can leak
+        Ciphertext can be manipulated
+        parallel is possible
+        errors do not propagate
+    CBC Chipher block Chaining
+        Take C1 XOR M2 and encrypt with Key, C2 + M3..., Cn-1 + Mn
+        uses a public initialization vector for the first message
+        Does not leak information
+        Can be parallelized in decryption but NOT encryption
+        Errors do propagate
+    OFB Output Feedback
+        One-time pad but with hash chaining for the random number generation
+        key generation isn't parallelizable, but the xor phase is
+        cipher errors don't propagate
+        no information leakage
+        CANNOT reuse initialization vector/key
+    CFB Cipher Feedback
+        like cipher block chaining but it is Cn-1 is put into the hash function and then xor'd with the message
+        similar benefits and negatives to CBC
+    CTR Counter
+        Best among all of them
+        M1 xor h(key,iv) = C1
+        M2 xor h(key,iv++) = C2
+        Fully parallelizable
+        Does not leak information
+        Ciphertext error propagation and manipulation does not occur
+
+Very Crash Number Theory Basics: Notes for Public key Crypto
+    Ceaser Cipher (simple algebraic permutation):
+        Encrypt:
+            {c} <- pi({x}), permutation
+            c <- a*x + b mod n, where x is plaintext and n=26(a small modulo)
+            "Attila" (x) -> "bxzwy" ciphertext. (a,b) element of Zn are keys x element of plaintext, c is ciphertext letter
+        Decrypt:
+            (c-b)/a = x (mod n)
+            a' = 1/a (mod n), is there a multiplicative inverse under modulo n?
+
+    The congruence a*b = b (mod n) has a unique solution x element of Zn
+        for all b element of Zn, iff Greatest common divisor (GCD), GCD(a,n) = 1
+        Use GCD to check if a unique inverse exists
+    GCD Basic:
+        Any integer can be expressed in terms of it's prime factors
+        a = p1^(a1) * p2^(a2) * ... * pr^(ar), where (p1...pr) are prime factors, (a1...ar) are integers
+        n = p1^(b1) * p2^(b2) * ... * pr^(br), {(ai,bi)} from 1 -> r are integers
+        GCD(a,n) = p1^(min(a1,b1)) * p2^(min(a2,b2)) * ... * pr^(min(ar,br))
+        Factorization of large integers into prime factors in computationally infeasible
+
+    GCD Finder - Algo 1: Euclid Algorithm (Basics for PKC Slides, see Slides)
+    GCD Finder - Algo 2: Extended Euclid Algorithm (EEA) (See Slides)
+    This is the main algorithm to find the multiplicative inverse.
+    (null,b) <- EEA(a,n) such that a*b congruent to (mod n) if b is multiplicative inverse of a,inveser of a, otherwise null.
+
+    Definition - Relatively Prime: if a>= 1, n>= 2 and GCD(a,n) = 1 then (a,n are relatively prime.)
+    Definition - Euler phi(Totient) function: the number of integers in Zn that are relatively prime
+        to n is phi(n): How many of these numbers in Zn are invertable.
+        Phi(n) = Product_1->k(P_i^e_i - P_i^e_i-1), where P_is are n's prime factors, e_i are integers
+        n = 60, n = 2^2*3^1*5^1 => phi(60) = (2^2-2^1) * (3^1-3^0) * (5^1-5^0) = 16
+        16 of 60 numbers are leatively prime n = 60
+
+Special Conditions for phi(n):
+    If n is prime then phi(n) = n - 1
+    If n = p*q, where p and q are primes, then phi(n) = (p-1)*(q-1)
+Definition-Order of a group:
+    phi(d) is the order of the group
+Definition-Order of an element in a group: Let G*_nis cyclic multiplicative group (close under multiplication), g element of G, the order of g is the
+    smallest element g^x = 1 mod n
+            Brute forcing x might be computationally infeasible
+Special condition- Corollary: if B element of Z*n then b^(phi(n)) = 1 (mod n)
+Euler Theorem:
+    FOr all (a,n) whose GCD(a,n) = 1, a ^phi(n) = 1 mod n => RSA
+Generator: Z*_p is a cyclic multiplicative group
+    if alpha element of Z*_p and order of alpha = phi(p) = p-1 then alpha is a generator
+
+    Finding a generator directly is hard.
+    Special condition: p >= 2 and prime and alpha element of Z*_p then generator alpha element Z*_p
+        alpha^(p-1/a) = 1 mod p, where for all primes q such that q | (p-1)
+Discrete logarithm problem (DLP): Select r, R = alpha^n mod p, given R, finding r is computationally infesible. Modular exponentiation is a one-way function.

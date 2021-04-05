@@ -1,0 +1,7 @@
+Question 1:
+    Rename(Select_Class.fid==Faculty.fid(Class X Faculty)) -> T1
+    Rename(Select_T1.name=Enrolled.cname=(T1 X Enrolled)) -> T2
+    Rename(Select_T2.snum==Student.snum(T2 X Students)) -> T3
+    Project_sname(Select_T3.fname=="I. Teach"_AND_T3.level=="JR"(T3))
+Question 2:
+    
