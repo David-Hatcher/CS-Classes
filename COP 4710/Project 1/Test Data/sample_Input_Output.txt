@@ -1,6 +1,6 @@
 
 
-load_coaches coaches_season.txt
+load_coaches c.txt
 ------------------
 
 
@@ -96,7 +96,7 @@ END01      1993  John   end end   32  50  7  0   HOU
 
 
 
-load_teams teams.txt
+load_teams t.txt
 ----------------
 
 

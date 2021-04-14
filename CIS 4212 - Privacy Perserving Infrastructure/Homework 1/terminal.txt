@@ -1,0 +1,10 @@
+To run the code make sure you have "helper.hpp" "Alice.cpp" and "Bob.cpp" in the same folder.
+Then enter the following commands:
+
+g++ -Wall -o alice Alice.cpp -lzmq -ltomcrypt
+g++ -Wall -o bob Bob.cpp -lzmq -ltomcrypt
+
+After compiling: 
+
+run alice on one terminal using ./alice
+run bob on another terminal using ./bob

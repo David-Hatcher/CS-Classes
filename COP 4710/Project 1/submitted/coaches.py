@@ -165,12 +165,3 @@ class CoachDB:
             if self.doesCoachMatch(coach,params,fields):
                 s += self.stringifyCoach(coach) + '\n'
         return s
-
-    def doesCoachMatch(self,coach,fields,params):
-        #helper function, tests if a coach matches the given parameters
-        isMatch = True
-        for field,param in zip(fields,params):
-            if field in coach:
-                if coach[field] != param:
-                    isMatch = False
-        return isMatch
