@@ -1,4 +1,0 @@
-need list,
-pruning method,
-getRandomCombo method,
-

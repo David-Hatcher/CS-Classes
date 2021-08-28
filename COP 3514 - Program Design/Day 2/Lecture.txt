@@ -1,0 +1,5 @@
+- Can use $ in variables
+- Int/Double ()
+
+- %lf float/Double
+- %d int

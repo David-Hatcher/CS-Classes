@@ -1,9 +1,0 @@
-a scroll of uncursing
-<<<<<<< Updated upstream
-a wizard's cloak
-an unknown potion
-=======
-a crossbow
-a scroll of invisibility
-a crossbow
->>>>>>> Stashed changes

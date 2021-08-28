@@ -1,5 +1,0 @@
-lettuce			2.20	882.40
-tomato			2.90	873.90
-potato			0.60	823.65
-honeydew			1.59	588.20
-orange			1.20	506.21
