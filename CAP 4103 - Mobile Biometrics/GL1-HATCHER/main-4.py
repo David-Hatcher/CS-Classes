@@ -1,11 +1,9 @@
 def equation(x,y):
-    numerator = (3*(x**2))*x - 16
-    denominator = y - 1
-    return float(numerator/denominator)
+    return float(((3*(x**2))*x - 16)/(y - 1))
 
 def doEquationFor(array):
     for (x,y) in array:
-        print("{:.2f}".format(equation(x,y)))
+        print("({}, {})".format(x,y),"= {:.2f}".format(equation(x,y)))
 
 def buildPairs(xStart,xEnd,yStart,yEnd):
     pairsArray = []

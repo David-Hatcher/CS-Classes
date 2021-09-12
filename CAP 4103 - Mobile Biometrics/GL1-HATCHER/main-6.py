@@ -10,9 +10,6 @@ plt.gray()
 rows = 2
 columns = 5
 
-for i in range(10):
-    print(digits.images[np.random.randint(0,len(digits.images))])
-
 # Creating Plot of 10 random images
 for i in  range(1,11):
     fig.add_subplot(rows,columns,i)
