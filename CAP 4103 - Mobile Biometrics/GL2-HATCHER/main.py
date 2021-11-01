@@ -44,14 +44,14 @@ print(len(X))
 # clf = KNeighborsClassifier(3)
 
 names = [
-    # "Nearest Neighbors", 
+    "Nearest Neighbors", 
     # "SVM",
     # "RBF SVM",
     # # "Gaussian Process",
     # "Decision Tree",
     # "Random Forest",
     # "Neural Net",
-    "Gaussian Naive Bayes",
+    # "Gaussian Naive Bayes",
     # "Catagorical Bayes",
     # "Complement Bayes"
     # "AdaBoost",
@@ -63,14 +63,14 @@ names = [
 '''
 classifiers = [
     #n_neighbors=5,weights='distance',metric='euclidean',n_jobs=-1
-    # KNeighborsClassifier(3,n_jobs=-1),
+    KNeighborsClassifier(3,n_jobs=-1),
     # SVC(kernel="poly", C=1, degree=6)
     # SVC(gamma=2, C=1),
     # # GaussianProcessClassifier(1.0 * RBF(1.0)),
     # DecisionTreeClassifier(max_depth=6),
     # RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
     # MLPClassifier(solver='lbfgs',max_iter=10000), #46%
-    GaussianNB(var_smoothing=1),
+    # GaussianNB(var_smoothing=1),
     # CategoricalNB(),
     # ComplementNB(),
     # AdaBoostClassifier(),

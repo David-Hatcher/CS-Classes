@@ -1,0 +1,44 @@
+KNN n = 1
+Num correct = 379, Num incorrect = 439, Accuracy = 0.46
+KNN n = 3
+Num correct = 326, Num incorrect = 492, Accuracy = 0.40
+KNN n = 5
+Num correct = 306, Num incorrect = 512, Accuracy = 0.37
+KNN n = 7
+Num correct = 293, Num incorrect = 525, Accuracy = 0.36
+KNN n = 9
+Num correct = 280, Num incorrect = 538, Accuracy = 0.34
+KNN n = 11
+Num correct = 256, Num incorrect = 562, Accuracy = 0.31
+KNN n = 13
+Num correct = 223, Num incorrect = 595, Accuracy = 0.27
+KNN n = 15
+Num correct = 211, Num incorrect = 607, Accuracy = 0.26
+KNN n = 17
+Num correct = 200, Num incorrect = 618, Accuracy = 0.24
+KNN n = 19
+Num correct = 200, Num incorrect = 618, Accuracy = 0.24
+KNN n = 21
+Num correct = 181, Num incorrect = 637, Accuracy = 0.22
+KNN n = 23
+Num correct = 181, Num incorrect = 637, Accuracy = 0.22
+KNN n = 25
+Num correct = 171, Num incorrect = 647, Accuracy = 0.21
+KNN n = 27
+Num correct = 155, Num incorrect = 663, Accuracy = 0.19
+KNN n = 29
+Num correct = 148, Num incorrect = 670, Accuracy = 0.18
+KNN n = 31
+Num correct = 146, Num incorrect = 672, Accuracy = 0.18
+KNN n = 33
+Num correct = 143, Num incorrect = 675, Accuracy = 0.17
+KNN n = 35
+Num correct = 126, Num incorrect = 692, Accuracy = 0.15
+KNN n = 37
+Num correct = 115, Num incorrect = 703, Accuracy = 0.14
+KNN n = 39
+Num correct = 105, Num incorrect = 713, Accuracy = 0.13
+KNN n = 41
+Num correct = 88, Num incorrect = 730, Accuracy = 0.11
+KNN n = 43
+Num correct = 89, Num incorrect = 729, Accuracy = 0.11
