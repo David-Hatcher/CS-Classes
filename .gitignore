@@ -1,4 +1,11 @@
 *.ini
-*png
 *jpg
 *zip
+.exe
+.jar
+.class
+.o
+*.jar
+*.class
+*.exe
+*.o
